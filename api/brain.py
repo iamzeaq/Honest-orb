@@ -17,8 +17,9 @@ ROOT = Path(__file__).resolve().parent.parent
 SECTIONS_PATH = ROOT / "data" / "sections.json"
 ENV_PATH = ROOT / ".env"
 
-MODEL = "muse-spark-1.3-contributor"
+MODEL = "muse-spark-1.2-contributor"
 BASE_URL = "https://api.meta.ai/v1"
+MAX_OUTPUT_TOKENS = 600
 
 _client = None
 
@@ -83,7 +84,8 @@ def _build_system_prompt() -> str:
         "- Answer ONLY from the LEGAL SECTIONS below. Do not use outside "
         "knowledge. Every answered or emergency response must cite at least "
         "one section id from VALID IDS, using labels like "
-        '"Police Act 2020, s.35" or "Constitution 1999, s.35".',
+        '"Police Act 2020, s.35" or "Constitution 1999, s.35". '
+        "The citations list must never be empty for those statuses.",
         "- If the sections do not clearly cover the question: status "
         '"not_sure", and say (in the user\'s language) to contact the Legal '
         "Aid Council of Nigeria or a lawyer.",
@@ -93,7 +95,10 @@ def _build_system_prompt() -> str:
         "- Off-topic questions (not about rights during police encounters): "
         "status \"off_topic\", and politely say you only help with rights "
         "during police encounters.",
-        "- Calm, plain words. This is legal information, not legal advice.",
+        "- Calm, plain words. This is legal information, not legal advice. "
+        "Keep every text field short: right, say_this and do_this are each "
+        "one sentence of at most 20 words; spoken is at most 3 short "
+        "sentences.",
         "",
         "For the spoken field: 2-3 short sentences combining right, say_this "
         "and do_this, written for text-to-speech. No symbols such as #, *, "
@@ -166,21 +171,34 @@ def answer(question: str) -> dict:
     sections.json; unknown ids are dropped.
     """
     client = _get_client()
-    response = _call_with_retry(
-        client,
-        model=MODEL,
-        reasoning={"effort": "low"},
-        input=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": question},
-        ],
-        text_format=_answer_schema(),
-    )
-    parsed = response.output_parsed
-    if parsed is None:
-        raise RuntimeError("Model returned no parsed output")
-    result = parsed.model_dump()
-    result["citations"] = [
-        c for c in result.get("citations", []) if c.get("id") in VALID_IDS
-    ]
+    result: dict | None = None
+    for _ in range(2):
+        # One repair retry if the model returns no citations: the spec
+        # requires at least one existing section id on every answer.
+        response = _call_with_retry(
+            client,
+            model=MODEL,
+            reasoning={"effort": "minimal"},
+            max_output_tokens=MAX_OUTPUT_TOKENS,
+            input=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": question},
+            ],
+            text_format=_answer_schema(),
+        )
+        parsed = response.output_parsed
+        if parsed is None:
+            raise RuntimeError("Model returned no parsed output")
+        result = parsed.model_dump()
+        result["citations"] = [
+            c
+            for c in result.get("citations", [])
+            if c.get("id") in VALID_IDS
+        ]
+        if result.get("status") in ("answered", "emergency") and not result[
+            "citations"
+        ]:
+            continue
+        return result
+    assert result is not None
     return result
