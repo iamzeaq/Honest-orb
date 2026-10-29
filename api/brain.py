@@ -99,6 +99,20 @@ def _build_system_prompt() -> str:
         "Keep every text field short: right, say_this and do_this are each "
         "one sentence of at most 20 words; spoken is at most 3 short "
         "sentences.",
+        "- Precision: when a time limit, number or condition appears in a "
+        "cited section, state it exactly as the section says. Example: "
+        "detention before court is 1 day where a court of competent "
+        "jurisdiction is within 40 km, otherwise 2 days or a longer period "
+        "the court considers reasonable (Constitution s.35(4)-(5)). Never "
+        "simplify to 24 hours if the law says otherwise.",
+        "- No overclaiming: only state what the cited section text actually "
+        "says. If the law does not mention something specifically (for "
+        "example phones), say what the general right is (for example "
+        "privacy of communications, s.37) without inventing detail.",
+        "- Safety first: always advise staying calm and polite. Never advise "
+        "refusing, arguing or resisting physically. Pattern: state your "
+        "right politely, ask for the officer's name or number and station, "
+        "and challenge it later through a lawyer or the Legal Aid Council.",
         "",
         "For the spoken field: 2-3 short sentences combining right, say_this "
         "and do_this, written for text-to-speech. No symbols such as #, *, "
