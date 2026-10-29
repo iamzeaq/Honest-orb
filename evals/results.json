@@ -1,0 +1,496 @@
+[
+  {
+    "id": "q01",
+    "language": "en",
+    "question": "Can police search my phone when they stop me on the road?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s49",
+      "NPA2020-s51",
+      "CFRN-s37"
+    ],
+    "output": {
+      "language": "en",
+      "status": "answered",
+      "right": "Your telephone conversations and privacy are guaranteed and protected. On the road, police may only stop and search you or your vehicle where there are reasonable grounds for suspicion, such as belief you have stolen property or an unlawful or offensive weapon. Before any search they must first ask you about your behaviour or presence, and tell you his name and station, the object of the search, and his grounds for it. They must be in uniform or wear a visible valid police ID, seek your cooperation, minimise embarrassment, and not use forcible search except as a last resort if you refuse to cooperate.",
+      "say_this": "Officer, I respectfully ask for your name, station and the reason for this search. I know my telephone privacy is protected by law.",
+      "do_this": "Stay calm and do not physically resist. Ask for his name, police station, and the ground for the search, and check he is in uniform or shows a valid police ID card. Note the time, place, and what happened, and contact a lawyer or the Legal Aid Council if you feel your rights were violated.",
+      "citations": [
+        {
+          "id": "CFRN-s37",
+          "label": "Constitution 1999, s.37"
+        },
+        {
+          "id": "NPA2020-s49",
+          "label": "Police Act 2020, s.49"
+        },
+        {
+          "id": "NPA2020-s50",
+          "label": "Police Act 2020, s.50"
+        },
+        {
+          "id": "NPA2020-s51",
+          "label": "Police Act 2020, s.51"
+        }
+      ],
+      "spoken": "Your telephone privacy is protected by the Constitution. On the road police can only search with reasonable grounds and they must tell you who they are and why. Stay calm, ask for their name and reason, and do not resist physically."
+    },
+    "latency_s": 14.63,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q02",
+    "language": "en",
+    "question": "Police arrested me without telling me why. Is that allowed?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s35",
+      "CFRN-s35"
+    ],
+    "output": {
+      "language": "en",
+      "status": "answered",
+      "right": "No. The police must inform you immediately of the reason for your arrest, and promptly tell you the allegation against you in a language you understand. You must also be informed in writing within 24 hours of the facts and grounds for your arrest. The only exception is if you are caught in the act of committing an offence, pursued immediately after, or escaped from custody.",
+      "say_this": "Please tell me why I am being arrested.",
+      "do_this": "Calmly ask for the reason, note the officer's name and station, and ask to contact your lawyer and your family. Remain silent until you have spoken to a lawyer.",
+      "citations": [
+        {
+          "id": "NPA2020-s35",
+          "label": "Police Act 2020, s.35"
+        },
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        },
+        {
+          "id": "NPA2020-s43",
+          "label": "Police Act 2020, s.43"
+        }
+      ],
+      "spoken": "Under the Police Act and the Constitution, the police must tell you immediately why you are arrested. Calmly ask, please tell me why I am being arrested. Ask to contact your lawyer and your family, and remain silent until you get legal help."
+    },
+    "latency_s": 7.53,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q03",
+    "language": "en",
+    "question": "Do I have the right to a lawyer after I am arrested?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s35",
+      "NPA2020-s43",
+      "CFRN-s36"
+    ],
+    "output": {
+      "language": "en",
+      "status": "answered",
+      "right": "Yes. After arrest you have the right to remain silent until after consultation with a lawyer of your choice, to consult that lawyer before making any statement or answering questions, to free legal representation by the Legal Aid Council where applicable, and to reasonable facilities to obtain legal advice.",
+      "say_this": "I want to consult my lawyer before I answer any question or make any statement.",
+      "do_this": "Ask for reasonable facilities to call your lawyer or the Legal Aid Council of Nigeria, and do not make, endorse or write any statement until you have spoken to them.",
+      "citations": [
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        },
+        {
+          "id": "NPA2020-s35",
+          "label": "Police Act 2020, s.35"
+        },
+        {
+          "id": "NPA2020-s43",
+          "label": "Police Act 2020, s.43"
+        }
+      ],
+      "spoken": "Yes you have the right to a lawyer after arrest under the Constitution and the Police Act. Tell the police you want to consult your lawyer before you answer any question. Ask for a chance to call your lawyer or the Legal Aid Council and do not make any statement until you speak to them."
+    },
+    "latency_s": 8.13,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q04",
+    "language": "en",
+    "question": "My brother has been in police custody for five days without bail or court. What can we do?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s64",
+      "NPA2020-s62",
+      "CFRN-s35",
+      "NPA2020-s70"
+    ],
+    "output": {
+      "language": "en",
+      "status": "answered",
+      "right": "Any person arrested must be brought before a court within a reasonable time, which means one day where there is a court within 40 kilometres and two days in other cases. Where a suspect is held without warrant for an offence other than one punishable with death, the officer in charge should inquire and release him on bail if he cannot be brought before a court within 24 hours.",
+      "say_this": "Ask the officer in charge for the reason for the continued detention and ask for release on bail, and tell the court that he has been held for five days without bail or court.",
+      "do_this": "If bail is not granted after 24 hours for a non-capital offence, you or a lawyer can apply to a court with jurisdiction, orally or in writing, for the court to order him to be brought to court and to consider bail.",
+      "citations": [
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        },
+        {
+          "id": "NPA2020-s62",
+          "label": "Police Act 2020, s.62"
+        },
+        {
+          "id": "NPA2020-s64",
+          "label": "Police Act 2020, s.64"
+        }
+      ],
+      "spoken": "Under the Constitution he must be brought to court within a short time, and under the Police Act he should be considered for bail within 24 hours. Ask the officer in charge for bail and for the reason he is still held. Apply to the court in writing or by speaking to the court to bring him and grant bail."
+    },
+    "latency_s": 10.39,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q05",
+    "language": "en",
+    "question": "Police beat me at the checkpoint and threatened to shoot me. What should I do?",
+    "expected_status": "emergency",
+    "expected_ids": [
+      "NPA2020-s37",
+      "NPA2020-s34",
+      "CFRN-s34"
+    ],
+    "output": {
+      "language": "en",
+      "status": "emergency",
+      "right": "You have the right to dignity and to life. Every person must have respect for dignity, and no person shall be subjected to torture or to inhuman or degrading treatment. A suspect must be given humane treatment and must not be subjected to torture, cruel, inhuman or degrading treatment.",
+      "say_this": "Say calmly if you can still speak to them: I am not resisting. Please do not shoot me. I need medical help.",
+      "do_this": "Call 112 first for emergency help. Move to a safe place if you can. Get medical care quickly and keep hospital records and photos of injuries. Write down the time, place, checkpoint, and officers involved. Report to a senior police officer and contact the Legal Aid Council of Nigeria or a lawyer.",
+      "citations": [
+        {
+          "id": "CFRN-s34",
+          "label": "Constitution 1999, s.34"
+        },
+        {
+          "id": "NPA2020-s37",
+          "label": "Police Act 2020, s.37"
+        },
+        {
+          "id": "CFRN-s33",
+          "label": "Constitution 1999, s.33"
+        }
+      ],
+      "spoken": "Call 112 first for emergency help. The Constitution and the Police Act say you have a right to dignity and life and police must not beat or torture you. Say you are not resisting and need medical help, then get to safety and contact Legal Aid or a lawyer."
+    },
+    "latency_s": 11.79,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q06",
+    "language": "pcm",
+    "question": "Police carry my younger brother go station because dem no see the person wey dem dey find. E legal?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s36"
+    ],
+    "output": {
+      "language": "pcm",
+      "status": "answered",
+      "right": "E no legal. Law talk say police no fit arrest person for another person place. If dem dey find person, dem no suppose carry your brother go station because dem no see that person.",
+      "say_this": "Abeg officer, wetin be my brother offence? I wan know why una hold am, and we wan speak with our lawyer.",
+      "do_this": "Make una stay calm for station, write the name of the officer and the station, ask when dem go release am, and call lawyer or Legal Aid Council of Nigeria to help una.",
+      "citations": [
+        {
+          "id": "NPA2020-s36",
+          "label": "Police Act 2020, s.36"
+        }
+      ],
+      "spoken": "Di Police Act talk say police no fit arrest person for anoda person place. Tell di officer you wan know im offence and you wan call lawyer. Stay calm and write di station name make you get help quick."
+    },
+    "latency_s": 17.3,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q07",
+    "language": "pcm",
+    "question": "If police stop me for road, dem fit search my phone?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s49",
+      "NPA2020-s51"
+    ],
+    "output": {
+      "language": "pcm",
+      "status": "answered",
+      "right": "Your privacy, including your telephone, dey protected. For road stop, police no fit just open your phone anyhow. Dem fit only detain and search person or motor if dem get reasonable ground to suspect say you carry stolen thing or unlawful article, and before any search dem must first question you, and tell you dem name and station, wetin dem dey find, and why dem wan search. Dem must dey for uniform or show valid police ID card.",
+      "say_this": "Abeg officer, wetin be the reason for this search? I know say my telephone privacy dey protected, I no gree make you search my phone without proper reason.",
+      "do_this": "Stay calm, no drag phone with dem. Ask dem name, which station dem from, and wetin dem dey find. If dem still insist, tell dem you wan call your lawyer or family, and note time and place.",
+      "citations": [
+        {
+          "id": "CFRN-s37",
+          "label": "Constitution 1999, s.37"
+        },
+        {
+          "id": "NPA2020-s49",
+          "label": "Police Act 2020, s.49"
+        },
+        {
+          "id": "NPA2020-s50",
+          "label": "Police Act 2020, s.50"
+        }
+      ],
+      "spoken": "Under the Constitution your phone privacy dey protected. Under the Police Act police for road must get reasonable reason before any search and must tell you who dem be and why. Stay calm, ask for their reason, and call your lawyer if dem insist."
+    },
+    "latency_s": 16.28,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q08",
+    "language": "pcm",
+    "question": "Dem don hold my friend for station two days, dem no gree grant am bail. Wetin we fit do?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s62",
+      "NPA2020-s64",
+      "CFRN-s35"
+    ],
+    "output": {
+      "language": "pcm",
+      "status": "answered",
+      "right": "For law, if dem hold person for offence wey no be death penalty offence, police suppose inquire the case and release am on bail, especially if dem no fit carry am go court within 24 hours after arrest. If dem don hold am pass 24 hours and dem never release am on bail, una fit notify court, and court go order police to bring am come, check why dem hold am, and fit grant am bail if e good. Person wey dem arrest suppose also dey carried go court within reasonable time, wey be one day if court dey near, or two days if court far.",
+      "say_this": "Abeg officer, we don come to ask for bail for our person wey una don hold for two days. We wan know wetin be the offence, and we wan make una release am on bail to appear when una want am. If una no gree, we go apply to court for bail.",
+      "do_this": "If police no gree, make una waka go court wey get power over that offence. Una fit write small application or talk am for mouth for court to order police to bring am come court and grant am bail. Make una call lawyer or Legal Aid Council of Nigeria make dem help una follow up. Bail na free, no pay bribe.",
+      "citations": [
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        },
+        {
+          "id": "NPA2020-s62",
+          "label": "Police Act 2020, s.62"
+        },
+        {
+          "id": "NPA2020-s64",
+          "label": "Police Act 2020, s.64"
+        },
+        {
+          "id": "NPA2020-s70",
+          "label": "Police Act 2020, s.70"
+        }
+      ],
+      "spoken": "Your friend get right to bail if the offence no be death penalty case, under the Police Act and the Constitution. Tell police say you wan apply for bail and you wan know the offence. If dem still no gree, go court quick quick or call Legal Aid Council make dem help you."
+    },
+    "latency_s": 18.58,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q09",
+    "language": "en",
+    "question": "Must I answer every question the police ask me after arrest?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s35",
+      "CFRN-s35"
+    ],
+    "output": {
+      "language": "en",
+      "status": "answered",
+      "right": "No. You have the right to remain silent and to avoid answering any question until after you have consulted a legal practitioner or any other person of your own choice. You also have the right to consult a lawyer of your choice before making, endorsing or writing any statement, and to free legal representation where applicable.",
+      "say_this": "I want to remain silent until after I consult my lawyer.",
+      "do_this": "Stay calm and do not argue. Ask to consult a legal practitioner of your choice or contact the Legal Aid Council of Nigeria before you answer questions or write any statement.",
+      "citations": [
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        },
+        {
+          "id": "NPA2020-s35",
+          "label": "Police Act 2020, s.35"
+        }
+      ],
+      "spoken": "You do not have to answer every question after arrest. Under the Constitution and the Police Act you have the right to remain silent until you consult a lawyer. Tell the police you want to wait for your lawyer and stay calm."
+    },
+    "latency_s": 6.46,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q10",
+    "language": "pcm",
+    "question": "I get right to call my lawyer after police arrest me?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s35",
+      "NPA2020-s43"
+    ],
+    "output": {
+      "language": "pcm",
+      "status": "answered",
+      "right": "Yes, you get right to call your lawyer after police arrest you. Police must tell you say you fit remain silent until you don talk to your lawyer or any other person wey you choose, and dem must give you reasonable chance to get legal advice and take steps for your bail and defence.",
+      "say_this": "Abeg I wan remain silent until I don consult my lawyer. I wan call my lawyer now.",
+      "do_this": "Stay calm, no sign any statement for now, ask police to give you phone access to call your lawyer and your family.",
+      "citations": [
+        {
+          "id": "NPA2020-s35",
+          "label": "Police Act 2020, s.35"
+        },
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        },
+        {
+          "id": "NPA2020-s43",
+          "label": "Police Act 2020, s.43"
+        }
+      ],
+      "spoken": "Yes you get right to call your lawyer after arrest under the Police Act and the Constitution. Tell police say you wan remain silent until you don talk to your lawyer. No sign anything and ask to call your lawyer and family now."
+    },
+    "latency_s": 8.92,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q11",
+    "language": "en",
+    "question": "Can the police search my house without a search warrant?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s58",
+      "NPA2020-s48"
+    ],
+    "output": {
+      "language": "en",
+      "status": "answered",
+      "right": "Your home privacy is guaranteed and protected. A search warrant is unlawful unless it complies with strict safeguards, and police must respect human rights during a search of premises.",
+      "say_this": "Please show me your search warrant and explain the grounds, the law, and what you want to search for.",
+      "do_this": "Ask to see the written warrant and check that it has the name of the applicant, date, law, your premises, and what is to be searched. It is for entry on one occasion only. During the search, stay calm and observe, and the officers must not violate your human rights.",
+      "citations": [
+        {
+          "id": "CFRN-s37",
+          "label": "Constitution 1999, s.37"
+        },
+        {
+          "id": "NPA2020-s58",
+          "label": "Police Act 2020, s.58"
+        },
+        {
+          "id": "NPA2020-s48",
+          "label": "Police Act 2020, s.48"
+        }
+      ],
+      "spoken": "Your home privacy is protected under the Constitution. Under the Police Act a search warrant must be proper and valid before police search your house. Ask to see the warrant and stay calm and observe while they search."
+    },
+    "latency_s": 8.53,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q12",
+    "language": "pcm",
+    "question": "Police dey threaten to beat me for station, I dey fear for my life. Wetin I go do?",
+    "expected_status": "emergency",
+    "expected_ids": [
+      "NPA2020-s37",
+      "CFRN-s34"
+    ],
+    "output": {
+      "language": "pcm",
+      "status": "emergency",
+      "right": "You get right to life and right to dignity. Police no suppose beat you, torture you or treat you in cruel or degrading way for station. Dem must treat you like human being.",
+      "say_this": "Abeg officer, I dey fear for my life, make una no beat me. I get right to dignity and humane treatment.",
+      "do_this": "Call 112 first now because you dey fear for your life. After that, call your family or lawyer make dem know where you dey, and write down officer name and everything wey dem talk or do.",
+      "citations": [
+        {
+          "id": "CFRN-s34",
+          "label": "Constitution 1999, s.34"
+        },
+        {
+          "id": "NPA2020-s37",
+          "label": "Police Act 2020, s.37"
+        },
+        {
+          "id": "CFRN-s33",
+          "label": "Constitution 1999, s.33"
+        }
+      ],
+      "spoken": "Call 112 now because you dey in danger. You get right to life and dignity and police no fit beat you under the Constitution and the Police Act. Tell officer make e no touch you and call your family and lawyer quick."
+    },
+    "latency_s": 9.63,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q13",
+    "language": "en",
+    "question": "A police officer collected money from me at a roadblock. How do I file a formal complaint against him?",
+    "expected_status": "not_sure",
+    "expected_ids": [],
+    "output": {
+      "language": "en",
+      "status": "not_sure",
+      "right": "The legal sections given to me do not clearly explain how to file a formal complaint about money collected at a roadblock.",
+      "say_this": "I want to make a formal complaint and I need legal help to do it properly.",
+      "do_this": "Contact the Legal Aid Council of Nigeria or a lawyer for help with filing a formal complaint. Keep safe any details you remember like date, time, place and officer description.",
+      "citations": [],
+      "spoken": "I do not have clear legal steps for this complaint in my guide. Please contact the Legal Aid Council of Nigeria or a lawyer for help."
+    },
+    "latency_s": 7.01,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q14",
+    "language": "pcm",
+    "question": "Abeg, how I fit cook jollof rice wey go sweet well-well?",
+    "expected_status": "off_topic",
+    "expected_ids": [],
+    "output": {
+      "language": "pcm",
+      "status": "off_topic",
+      "right": "I only dey help with your rights when police stop you or arrest you.",
+      "say_this": "Abeg, I no fit help with cooking matter.",
+      "do_this": "Ask me if police stop you, search you, or carry you go station.",
+      "citations": [],
+      "spoken": "Abeg, I no fit help with cooking matter. I only dey help with your rights when police stop you. Ask me about arrest or search."
+    },
+    "latency_s": 5.96,
+    "passed": true,
+    "notes": []
+  },
+  {
+    "id": "q15",
+    "language": "pcm",
+    "question": "Police just carry me go station, dem no tell me wetin I do. Na so e suppose be?",
+    "expected_status": "answered",
+    "expected_ids": [
+      "NPA2020-s35",
+      "CFRN-s35"
+    ],
+    "output": {
+      "language": "pcm",
+      "status": "answered",
+      "right": "No, e no suppose be so. Police must tell you immediately why dem arrest you, and when dem carry you reach station dem must promptly tell you wetin dem dey accuse you of for language wey you understand. For Constitution, dem must give you in writing within 24 hours the facts and grounds for your arrest.",
+      "say_this": "Abeg officer, wetin be my offence? I want make una tell me reason for my arrest. I want consult my lawyer and make una notify my family.",
+      "do_this": "Stay calm. No follow dem argue. Ask for lawyer before you answer any question or write any statement. Ask make dem call your family or next of kin at no cost to you.",
+      "citations": [
+        {
+          "id": "NPA2020-s35",
+          "label": "Police Act 2020, s.35"
+        },
+        {
+          "id": "NPA2020-s43",
+          "label": "Police Act 2020, s.43"
+        },
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        }
+      ],
+      "spoken": "Under the Police Act and the Constitution police must tell you why dem arrest you immediately. Tell dem say you wan know your offence and you wan see your lawyer and call your family. Stay calm and no answer question or sign anything until your lawyer come."
+    },
+    "latency_s": 8.63,
+    "passed": true,
+    "notes": []
+  }
+]
