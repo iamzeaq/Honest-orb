@@ -1,0 +1,11 @@
+# Honest Orb API dependencies.
+#
+# torch: install the CPU wheel to avoid the large CUDA build:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+openai>=1.0
+requests
+transformers
+torch
+numpy
+imageio-ffmpeg
+pymupdf

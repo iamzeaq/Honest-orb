@@ -1,0 +1,72 @@
+[
+  {
+    "file": "test_en.wav",
+    "transcript": "and police police search my phone when they stop me on the road.",
+    "language_hint": "en",
+    "stt_seconds": 3.44,
+    "answer": {
+      "language": "en",
+      "status": "answered",
+      "right": "Your phones and private conversations are protected by privacy rights, searches need reasonable grounds and proper procedure.",
+      "say_this": "Officer, I do not consent to a phone search, please tell me your grounds and identity.",
+      "do_this": "Stay calm and polite, note the officers name, number, station, then challenge later with a lawyer.",
+      "citations": [
+        {
+          "id": "CFRN-s37",
+          "label": "Constitution 1999, s.37"
+        },
+        {
+          "id": "NPA2020-s49",
+          "label": "Police Act 2020, s.49"
+        },
+        {
+          "id": "NPA2020-s50",
+          "label": "Police Act 2020, s.50"
+        }
+      ],
+      "spoken": "Your phone privacy is protected by the Constitution. Police can only search with reasonable grounds and must explain why. Stay calm, ask for their name and station, and get legal help later."
+    },
+    "audio_out": "/tmp/tmpzrwuj8us.wav",
+    "timings": {
+      "stt": 3.26,
+      "brain": 4.57,
+      "tts": 12.42,
+      "total": 20.25
+    },
+    "wall_s": 20.25,
+    "error": null
+  },
+  {
+    "file": "test_pcm.wav",
+    "transcript": "All as carry my younger brother go station because dem no see the person person we dem dey find illegal.",
+    "language_hint": "pcm",
+    "stt_seconds": 7.44,
+    "answer": {
+      "language": "pcm",
+      "status": "answered",
+      "right": "Police no fit arrest your brother instead of suspect dem dey find.",
+      "say_this": "Oga abeg, my brother no be suspect, make you no hold am for another person.",
+      "do_this": "Ask for officer name, station, and contact Legal Aid Council or lawyer later.",
+      "citations": [
+        {
+          "id": "NPA2020-s36",
+          "label": "Police Act 2020, s.36"
+        },
+        {
+          "id": "CFRN-s35",
+          "label": "Constitution 1999, s.35"
+        }
+      ],
+      "spoken": "Police no fit arrest person for another person place. Na wetin the Police Act talk. Stay calm, ask for officer name and station, follow lawyer or Legal Aid Council later."
+    },
+    "audio_out": "/tmp/tmp3o3ntt1e.wav",
+    "timings": {
+      "stt": 2.57,
+      "brain": 2.85,
+      "tts": 5.17,
+      "total": 10.58
+    },
+    "wall_s": 10.58,
+    "error": null
+  }
+]
