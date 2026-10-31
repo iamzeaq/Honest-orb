@@ -23,7 +23,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -112,12 +112,39 @@ def _store_clip(src_path: str) -> str:
     return audio_id
 
 
-def _speak_to_url(spoken: str, timings: dict, key: str = "tts") -> str:
+def _speak_to_urls(spoken: str, timings: dict) -> tuple[str, list[str], list[str]]:
+    """Synthesize one WAV per sentence; return (full_url, urls, sentences).
+
+    ``audio_url`` is the whole answer as one clip (previous clients keep
+    working); ``audio_urls`` is the per-sentence queue so the browser can
+    start playing sentence 1 while later sentences are still rendering.
+    ``timings["tts_first"]`` marks when the first sentence was ready.
+    """
+    import tempfile
+
+    sentences = tts.split_sentences(spoken) or [spoken]
     started = time.perf_counter()
-    tmp_path = tts.speak(spoken)
-    timings[key] = round(time.perf_counter() - started, 2)
-    audio_id = _store_clip(tmp_path)
-    return f"/audio/{audio_id}.wav"
+    first_s: dict[str, float] = {}
+    tmpdir = tempfile.mkdtemp(prefix="orb_sent_")
+    try:
+        paths = tts.speak_sentences(
+            spoken,
+            out_dir=tmpdir,
+            on_sentence=lambda i, _p: first_s.setdefault(
+                "t", round(time.perf_counter() - started, 2)
+            ),
+        )
+        timings["tts_first"] = first_s.get(
+            "t", round(time.perf_counter() - started, 2)
+        )
+        full_tmp = tempfile.mktemp(suffix=".wav")
+        tts.concat_wav_files(paths, full_tmp)
+        timings["tts"] = round(time.perf_counter() - started, 2)
+        urls = [f"/audio/{_store_clip(p)}.wav" for p in paths]
+        full_url = f"/audio/{_store_clip(full_tmp)}.wav"
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    return full_url, urls, sentences
 
 
 class AskTextBody(BaseModel):
@@ -152,7 +179,7 @@ def ask_text(body: AskTextBody) -> dict:
     timings["brain"] = round(time.perf_counter() - started, 2)
 
     try:
-        audio_url = _speak_to_url(ans["spoken"], timings)
+        audio_url, audio_urls, sentences = _speak_to_urls(ans["spoken"], timings)
     except HTTPException:
         raise
     except Exception as exc:
@@ -165,8 +192,91 @@ def ask_text(body: AskTextBody) -> dict:
         "transcript": text,
         "answer": ans,
         "audio_url": audio_url,
+        "audio_urls": audio_urls,
+        "sentences": sentences,
         "timings": timings,
     }
+
+
+@app.post("/api/ask_text_stream")
+def ask_text_stream(body: AskTextBody):
+    """Streaming twin of /api/ask_text: NDJSON lines over one response.
+
+    First line: ``{"type": "meta", "transcript", "answer", "sentences",
+    "timings"}`` as soon as the brain answer is ready. Then one
+    ``{"type": "audio", "index", "audio_url", "sentence", "tts_s"}`` line
+    per sentence, each sent the moment that sentence's audio is ready, so
+    the browser can play sentence 1 while later sentences still render.
+    """
+    text = (body.text or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="text must not be empty")
+    if len(text) > 2000:
+        raise HTTPException(status_code=400, detail="text is too long")
+    timings: dict[str, float] = {}
+
+    started = time.perf_counter()
+    try:
+        ans = _run_timed(brain_answer, text, timeout_s=BRAIN_TIMEOUT_S)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("ask_text_stream brain failed")
+        raise HTTPException(
+            status_code=502, detail=f"could not answer the text: {_reason(exc)}"
+        ) from exc
+    timings["brain"] = round(time.perf_counter() - started, 2)
+
+    sentences = tts.split_sentences(ans["spoken"]) or [ans["spoken"]]
+    meta = {
+        "type": "meta",
+        "transcript": text,
+        "answer": ans,
+        "sentences": sentences,
+        "timings": timings,
+    }
+
+    def gen():
+        import tempfile
+
+        yield json.dumps(meta) + "\n"
+        tts_started = time.perf_counter()
+        tmpdir = Path(tempfile.mkdtemp(prefix="orb_stream_"))
+        try:
+            for i, sentence in enumerate(sentences):
+                try:
+                    path = tts.speak_sentence(
+                        sentence, str(tmpdir / f"s{i:02d}.wav")
+                    )
+                except Exception as exc:
+                    logger.exception("ask_text_stream tts failed")
+                    yield json.dumps(
+                        {"type": "error", "index": i, "detail": _reason(exc)}
+                    ) + "\n"
+                    return
+                if path is None:
+                    continue
+                try:
+                    audio_id = _store_clip(path)
+                except Exception as exc:
+                    logger.exception("ask_text_stream store failed")
+                    yield json.dumps(
+                        {"type": "error", "index": i, "detail": _reason(exc)}
+                    ) + "\n"
+                    return
+                yield json.dumps(
+                    {
+                        "type": "audio",
+                        "index": i,
+                        "audio_url": f"/audio/{audio_id}.wav",
+                        "sentence": sentence,
+                        "tts_s": round(time.perf_counter() - tts_started, 2),
+                    }
+                ) + "\n"
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
+
+    return StreamingResponse(gen(), media_type="application/x-ndjson")
 
 
 @app.post("/api/ask")
@@ -213,10 +323,18 @@ async def ask(audio: UploadFile = File(...)) -> dict:
         except OSError:
             pass
     audio_id = _store_clip(result["audio_out"])
+    audio_urls = []
+    for p in result.get("sentence_outs") or []:
+        try:
+            audio_urls.append(f"/audio/{_store_clip(p)}.wav")
+        except OSError:
+            logger.exception("ask sentence clip store failed")
     return {
         "transcript": result["transcript"],
         "answer": result["answer"],
         "audio_url": f"/audio/{audio_id}.wav",
+        "audio_urls": audio_urls,
+        "sentences": result.get("sentences") or [],
         "timings": result["timings"],
     }
 

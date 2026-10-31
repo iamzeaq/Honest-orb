@@ -38,6 +38,11 @@
   var answerCtx = null;
   var answerAnalyser = null;
   var answerRaf = 0;
+  var answerQueue = [];      // {url, sentence}[] in speaking order
+  var queuePos = 0;          // next item in answerQueue to play
+  var queuePlaying = false;  // an Audio element is active
+  var streamOpen = false;    // more sentences may still arrive
+  var playToken = 0;         // invalidates stale ended handlers
 
   function orb() { return window.Orb || null; }
 
@@ -199,15 +204,69 @@
     setState("thinking");
     setLine("Thinking…");
     try {
-      var res = await fetch("/api/ask_text", {
+      // Prefer the streaming endpoint: the first sentence's audio starts
+      // playing while later sentences are still rendering server-side.
+      var res = await fetch("/api/ask_text_stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: text })
       });
       if (!res.ok) throw await httpError(res);
-      handleAnswer(await res.json());
+      if (res.body && res.body.getReader) {
+        await readAnswerStream(res.body);
+        return;
+      }
+      // Ancient browser without stream support: plain JSON answer instead.
+      var res2 = await fetch("/api/ask_text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text })
+      });
+      if (!res2.ok) throw await httpError(res2);
+      handleAnswer(await res2.json());
     } catch (e) {
       resetToIdle("Something went wrong — try again.", e);
+    }
+  }
+
+  // NDJSON stream: a meta line, then one audio line per sentence.
+  // Sentences play in order as they arrive.
+  async function readAnswerStream(body) {
+    var reader = body.getReader();
+    var decoder = new TextDecoder();
+    var buf = "";
+    for (;;) {
+      var chunk = await reader.read();
+      if (chunk.value) buf += decoder.decode(chunk.value, { stream: !chunk.done });
+      var lines = buf.split("\n");
+      buf = chunk.done ? "" : lines.pop();
+      for (var i = 0; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        var msg = null;
+        try { msg = JSON.parse(lines[i]); } catch (e) { continue; }
+        onStreamMessage(msg);
+        if (mode === "idle") return; // failed mid-stream; UI already reset
+      }
+      if (chunk.done) break;
+    }
+    streamOpen = false;
+    if (!queuePlaying) finishSpeaking();
+  }
+
+  function onStreamMessage(msg) {
+    if (msg.type === "meta") {
+      var ans = msg.answer || {};
+      setEmergency(ans.status === "emergency");
+      mode = "speaking";
+      setState("speaking");
+      setLine("Speaking…");
+      showCard(ans);
+      startQueue();
+    } else if (msg.type === "audio") {
+      answerQueue.push({ url: msg.audio_url, sentence: msg.sentence || "" });
+      if (!queuePlaying) playNextInQueue();
+    } else if (msg.type === "error") {
+      resetToIdle("Something went wrong — try again.", new Error(msg.detail || "tts"));
     }
   }
 
@@ -221,20 +280,55 @@
     setState("speaking");
     setLine(firstSentence(ans.spoken) || "Here's what I found.");
     showCard(ans);
-    playAnswer(data.audio_url);
+    // Prefer the per-sentence queue; fall back to the single full clip.
+    var urls = data.audio_urls || [];
+    if (urls.length) {
+      var sents = data.sentences || [];
+      startQueue(urls.map(function (u, i) {
+        return { url: u, sentence: sents[i] || "" };
+      }));
+    } else if (data.audio_url) {
+      startQueue([{ url: data.audio_url, sentence: firstSentence(ans.spoken) }]);
+    }
   }
 
-  function playAnswer(url) {
+  function startQueue(items) {
     stopAnswerAudio();
-    answerAudio = new Audio(url);
+    playToken++;
+    answerQueue = items || [];
+    queuePos = 0;
+    streamOpen = !items; // stream mode: meta arrived, audio lines pending
+    queuePlaying = false;
+    playNextInQueue();
+  }
+
+  // Play answerQueue[queuePos..] in order. The orb line and the pulse
+  // always follow whichever sentence is currently playing.
+  function playNextInQueue() {
+    if (queuePos >= answerQueue.length) {
+      if (!streamOpen) finishSpeaking();
+      return; // waiting on more stream lines
+    }
+    var item = answerQueue[queuePos++];
+    var token = playToken;
+    queuePlaying = true;
+    setLine(item.sentence || "Speaking…");
+    answerAudio = new Audio(item.url);
     answerAudio.playsInline = true;
     var o = orb();
     answerAudio.addEventListener("ended", function () {
+      if (token !== playToken) return;
+      queuePlaying = false;
       stopAnswerLevel();
-      if (o && o.setLevel) o.setLevel(0);
+      playNextInQueue();
     });
-    answerAudio.addEventListener("error", stopAnswerLevel);
-    // Pulse the orb with the answer's amplitude (best effort).
+    answerAudio.addEventListener("error", function () {
+      if (token !== playToken) return;
+      queuePlaying = false;
+      stopAnswerLevel();
+      playNextInQueue(); // skip the broken clip, keep the answer going
+    });
+    // Pulse the orb with this sentence's amplitude (best effort).
     try {
       if (!answerCtx) {
         var AC = window.AudioContext || window.webkitAudioContext;
@@ -266,12 +360,23 @@
     answerAudio.play().catch(function () { /* autoplay guard: user already tapped */ });
   }
 
+  function finishSpeaking() {
+    stopAnswerLevel();
+    var o = orb();
+    if (o && o.setLevel) o.setLevel(0);
+  }
+
   function stopAnswerLevel() {
     cancelAnimationFrame(answerRaf);
   }
 
   function stopAnswerAudio() {
     stopAnswerLevel();
+    playToken++;
+    answerQueue = [];
+    queuePos = 0;
+    queuePlaying = false;
+    streamOpen = false;
     if (answerAudio) {
       try { answerAudio.pause(); } catch (e) {}
       answerAudio = null;
