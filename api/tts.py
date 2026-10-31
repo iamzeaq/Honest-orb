@@ -7,12 +7,21 @@ and reused. Output is mono 16-bit PCM WAV.
 
 from __future__ import annotations
 
+import os
 import re
 import time
 import wave
 from pathlib import Path
 
-MODEL_ID = "facebook/mms-tts-eng"
+# Single config value for the voice: swap in a fine-tuned checkpoint here.
+MODEL_ID = os.environ.get("TTS_MODEL_ID", "facebook/mms-tts-pcm")
+
+# Keep model downloads inside the repo when the caller did not configure a
+# Hugging Face cache (e.g. hosts whose default HF cache is not writable).
+if not os.environ.get("HF_HOME") and not os.environ.get("HF_HUB_CACHE"):
+    _repo_cache = Path(__file__).resolve().parent.parent / ".hf-cache"
+    _repo_cache.mkdir(parents=True, exist_ok=True)
+    os.environ["HF_HUB_CACHE"] = str(_repo_cache / "hub")
 
 _model = None
 _tokenizer = None

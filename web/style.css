@@ -1,0 +1,296 @@
+/* Honest Orb — near-black, warm white, muted gold. Red only for emergencies. */
+
+:root {
+  --black: #0a0a0a;
+  --warm-white: #f5efe4;
+  --gold: #c9a45c;
+  --gold-dim: rgba(201, 164, 92, 0.55);
+  --ink-dim: rgba(245, 239, 228, 0.55);
+  --ink-faint: rgba(245, 239, 228, 0.32);
+  --glass: rgba(18, 16, 12, 0.82);
+  --line: rgba(201, 164, 92, 0.28);
+  --red: #b3261e;
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Inter", -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--warm-white);
+  font-family: var(--sans);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wordmark {
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: calc(env(safe-area-inset-top, 0px) + 22px) 0 0;
+  margin: 0;
+  user-select: none;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px 24px;
+  min-height: 0;
+}
+
+.orb-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  width: min(60vw, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  touch-action: manipulation;
+}
+
+.orb-button:focus-visible {
+  outline: 1px solid var(--gold-dim);
+  outline-offset: 10px;
+}
+
+#orbCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+}
+
+/* CSS fallback orb when WebGL is unavailable. */
+.orb-fallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%,
+    #fffdf6 0%, #f7ead0 22%, #e8c37c 46%, #8a5f2a 68%, rgba(10, 10, 10, 0) 74%);
+  box-shadow: 0 0 90px 18px rgba(201, 164, 92, 0.35);
+  animation: orb-breathe 4s ease-in-out infinite;
+}
+.no-webgl #orbCanvas { display: none; }
+.no-webgl .orb-fallback { display: block; }
+.no-webgl.emergency .orb-fallback {
+  background: radial-gradient(circle at 50% 42%,
+    #fff5f3 0%, #f3b8b0 24%, #c0392b 50%, #5c0f0a 70%, rgba(10, 10, 10, 0) 75%);
+  box-shadow: 0 0 90px 18px rgba(179, 38, 30, 0.45);
+}
+
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.orb-line {
+  font-family: var(--serif);
+  font-size: clamp(19px, 5.4vw, 24px);
+  line-height: 1.4;
+  text-align: center;
+  color: var(--warm-white);
+  margin: 26px 0 0;
+  max-width: 34ch;
+  min-height: 2.6em;
+  transition: opacity 0.4s ease;
+}
+.orb-line.fade { opacity: 0; }
+
+/* Dev-only failure reason (?dev=1): tiny, quiet, under the orb line. */
+.orb-error {
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--ink-faint);
+  margin: 8px 0 0;
+  max-width: 42ch;
+  overflow-wrap: break-word;
+}
+.orb-error[hidden] { display: none; }
+
+.type-toggle {
+  background: none;
+  border: 0;
+  color: var(--ink-faint);
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-top: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.type-form {
+  display: flex;
+  gap: 8px;
+  width: min(100%, 380px);
+  margin-top: 6px;
+}
+.type-form[hidden] { display: none; }
+.type-form input {
+  flex: 1;
+  background: rgba(245, 239, 228, 0.06);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--warm-white);
+  font-family: var(--sans);
+  font-size: 15px;
+  padding: 12px 18px;
+  outline: none;
+  min-width: 0;
+}
+.type-form input:focus { border-color: var(--gold-dim); }
+.type-form button {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold);
+  width: 46px;
+  height: 46px;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Answer card: dark glass sheet sliding up from the bottom. */
+.card {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-radius: 22px 22px 0 0;
+  padding: 8px 22px calc(env(safe-area-inset-bottom, 0px) + 26px);
+  max-width: 560px;
+  margin: 0 auto;
+  max-height: 62dvh;
+  overflow-y: auto;
+  transform: translateY(105%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card[hidden] { display: block; visibility: hidden; }
+.card.open { transform: translateY(0); visibility: visible; }
+
+.card-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(245, 239, 228, 0.22);
+  margin: 8px auto 14px;
+}
+
+.call-button {
+  display: block;
+  text-align: center;
+  background: var(--red);
+  color: #fff;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 4px 0 14px;
+  text-decoration: none;
+}
+.call-button[hidden] { display: none; }
+
+.card-right {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 23px;
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+
+.card-row {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+  margin: 0 0 8px;
+}
+.card-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+
+.card-cites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.cite-chip {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--warm-white);
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 7px 13px;
+  cursor: pointer;
+}
+.cite-text {
+  flex-basis: 100%;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  border-left: 2px solid var(--gold-dim);
+  padding-left: 12px;
+  margin: 2px 0 4px;
+}
+.cite-text strong { color: var(--warm-white); font-weight: 600; }
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.45);
+}
+.scrim[hidden] { display: none; }
+
+.footer {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-fallback { animation-duration: 8s; }
+  .card { transition-duration: 0.01s; }
+  .orb-line { transition: none; }
+}
