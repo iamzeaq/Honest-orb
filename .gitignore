@@ -229,4 +229,5 @@ node_modules/
 data/audio_out/*.wav
 data/voice/raw/
 data/voice/dataset/
+data/voice/dataset_disguised/
 voice_dataset.zip
