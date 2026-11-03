@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.hf-cache/
+data/audio_out/
+data/voice/previews/
+data/voice/dataset/
+data/voice/dataset_disguised/
+voice_dataset.zip
+.env
+.git
