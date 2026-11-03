@@ -70,6 +70,69 @@ class TestSplitSentences(unittest.TestCase):
         self.assertEqual(split_sentences("   "), [])
 
 
+class TestLoudnessNormalization(unittest.TestCase):
+    """Every synthesized sentence must be phone-speaker loud.
+
+    Target is about -16 LUFS integrated loudness with true peak at or
+    below -1 dBFS. Pure synthesis-free checks on synthetic signals.
+    """
+
+    def _speech_like(self, seconds=2.0, sr=16000, level=0.2):
+        import numpy as np
+
+        t = np.arange(int(sr * seconds)) / sr
+        # Voiced-ish wobble: a low tone with slow amplitude modulation so
+        # gating sees real speech-like energy, not digital silence.
+        return (
+            level * np.sin(2 * np.pi * 220 * t)
+            * (0.6 + 0.4 * np.sin(2 * np.pi * 3 * t))
+        ).astype(np.float64)
+
+    def test_sentence_lands_near_minus_16_lufs(self):
+        from api.tts import measure_lufs, normalize_loudness
+
+        out = normalize_loudness(self._speech_like(), 16000)
+        measured = measure_lufs(out, 16000)
+        self.assertIsNotNone(measured)
+        self.assertAlmostEqual(measured, -16.0, delta=1.0)
+
+    def test_quiet_sentence_is_lifted_loud_one_is_kept(self):
+        from api.tts import measure_lufs, normalize_loudness
+
+        for level in (0.02, 0.5):
+            out = normalize_loudness(self._speech_like(level=level), 16000)
+            measured = measure_lufs(out, 16000)
+            self.assertIsNotNone(measured)
+            self.assertAlmostEqual(measured, -16.0, delta=1.5)
+
+    def test_peak_never_exceeds_minus_1_dbfs(self):
+        import numpy as np
+
+        from api.tts import normalize_loudness
+
+        hot = self._speech_like(level=0.99)
+        out = normalize_loudness(hot, 16000)
+        self.assertTrue(bool(np.all(np.isfinite(out))))
+        self.assertLessEqual(float(np.max(np.abs(out))), 10 ** (-1 / 20) + 1e-6)
+        # A full-scale transient too short to measure must still be limited.
+        click = np.zeros(16000, dtype=np.float64)
+        click[8000] = 1.0
+        out = normalize_loudness(click, 16000)
+        self.assertTrue(bool(np.all(np.isfinite(out))))
+        self.assertLessEqual(float(np.max(np.abs(out))), 10 ** (-1 / 20) + 1e-6)
+
+    def test_silence_stays_silent(self):
+        import numpy as np
+
+        from api.tts import measure_lufs, normalize_loudness
+
+        silence = np.zeros(16000, dtype=np.float64)
+        out = normalize_loudness(silence, 16000)
+        self.assertTrue(bool(np.all(np.isfinite(out))))
+        self.assertTrue(bool((out == 0).all()))
+        self.assertIsNone(measure_lufs(silence, 16000))
+
+
 class TestAskTextSentenceQueue(unittest.TestCase):
     def test_ask_text_returns_audio_url_queue(self):
         import tempfile

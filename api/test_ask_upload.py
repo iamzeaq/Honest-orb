@@ -126,5 +126,157 @@ class AskUploadTest(unittest.TestCase):
         self.assertIn("overloaded", ctx.exception.detail)
 
 
+def _ndjson_request(accept="application/x-ndjson"):
+    from starlette.requests import Request
+
+    return Request(
+        {
+            "type": "http",
+            "method": "POST",
+            "headers": [(b"accept", accept.encode("latin-1"))],
+        }
+    )
+
+
+async def _collect_lines(resp):
+    """Read a StreamingResponse body into parsed NDJSON dicts."""
+    import json as _json
+
+    text = ""
+    async for chunk in resp.body_iterator:
+        text += chunk.decode("utf-8") if isinstance(chunk, bytes) else chunk
+    out = []
+    for line in text.split("\n"):
+        if line.strip():
+            out.append(_json.loads(line))
+    return out
+
+
+class AskStreamTest(unittest.TestCase):
+    """POST /api/ask streams meta first, then one audio line per sentence."""
+
+    def _stubs(self):
+        import os
+        import tempfile
+
+        def fake_stt(path):
+            return {"text": "can police search me", "seconds": 1.0}
+
+        def fake_brain(question):
+            return {
+                "language": "en",
+                "status": "answered",
+                "right": "You have a right.",
+                "say_this": "Say it.",
+                "do_this": "Do it.",
+                "citations": [],
+                "spoken": "Stay calm. Ask for a name. Call 112 first!",
+            }
+
+        def fake_speak_sentence(text, out_path=None):
+            if out_path is None:
+                fd, out_path = tempfile.mkstemp(suffix=".wav")
+                os.close(fd)
+            with wave.open(out_path, "wb") as w:
+                w.setnchannels(1)
+                w.setsampwidth(2)
+                w.setframerate(16000)
+                w.writeframes(b"\x00\x00" * 160)
+            return out_path
+
+        ids = {"n": 0}
+
+        def fake_store(path):
+            ids["n"] += 1
+            return f"clip{ids['n']}"
+
+        return fake_stt, fake_brain, fake_speak_sentence, fake_store
+
+    def test_ask_streams_meta_then_audio(self):
+        from fastapi.responses import StreamingResponse
+
+        fake_stt, fake_brain, fake_speak, fake_store = self._stubs()
+        old = (
+            srv.stt_transcribe,
+            srv.brain_answer,
+            srv.tts.speak_sentence,
+            srv._store_clip,
+        )
+        srv.stt_transcribe = fake_stt
+        srv.brain_answer = fake_brain
+        srv.tts.speak_sentence = fake_speak
+        srv._store_clip = fake_store
+        try:
+            async def go():
+                return await srv.ask(
+                    _upload(data=FIXTURE.read_bytes()),
+                    _ndjson_request(),
+                )
+            resp = asyncio.run(go())
+        finally:
+            (
+                srv.stt_transcribe,
+                srv.brain_answer,
+                srv.tts.speak_sentence,
+                srv._store_clip,
+            ) = old
+        self.assertIsInstance(resp, StreamingResponse)
+        self.assertIn("x-ndjson", resp.media_type)
+        lines = asyncio.run(_collect_lines(resp))
+        self.assertGreaterEqual(len(lines), 2)
+        # Meta first: transcript, answer and sentences, like ask_text_stream.
+        self.assertEqual(lines[0]["type"], "meta")
+        self.assertEqual(lines[0]["transcript"], "can police search me")
+        self.assertEqual(
+            lines[0]["sentences"],
+            ["Stay calm.", "Ask for a name.", "Call 112 first!"],
+        )
+        self.assertIn("stt", lines[0]["timings"])
+        self.assertIn("brain", lines[0]["timings"])
+        # Then one audio line per sentence, in order, starting with the
+        # first sentence so the browser can play it right away.
+        audio = [ln for ln in lines if ln["type"] == "audio"]
+        self.assertEqual(len(audio), 3)
+        self.assertEqual(
+            [ln["sentence"] for ln in audio],
+            ["Stay calm.", "Ask for a name.", "Call 112 first!"],
+        )
+        self.assertEqual([ln["index"] for ln in audio], [0, 1, 2])
+        for ln in audio:
+            self.assertTrue(ln["audio_url"].startswith("/audio/"))
+
+    def test_ask_format_json_keeps_dict_fallback(self):
+        """?format=json answers with the legacy dict, not NDJSON."""
+
+        def fake_run(path):
+            import shutil
+            import tempfile
+
+            fd, tmp_wav = tempfile.mkstemp(suffix=".wav")
+            os.close(fd)
+            shutil.copy(str(ROOT / "data" / "audio" / "test_en.wav"), tmp_wav)
+            return {"transcript": "hello orb",
+                    "answer": {"status": "answered"},
+                    "audio_out": tmp_wav,
+                    "timings": {}}
+
+        old, srv.pipeline_run = srv.pipeline_run, fake_run
+        try:
+            async def go():
+                return await srv.ask(
+                    _upload(data=FIXTURE.read_bytes()),
+                    _ndjson_request(),
+                    format="json",
+                )
+            data = asyncio.run(go())
+        finally:
+            srv.pipeline_run = old
+        self.assertIsInstance(data, dict)
+        self.assertEqual(data["transcript"], "hello orb")
+        stored = ROOT / "data" / "audio_out" / (data["audio_url"].split("/")[-1])
+        self.assertTrue(stored.is_file())
+        stored.unlink()
+
+
 if __name__ == "__main__":
     unittest.main()

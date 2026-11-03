@@ -3,7 +3,12 @@
 Endpoints:
     GET  /health            liveness check
     POST /api/ask_text      {"text"} -> brain + TTS answer
-    POST /api/ask           audio upload (webm/ogg/m4a/wav) -> stt -> brain -> tts
+    POST /api/ask           audio upload (webm/ogg/m4a/wav) -> stt -> brain
+                            -> tts, streamed NDJSON just like /api/ask_text_stream
+                            (meta first, then one audio line per sentence);
+                            ?format=json (or an in-process call, or an
+                            Accept: application/json request) keeps the
+                            legacy single-JSON answer as a fallback
     GET  /audio/<id>.wav    generated answer audio
     GET  /api/section/<id>  section text behind a citation chip
     GET  /                  the web UI (web/ static files)
@@ -22,7 +27,7 @@ from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -34,6 +39,7 @@ if str(ROOT) not in sys.path:
 from api import tts  # noqa: E402
 from api.brain import answer as brain_answer  # noqa: E402
 from api.pipeline import run as pipeline_run  # noqa: E402
+from api.stt import transcribe as stt_transcribe  # noqa: E402
 
 AUDIO_OUT_DIR = ROOT / "data" / "audio_out"
 SECTIONS_PATH = ROOT / "data" / "sections.json"
@@ -45,6 +51,7 @@ ALLOWED_SUFFIXES = {".webm", ".ogg", ".oga", ".m4a", ".mp4", ".wav", ".mp3", ".m
 # transcription, synthesis) fails as a 504 instead of hanging the worker.
 # Voice uploads allow longer: they include audio upload + transcription.
 BRAIN_TIMEOUT_S = 180.0
+STT_TIMEOUT_S = 240.0
 PIPELINE_TIMEOUT_S = 420.0
 
 _pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="orb")
@@ -70,7 +77,17 @@ def _reason(exc: Exception) -> str:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     AUDIO_OUT_DIR.mkdir(parents=True, exist_ok=True)
-    tts._load()  # load the TTS model once at startup
+    try:
+        # Warm the TTS model once at startup (this downloads it on first
+        # boot, so the private token is only needed at runtime, never at
+        # image build time).
+        tts._load()
+    except Exception:
+        # A private TTS_MODEL_ID without HF_TOKEN (or no network at boot)
+        # must not take the whole app down: /health stays green and the
+        # model loads lazily on the first synthesis instead.
+        logger.warning("tts preload failed; loading lazily on first use",
+                       exc_info=True)
     yield
 
 
@@ -280,7 +297,23 @@ def ask_text_stream(body: AskTextBody):
 
 
 @app.post("/api/ask")
-async def ask(audio: UploadFile = File(...)) -> dict:
+async def ask(
+    audio: UploadFile = File(...),
+    request: Request = None,  # type: ignore[assignment]
+    format: str | None = None,
+):
+    """Voice question: transcribe, answer, and stream the spoken answer.
+
+    Same sentence-by-sentence NDJSON stream as ``/api/ask_text_stream``:
+    a ``{"type": "meta", ...}`` line as soon as transcription + brain are
+    done, then one ``{"type": "audio", ...}`` line per sentence, each sent
+    the moment that sentence's audio is ready — so the browser plays the
+    first sentence while later ones still render.
+
+    JSON fallback: ``?format=json``, an ``Accept: application/json``
+    request, or an in-process call without a request answers with the
+    legacy single-JSON dict instead.
+    """
     suffix = Path(audio.filename or "").suffix.lower()
     if suffix not in ALLOWED_SUFFIXES:
         # Fall back to the declared content type for extensionless uploads.
@@ -305,38 +338,129 @@ async def ask(audio: UploadFile = File(...)) -> dict:
     try:
         with open(fd, "wb") as fh:
             shutil.copyfileobj(audio.file, fh)
+
+        accept = ""
+        if request is not None:
+            accept = (request.headers.get("accept", "") or "").lower()
+        wants_json = (
+            format == "json"
+            or request is None
+            or ("application/json" in accept and "x-ndjson" not in accept)
+        )
+        if wants_json:
+            try:
+                result = _run_timed(
+                    pipeline_run, tmp_in, timeout_s=PIPELINE_TIMEOUT_S
+                )
+            except HTTPException:
+                raise
+            except Exception as exc:
+                logger.exception("voice pipeline failed")
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"could not process the recording: {_reason(exc)}",
+                ) from exc
+            audio_id = _store_clip(result["audio_out"])
+            audio_urls = []
+            for p in result.get("sentence_outs") or []:
+                try:
+                    audio_urls.append(f"/audio/{_store_clip(p)}.wav")
+                except OSError:
+                    logger.exception("ask sentence clip store failed")
+            return {
+                "transcript": result["transcript"],
+                "answer": result["answer"],
+                "audio_url": f"/audio/{audio_id}.wav",
+                "audio_urls": audio_urls,
+                "sentences": result.get("sentences") or [],
+                "timings": result["timings"],
+            }
+
+        # Streaming path: transcribe + answer while the upload still
+        # exists, then stream one audio line per sentence as each sentence
+        # finishes rendering (the generator only needs sentence text).
+        timings: dict[str, float] = {}
+        started = time.perf_counter()
         try:
-            result = _run_timed(
-                pipeline_run, tmp_in, timeout_s=PIPELINE_TIMEOUT_S
+            stt = _run_timed(stt_transcribe, tmp_in, timeout_s=STT_TIMEOUT_S)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            logger.exception("voice stt failed")
+            raise HTTPException(
+                status_code=502,
+                detail=f"could not transcribe the recording: {_reason(exc)}",
+            ) from exc
+        timings["stt"] = round(time.perf_counter() - started, 2)
+        started = time.perf_counter()
+        try:
+            ans = _run_timed(
+                brain_answer, stt["text"], timeout_s=BRAIN_TIMEOUT_S
             )
         except HTTPException:
             raise
         except Exception as exc:
-            logger.exception("voice pipeline failed")
+            logger.exception("voice brain failed")
             raise HTTPException(
                 status_code=502,
-                detail=f"could not process the recording: {_reason(exc)}",
+                detail=f"could not answer the voice question: {_reason(exc)}",
             ) from exc
+        timings["brain"] = round(time.perf_counter() - started, 2)
+
+        sentences = tts.split_sentences(ans["spoken"]) or [ans["spoken"]]
+        meta = {
+            "type": "meta",
+            "transcript": stt["text"],
+            "language_hint": stt.get("language_hint"),
+            "answer": ans,
+            "sentences": sentences,
+            "timings": timings,
+        }
+
+        def gen():
+            yield json.dumps(meta) + "\n"
+            tts_started = time.perf_counter()
+            tmpdir = Path(tempfile.mkdtemp(prefix="orb_ask_stream_"))
+            try:
+                for i, sentence in enumerate(sentences):
+                    try:
+                        path = tts.speak_sentence(
+                            sentence, str(tmpdir / f"s{i:02d}.wav")
+                        )
+                    except Exception as exc:
+                        logger.exception("ask stream tts failed")
+                        yield json.dumps(
+                            {"type": "error", "index": i, "detail": _reason(exc)}
+                        ) + "\n"
+                        return
+                    if path is None:
+                        continue
+                    try:
+                        audio_id = _store_clip(path)
+                    except Exception as exc:
+                        logger.exception("ask stream store failed")
+                        yield json.dumps(
+                            {"type": "error", "index": i, "detail": _reason(exc)}
+                        ) + "\n"
+                        return
+                    yield json.dumps(
+                        {
+                            "type": "audio",
+                            "index": i,
+                            "audio_url": f"/audio/{audio_id}.wav",
+                            "sentence": sentence,
+                            "tts_s": round(time.perf_counter() - tts_started, 2),
+                        }
+                    ) + "\n"
+            finally:
+                shutil.rmtree(tmpdir, ignore_errors=True)
+
+        return StreamingResponse(gen(), media_type="application/x-ndjson")
     finally:
         try:
             Path(tmp_in).unlink()
         except OSError:
             pass
-    audio_id = _store_clip(result["audio_out"])
-    audio_urls = []
-    for p in result.get("sentence_outs") or []:
-        try:
-            audio_urls.append(f"/audio/{_store_clip(p)}.wav")
-        except OSError:
-            logger.exception("ask sentence clip store failed")
-    return {
-        "transcript": result["transcript"],
-        "answer": result["answer"],
-        "audio_url": f"/audio/{audio_id}.wav",
-        "audio_urls": audio_urls,
-        "sentences": result.get("sentences") or [],
-        "timings": result["timings"],
-    }
 
 
 @app.get("/audio/{audio_id}.wav")

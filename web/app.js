@@ -188,9 +188,30 @@
     var form = new FormData();
     form.append("audio", blob, "question." + ext);
     try {
-      var res = await fetch("/api/ask", { method: "POST", body: form });
+      // Prefer the streaming endpoint shape: meta first, then one audio
+      // line per sentence, so the first sentence starts playing while
+      // later sentences are still rendering server-side.
+      var res = await fetch("/api/ask", {
+        method: "POST",
+        body: form,
+        headers: { "Accept": "application/x-ndjson" }
+      });
       if (!res.ok) throw await httpError(res);
-      handleAnswer(await res.json());
+      var ctype = res.headers.get("content-type") || "";
+      if (res.body && res.body.getReader && ctype.indexOf("ndjson") >= 0) {
+        await readAnswerStream(res.body);
+        return;
+      }
+      // No stream support on this response: plain JSON answer instead.
+      if (res.body && res.body.cancel) {
+        try { await res.body.cancel(); } catch (e) { /* already read */ }
+      }
+      var res2 = await fetch("/api/ask?format=json", {
+        method: "POST",
+        body: form
+      });
+      if (!res2.ok) throw await httpError(res2);
+      handleAnswer(await res2.json());
     } catch (e) {
       resetToIdle("Something went wrong — tap to try again.", e);
     }
