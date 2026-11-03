@@ -127,6 +127,19 @@ body {
 }
 .orb-error[hidden] { display: none; }
 
+/* Voice fallback note: tiny, quiet, under the orb line. Shown when the
+   answer has no playable audio, so the silence is never a mystery. */
+.voice-note {
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--ink-faint);
+  margin: 8px 0 0;
+  max-width: 42ch;
+}
+.voice-note[hidden] { display: none; }
+
 .type-toggle {
   background: none;
   border: 0;

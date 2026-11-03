@@ -16,6 +16,7 @@ Endpoints:
 
 from __future__ import annotations
 
+import base64
 import json
 import logging
 import shutil
@@ -42,6 +43,10 @@ from api.pipeline import run as pipeline_run  # noqa: E402
 from api.stt import transcribe as stt_transcribe  # noqa: E402
 
 AUDIO_OUT_DIR = ROOT / "data" / "audio_out"
+# Create eagerly at import: the Modal image only bakes in
+# data/sections.json, so this directory does not exist in the container
+# until we make it (the lifespan below re-ensures it on startup).
+AUDIO_OUT_DIR.mkdir(parents=True, exist_ok=True)
 SECTIONS_PATH = ROOT / "data" / "sections.json"
 WEB_DIR = ROOT / "web"
 
@@ -91,7 +96,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Honest Orb")
+app = FastAPI(title="Honest Orb", lifespan=lifespan)
 
 
 def _load_sections() -> list[dict]:
@@ -122,6 +127,7 @@ def _prune_old_audio(max_age_s: float = 2 * 3600, keep: int = 200) -> None:
 
 def _store_clip(src_path: str) -> str:
     """Move a generated WAV into the served dir; return its audio id."""
+    AUDIO_OUT_DIR.mkdir(parents=True, exist_ok=True)
     audio_id = uuid.uuid4().hex
     dest = AUDIO_OUT_DIR / f"{audio_id}.wav"
     shutil.move(src_path, dest)
@@ -129,13 +135,42 @@ def _store_clip(src_path: str) -> str:
     return audio_id
 
 
-def _speak_to_urls(spoken: str, timings: dict) -> tuple[str, list[str], list[str]]:
-    """Synthesize one WAV per sentence; return (full_url, urls, sentences).
+def _clip_data_uri(path: str) -> str:
+    """Read a WAV clip as a base64 data URI for inline delivery.
+
+    Clips on disk live on the container that synthesized them, and a
+    later ``GET /audio/...`` may land on a different container. The
+    inline copy travels with the answer, so playback never depends on
+    which container serves ``/audio/``.
+    """
+    with open(path, "rb") as fh:
+        raw = base64.b64encode(fh.read()).decode("ascii")
+    return f"data:audio/wav;base64,{raw}"
+
+
+def _store_clip_with_b64(path: str) -> tuple[str, str]:
+    """Store a clip for ``/audio/``; return (audio_id, data_uri).
+
+    Bytes are read before the move, so the inline copy survives even if
+    the stored file later prunes or lives on another container.
+    """
+    data_uri = _clip_data_uri(path)
+    return _store_clip(path), data_uri
+
+
+def _speak_to_urls(
+    spoken: str, timings: dict
+) -> tuple[str, list[str], list[str], str, list[str]]:
+    """Synthesize one WAV per sentence; return (full_url, urls, sentences,
+    full_b64, b64s).
 
     ``audio_url`` is the whole answer as one clip (previous clients keep
     working); ``audio_urls`` is the per-sentence queue so the browser can
     start playing sentence 1 while later sentences are still rendering.
-    ``timings["tts_first"]`` marks when the first sentence was ready.
+    ``audio_b64``/``audio_b64s`` carry the same clips as base64 data
+    URIs, so playback works even when ``/audio/`` lands on another
+    container. ``timings["tts_first"]`` marks when the first sentence
+    was ready.
     """
     import tempfile
 
@@ -157,11 +192,14 @@ def _speak_to_urls(spoken: str, timings: dict) -> tuple[str, list[str], list[str
         full_tmp = tempfile.mktemp(suffix=".wav")
         tts.concat_wav_files(paths, full_tmp)
         timings["tts"] = round(time.perf_counter() - started, 2)
-        urls = [f"/audio/{_store_clip(p)}.wav" for p in paths]
-        full_url = f"/audio/{_store_clip(full_tmp)}.wav"
+        stored = [_store_clip_with_b64(p) for p in paths]
+        full_id, full_b64 = _store_clip_with_b64(full_tmp)
+        urls = [f"/audio/{audio_id}.wav" for audio_id, _b64 in stored]
+        b64s = [b64 for _audio_id, b64 in stored]
+        full_url = f"/audio/{full_id}.wav"
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
-    return full_url, urls, sentences
+    return full_url, urls, sentences, full_b64, b64s
 
 
 class AskTextBody(BaseModel):
@@ -196,7 +234,9 @@ def ask_text(body: AskTextBody) -> dict:
     timings["brain"] = round(time.perf_counter() - started, 2)
 
     try:
-        audio_url, audio_urls, sentences = _speak_to_urls(ans["spoken"], timings)
+        audio_url, audio_urls, sentences, audio_b64, audio_b64s = _speak_to_urls(
+            ans["spoken"], timings
+        )
     except HTTPException:
         raise
     except Exception as exc:
@@ -210,6 +250,8 @@ def ask_text(body: AskTextBody) -> dict:
         "answer": ans,
         "audio_url": audio_url,
         "audio_urls": audio_urls,
+        "audio_b64": audio_b64,
+        "audio_b64s": audio_b64s,
         "sentences": sentences,
         "timings": timings,
     }
@@ -274,7 +316,7 @@ def ask_text_stream(body: AskTextBody):
                 if path is None:
                     continue
                 try:
-                    audio_id = _store_clip(path)
+                    audio_id, audio_b64 = _store_clip_with_b64(path)
                 except Exception as exc:
                     logger.exception("ask_text_stream store failed")
                     yield json.dumps(
@@ -286,6 +328,7 @@ def ask_text_stream(body: AskTextBody):
                         "type": "audio",
                         "index": i,
                         "audio_url": f"/audio/{audio_id}.wav",
+                        "audio_b64": audio_b64,
                         "sentence": sentence,
                         "tts_s": round(time.perf_counter() - tts_started, 2),
                     }
@@ -360,18 +403,24 @@ async def ask(
                     status_code=502,
                     detail=f"could not process the recording: {_reason(exc)}",
                 ) from exc
-            audio_id = _store_clip(result["audio_out"])
+            audio_id, audio_b64 = _store_clip_with_b64(result["audio_out"])
             audio_urls = []
+            audio_b64s = []
             for p in result.get("sentence_outs") or []:
                 try:
-                    audio_urls.append(f"/audio/{_store_clip(p)}.wav")
+                    sent_id, sent_b64 = _store_clip_with_b64(p)
                 except OSError:
                     logger.exception("ask sentence clip store failed")
+                else:
+                    audio_urls.append(f"/audio/{sent_id}.wav")
+                    audio_b64s.append(sent_b64)
             return {
                 "transcript": result["transcript"],
                 "answer": result["answer"],
                 "audio_url": f"/audio/{audio_id}.wav",
                 "audio_urls": audio_urls,
+                "audio_b64": audio_b64,
+                "audio_b64s": audio_b64s,
                 "sentences": result.get("sentences") or [],
                 "timings": result["timings"],
             }
@@ -436,7 +485,7 @@ async def ask(
                     if path is None:
                         continue
                     try:
-                        audio_id = _store_clip(path)
+                        audio_id, audio_b64 = _store_clip_with_b64(path)
                     except Exception as exc:
                         logger.exception("ask stream store failed")
                         yield json.dumps(
@@ -448,6 +497,7 @@ async def ask(
                             "type": "audio",
                             "index": i,
                             "audio_url": f"/audio/{audio_id}.wav",
+                            "audio_b64": audio_b64,
                             "sentence": sentence,
                             "tts_s": round(time.perf_counter() - tts_started, 2),
                         }

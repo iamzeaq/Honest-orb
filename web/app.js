@@ -6,6 +6,7 @@
   var orbButton = document.getElementById("orbButton");
   var orbLine = document.getElementById("orbLine");
   var orbError = document.getElementById("orbError");
+  var voiceNote = document.getElementById("voiceNote");
 
   // Dev mode (?dev=1): show the server's actual failure reason in small
   // text under the orb. Off by default — users only see the friendly line.
@@ -43,6 +44,25 @@
   var queuePlaying = false;  // an Audio element is active
   var streamOpen = false;    // more sentences may still arrive
   var playToken = 0;         // invalidates stale ended handlers
+  var playOk = false;        // any clip actually started playing
+
+  // Inline base64 data URIs play from the answer itself, so they keep
+  // working even when /audio/ would land on another container. Plain
+  // /audio/ URLs stay as the fallback for older responses.
+  function clipUrl(msg) {
+    return (msg && (msg.audio_b64 || msg.audio_url)) || "";
+  }
+
+  function showVoiceNote() {
+    if (!voiceNote) return;
+    voiceNote.textContent = "Voice unavailable — text answer above.";
+    voiceNote.hidden = false;
+  }
+
+  function hideVoiceNote() {
+    if (!voiceNote) return;
+    voiceNote.hidden = true;
+  }
 
   function orb() { return window.Orb || null; }
 
@@ -274,6 +294,19 @@
     if (!queuePlaying) finishSpeaking();
   }
 
+  // The brain answered but the voice failed: keep the text card and say
+  // so in small text instead of dropping back to idle silently.
+  function voiceFailed(detail) {
+    streamOpen = false;
+    if (mode === "speaking" && !card.hidden) {
+      showVoiceNote();
+      if (!queuePlaying) finishSpeaking();
+    } else {
+      resetToIdle("Something went wrong — try again.",
+        new Error(detail || "tts"));
+    }
+  }
+
   function onStreamMessage(msg) {
     if (msg.type === "meta") {
       var ans = msg.answer || {};
@@ -284,10 +317,12 @@
       showCard(ans);
       startQueue();
     } else if (msg.type === "audio") {
-      answerQueue.push({ url: msg.audio_url, sentence: msg.sentence || "" });
+      var url = clipUrl(msg);
+      if (!url) return; // unplayable line; the queue finish shows the note
+      answerQueue.push({ url: url, sentence: msg.sentence || "" });
       if (!queuePlaying) playNextInQueue();
     } else if (msg.type === "error") {
-      resetToIdle("Something went wrong — try again.", new Error(msg.detail || "tts"));
+      voiceFailed(msg.detail);
     }
   }
 
@@ -302,20 +337,32 @@
     setLine(firstSentence(ans.spoken) || "Here's what I found.");
     showCard(ans);
     // Prefer the per-sentence queue; fall back to the single full clip.
+    // Inline base64 first, /audio/ URL second (see clipUrl).
     var urls = data.audio_urls || [];
-    if (urls.length) {
-      var sents = data.sentences || [];
-      startQueue(urls.map(function (u, i) {
-        return { url: u, sentence: sents[i] || "" };
-      }));
-    } else if (data.audio_url) {
-      startQueue([{ url: data.audio_url, sentence: firstSentence(ans.spoken) }]);
+    var b64s = data.audio_b64s || [];
+    var sents = data.sentences || [];
+    var items = [];
+    var n = Math.max(urls.length, b64s.length);
+    for (var i = 0; i < n; i++) {
+      var url = clipUrl({ audio_b64: b64s[i], audio_url: urls[i] });
+      if (url) items.push({ url: url, sentence: sents[i] || "" });
     }
+    if (!items.length) {
+      var last = clipUrl(data);
+      if (last) items.push({ url: last, sentence: firstSentence(ans.spoken) });
+    }
+    if (!items.length) {
+      showVoiceNote(); // text answer only, no playable audio at all
+      return;
+    }
+    startQueue(items);
   }
 
   function startQueue(items) {
     stopAnswerAudio();
     playToken++;
+    playOk = false;
+    hideVoiceNote();
     answerQueue = items || [];
     queuePos = 0;
     streamOpen = !items; // stream mode: meta arrived, audio lines pending
@@ -375,16 +422,27 @@
       };
       answerAudio.addEventListener("play", function onPlay() {
         answerAudio.removeEventListener("play", onPlay);
+        if (token === playToken) playOk = true;
         answerRaf = requestAnimationFrame(tick);
       });
     } catch (e) { /* plain playback without the pulse */ }
-    answerAudio.play().catch(function () { /* autoplay guard: user already tapped */ });
+    answerAudio.play().catch(function () {
+      // Rejected play (autoplay guard or undecodable clip): skip to the
+      // next clip like the error handler instead of stalling silently.
+      if (token !== playToken) return;
+      queuePlaying = false;
+      stopAnswerLevel();
+      playNextInQueue();
+    });
   }
 
   function finishSpeaking() {
     stopAnswerLevel();
     var o = orb();
     if (o && o.setLevel) o.setLevel(0);
+    // The queue drained but no clip ever played: every clip was broken
+    // (or the voice failed mid-stream), so say so under the orb line.
+    if (!playOk && queuePos > 0) showVoiceNote();
   }
 
   function stopAnswerLevel() {
@@ -460,6 +518,7 @@
   function resetToIdle(line, err) {
     mode = "idle";
     stopAnswerAudio();
+    hideVoiceNote();
     dismissCard();
     setEmergency(false);
     setState("idle");
