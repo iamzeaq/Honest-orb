@@ -1,5 +1,5 @@
 {
- "note": "Honest Orb conversation evals. Core scripts run live against converse(). Domain probes carry explicit expects calibrated to the data actually loaded (Constitution 1999 + Police Act 2020 only; the ten new-law PDFs are absent from data/raw/). Unloaded-domain probes honestly expect not_covered + Legal Aid pointer + EMPTY citations. When a domain's PDF lands and sections.json is rebuilt, flip that probe to expect legal + cites.",
+ "note": "Honest Orb conversation evals, calibrated to data/sections.json with 99 sections (Constitution + Police Act + ACJA + Lagos Tenancy + FOI + Land Use + Labour + FCCPA + Corrupt Practices + Legal Aid + Anti-Torture). Kano/FCT tenancy and armed-robbery punishment remain honestly not_covered (no Kano/FCT tenancy law loaded; FCT photographed scan skipped as unverifiable).",
  "sessions": [
   {
    "id": "A-memory-tenancy-police",
@@ -39,20 +39,41 @@
     },
     {
      "expect": {
+      "mode": [
+       "clarify"
+      ],
       "citations_empty": true,
       "facts": {
        "state": "lagos",
        "topic": "tenancy"
       },
-      "mode": [
-       "not_covered"
-      ],
       "spoken_contains": [
-       "Legal Aid"
+       "yearly",
+       "monthly"
       ]
      },
      "id": "A4",
      "text": "Lagos"
+    },
+    {
+     "id": "A4b",
+     "text": "It is a yearly tenancy. Can he actually do that?",
+     "expect": {
+      "mode": [
+       "legal"
+      ],
+      "cite_any": [
+       "LAGTEN2011-s13",
+       "LAGTEN2011-s16",
+       "LAGTEN2011-s1"
+      ],
+      "facts": {
+       "state": "lagos"
+      },
+      "spoken_contains": [
+       "month"
+      ]
+     }
     },
     {
      "expect": {
@@ -78,6 +99,14 @@
       ],
       "spoken_contains": [
        "112"
+      ],
+      "cite_any": [
+       "ATA2017-s2",
+       "ATA2017-s8",
+       "ATA2017-s4",
+       "ATA2017-s6",
+       "CFRN-s34",
+       "NPA2020-s37"
       ]
      },
      "id": "A6",
@@ -90,12 +119,13 @@
    "turns": [
     {
      "expect": {
-      "citations_empty": true,
       "mode": [
-       "not_covered"
+       "legal"
       ],
-      "spoken_contains": [
-       "Legal Aid"
+      "cite_any": [
+       "LABOUR1971-s15",
+       "LABOUR1971-s11",
+       "LABOUR1971-s18"
       ]
      },
      "id": "B1",
@@ -103,12 +133,13 @@
     },
     {
      "expect": {
-      "citations_empty": true,
       "mode": [
-       "not_covered"
+       "legal"
       ],
-      "spoken_contains": [
-       "Legal Aid"
+      "cite_any": [
+       "LAA2011-s10",
+       "LAA2011-s8",
+       "LAA2011-s11"
       ]
      },
      "id": "B2",
@@ -116,12 +147,13 @@
     },
     {
      "expect": {
-      "citations_empty": true,
       "mode": [
-       "not_covered"
+       "legal"
       ],
-      "spoken_contains": [
-       "Legal Aid"
+      "cite_any": [
+       "FOIA2011-s1",
+       "FOIA2011-s3",
+       "FOIA2011-s4"
       ]
      },
      "id": "B3",
@@ -225,7 +257,9 @@
    "id": "D-tenancy-2",
    "kind": "retrieval",
    "requires_domain": "tenancy",
-   "text": "notice to quit recover possession landlord tenant"
+   "text": "notice to quit recover possession landlord tenant",
+   "state": "lagos",
+   "expect_domain_hits": true
   },
   {
    "id": "D-tenancy-3",
@@ -241,11 +275,13 @@
    "text": "How do I request records from a ministry?",
    "expect": {
     "mode": [
-     "not_covered"
+     "legal"
     ],
-    "citations_empty": true,
-    "spoken_contains": [
-     "Legal Aid"
+    "cite_any": [
+     "FOIA2011-s1",
+     "FOIA2011-s3",
+     "FOIA2011-s4",
+     "FOIA2011-s2"
     ]
    }
   },
@@ -272,6 +308,9 @@
      "legal"
     ],
     "cite_any": [
+     "LUA1978-s29",
+     "LUA1978-s28",
+     "LUA1978-s1",
      "CFRN-s43",
      "CFRN-s44"
     ]
@@ -297,11 +336,11 @@
    "text": "My oga sacked me without notice, I need my terminal benefits",
    "expect": {
     "mode": [
-     "not_covered"
+     "legal"
     ],
-    "citations_empty": true,
-    "spoken_contains": [
-     "Legal Aid"
+    "cite_any": [
+     "LABOUR1971-s11",
+     "LABOUR1971-s15"
     ]
    }
   },
@@ -325,11 +364,13 @@
    "text": "A shop sold me fake medicine, where do I complain?",
    "expect": {
     "mode": [
-     "not_covered"
+     "legal"
     ],
-    "citations_empty": true,
-    "spoken_contains": [
-     "Legal Aid"
+    "cite_any": [
+     "FCCPA2018-s134",
+     "FCCPA2018-s145",
+     "FCCPA2018-s152",
+     "FCCPA2018-s119"
     ]
    }
   },
@@ -353,11 +394,13 @@
    "text": "An official asked me for a bribe, how do I report?",
    "expect": {
     "mode": [
-     "not_covered"
+     "legal"
     ],
-    "citations_empty": true,
-    "spoken_contains": [
-     "Legal Aid"
+    "cite_any": [
+     "CPA2000-s23",
+     "CPA2000-s8",
+     "CPA2000-s18",
+     "CPA2000-s64"
     ]
    }
   },
@@ -381,11 +424,12 @@
    "text": "I cannot pay for a lawyer for my court case",
    "expect": {
     "mode": [
-     "not_covered"
+     "legal"
     ],
-    "citations_empty": true,
-    "spoken_contains": [
-     "Legal Aid"
+    "cite_any": [
+     "LAA2011-s10",
+     "LAA2011-s8",
+     "LAA2011-s11"
     ]
    }
   },
@@ -412,6 +456,10 @@
      "emergency"
     ],
     "cite_any": [
+     "ATA2017-s2",
+     "ATA2017-s8",
+     "ATA2017-s4",
+     "ATA2017-s6",
      "CFRN-s34",
      "NPA2020-s37"
     ],
@@ -455,7 +503,9 @@
    "id": "D-fct-2",
    "kind": "retrieval",
    "requires_domain": "tenancy",
-   "text": "abuja recover possession quit notice"
+   "text": "abuja recover possession quit notice",
+   "state": "fct",
+   "expect_domain_hits": false
   },
   {
    "id": "D-fct-3",

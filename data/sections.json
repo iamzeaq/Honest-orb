@@ -594,5 +594,1215 @@
       "oversight",
       "cell visit"
     ]
+  },
+  {
+    "id": "ACJA2015-s4",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "4",
+    "title": "Mode of arrest",
+    "text": "4. In making an arrest, the police officer or other persons making the arrest shall actually touch or confine the body of the suspect, unless there is a submission to the custody by word or action. Mode of arrest.",
+    "keywords": [
+      "arrest",
+      "how police arrest",
+      "touch",
+      "confine",
+      "carry go station",
+      "warrant"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "ACJA2015-s5",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "5",
+    "title": "No unnecessary restraint",
+    "text": "5. A suspect or defendant may not be handcuffed, bound or be subjected to restraint except: (a) there is reasonable apprehension of violence or an attempt to escape; (b) the restraint is considered necessary for the safety of the suspect or defendant; or (c) by order of a court. No unnecessary restraint.",
+    "keywords": [
+      "handcuff",
+      "restraint",
+      "no beating",
+      "tie",
+      "force"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "ACJA2015-s7",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "7",
+    "title": "Arrest in lieu prohibited",
+    "text": "7. A person shall not be arrested in place of a suspect. Arrest in lieu prohibited.",
+    "keywords": [
+      "arrest in lieu",
+      "family",
+      "relative",
+      "proxy arrest",
+      "carry another person",
+      "dem no see the person"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "ACJA2015-s158",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "158",
+    "title": "Bail: general entitlement",
+    "text": "158. When a person who is suspected to have committed an offence or is accused of an offence is arrested or detained, or appears or is brought before a court, he shall, subject to the provisions of this Part, be entitled to bail. General entitlement to bail.",
+    "keywords": [
+      "bail",
+      "release",
+      "court",
+      "bail na free",
+      "police bail",
+      "apply for bail"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "ACJA2015-s164",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "164",
+    "title": "Court bail in other cases",
+    "text": "164. Where a defendant is brought before a court on any process in respect of any matter not included within Sections 158 to 163 of this Act, the person may, at the discretion of the court, be released on his entering into recognizance, in the manner provided in this Act, for his appearance before the court or any other court at the time and place mentioned in the recognizance. Bail in respect of matters in other offences.",
+    "keywords": [
+      "bail",
+      "court",
+      "discretion",
+      "release",
+      "remand"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "ACJA2015-s293",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "293",
+    "title": "Remand procedure after arrest",
+    "text": "293. (1) A suspect arrested for an offence which a magistrate court has no jurisdiction to try shall, within a reasonable time of arrest, be brought before a magistrate court for remand. (2) An application for remand under this section shall be made ex parte and shall: (a) be made in the prescribed “Report and Request for Remand Form” as contained in Form 8, in the First Schedule to this Act; and (b) be verified on oath and contain reasons for the remand request. Application for remand or other interlocutory proceedings. First Schedule",
+    "keywords": [
+      "remand",
+      "magistrate",
+      "brought to court",
+      "detention",
+      "reasonable time",
+      "custody"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "ACJA2015-s295",
+    "source": "Administration of Criminal Justice Act 2015",
+    "section": "295",
+    "title": "Court consideration of remand application",
+    "text": "295. The court may, in considering an application for remand brought under section 293 of this Act, grant bail to the suspect brought before it, taking into consideration the provisions of sections 158 to 188 of this Act relating to bail. Court may grant bail in remand proceedings.",
+    "keywords": [
+      "remand",
+      "probable cause",
+      "magistrate",
+      "detention",
+      "release",
+      "bail"
+    ],
+    "jurisdiction": "federal",
+    "domain": "criminal_procedure",
+    "applicability": "Federal criminal procedure: arrest, bail, remand and trial."
+  },
+  {
+    "id": "LAGTEN2011-s1",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "1",
+    "title": "Application of the Law",
+    "text": "1.-(1) This Law shall apply to all premises within Lagos State, including business and residential premises unless otherwise specified. (2) This Law shall not apply to- (a) Residential premises owned or operated by an educational institution for its staff and students; (b) Residential premises provided for emergency shelter; (c) Residential premises- (i) In a care or hospice facility; (ii) In a public or private hospital or a mental health facility: and (d) that is made available in the course of providing rehabilitative or therapeutic treatment. (3) The following areas: (i) Apapa: (ii) Ikeja GRA.; (iii) Ikoyi; and (iv) Victoria Island are exempted from the application of this Law, however, the Governor may from time to time by Order published in the State Official Gazette exempt the application of this Law to any other area or premises in the State,",
+    "keywords": [
+      "lagos",
+      "apply",
+      "covers",
+      "exempt",
+      "excluded",
+      "residential",
+      "business premises",
+      "tenancy"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s2",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "2",
+    "title": "Jurisdiction of the Courts",
+    "text": "2.-(1) A Court shall have jurisdiction to determine matters in respect of the tenancy of any premises let before or after the commencement this Law. (2) The jurisdiction of a court shall not be ousted by the defendant or respondent setting up the title of any other party. (3) The parties’ agreement to resort to Court connected Alternative Dispute Resolution (ADR) or other facilities such as the Lagos Multi-Door Court House or to the Citizens Mediation Centre for amicable dispute resolution shall not however be construed as an ouster of Court's jurisdiction. (4) Proceedings shall be brought under this Law at the High Court where the rental value of the premises exceeds the jurisdiction of the Magistrate Court as provided by the Magistrates' Courts Law. (5) Subject to the provisions of this Law, a Court shall be bound by the practice and procedure in civil matters in the Magistrates' Court or the High Court of Lagos State.",
+    "keywords": [
+      "court",
+      "jurisdiction",
+      "magistrate",
+      "high court",
+      "tenancy",
+      "lagos"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s4",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "4",
+    "title": "Advance Rent",
+    "text": "4.-(1) It shall be unlawful for a landlord or his agent to demand or receive from a sitting tenant rent in excess of six (6) months from a monthly tenant and one (1) year from a yearly tenant in respect of any premises without prejudice to the nature of tenancy held at the commencement of the tenancy. (2) It shall be unlawful for a sitting tenant to offer or pay rent in excess of one (1) year for a yearly tenant and six (6) months for a monthly tenant in respect of any premises. (3) It shall be unlawful for a landlord or his agent to demand or receive from a new or would be tenant rent in excess of one (1) year in respect of any premises. (4) It shall be unlawful for a new or would be tenant to offer or pay rent in excess of one (1) year in respect of any premises. (5) Any person who receives or pays rent in excess of what is prescribed in this Section shall be guilty of an offence and shall be liable on conviction to a fine of One Hundred Thousand Naira (N100,000.00) or to three (3) months imprisonment",
+    "keywords": [
+      "advance rent",
+      "one year",
+      "three months",
+      "pay rent",
+      "landlord collect",
+      "upfront"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s6",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "6",
+    "title": "Rights of a Tenant",
+    "text": "6.-(1) the tenant's entitlement to quiet and peaceable enjoyment of the Premises includes the right to – (a) privacy; (b) Freedom from unreasonable disturbance; (c) exclusive possession of the premises, subject to the landlord's restricted right of inspection; and (d) the use of common areas for reasonable and lawful purpose. (2) Where a tenant with the previous consent in writing of the landlord, effects improvements on the premises and the landlord determines the tenancy, such a tenant shall be entitled to claim compensation for the effected improvements on quitting the premises.",
+    "keywords": [
+      "tenant rights",
+      "enjoy",
+      "rent",
+      "receipt",
+      "lagos"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s8",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "8",
+    "title": "Obligations of the Landlord",
+    "text": "8. Subject to any provision to the contrary in a tenancy agreement, the landlord shall; (i) Not disturb the tenant's quiet and peaceable enjoyment of the premises. (ii) Pay all rates and charges as stipulated by law. (iii) Keep the premises insured against loss or damage. (iv) Not terminate or restrict the use of a common facility or service for the use of the premises. (v) Not seize any item or property of the tenant or interfere with the tenant's access to his personal property. (vi) Effect repairs and maintain the external and common parts of the premises.",
+    "keywords": [
+      "landlord",
+      "repair",
+      "obligations",
+      "maintain",
+      "rates",
+      "tenant"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s13",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "13",
+    "title": "Length of Notice",
+    "text": "13.-(1) where there is no stipulation as to the notice to be given by either party to determine the tenancy, the following shall apply- (a) a week’s notice for a tenant at will; (b) one (1) month’s notice for a monthly tenant; (c) three (3) months notice for a quarterly tenant; (d) three (3) months notice for a half-yearly tenant; and (e) six months notice for a yearly tenant (2) In the case of a monthly tenancy, where the tenant is in arrears of rent for six (6) months, the tenancy shall lapse and the Court shall make an order for possession and arrears of rent upon proof of the arrears by the landlord. (3) In the case of a quarterly or half-yearly tenancy, where the tenant is in arrears of one (1) year rent, the tenancy shall lapse and the Court shall make an order for possession and arrears of rent upon proof of the arrears by the landlord. (4) Notice for tenants under subsection (1) (c), (d) and (e) of this Section need not terminate on the anniversary of the tenancy but may terminate on or after the date of expiration of the tenancy. (5) In the case of a tenancy for a fixed term, no notice to quit shall be required once the tenancy has been determined by efflux ion of time and where the landlord intends to proceed to Court to recover possession, he shall serve a seven (7) days written notice of his intention to apply to recover possession as in Form TL5 in the Schedule to this Law. (6) The nature of a tenancy shall, in the absence of any evidence to the contrary, be determined by reference to the time when the rent is paid or demanded.",
+    "keywords": [
+      "notice to quit",
+      "quit notice",
+      "length of notice",
+      "one month",
+      "three months",
+      "six months",
+      "yearly tenant",
+      "eviction",
+      "landlord",
+      "leave",
+      "eject"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s16",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "16",
+    "title": "Tenant refusing to give up possession",
+    "text": "16. As soon as the term or interest on any premises has been determined by a written notice to quit as in Form TL2 or TL3, in the Schedule to this Law and the tenant neglects or refuses to quit and deliver up possession of the premises or any part of it, the Landlord or his agent may cause the tenant to As soon as the term or interest on any premises has been determined by a be served with a written notice as in Form TL4, signed by the Landlord or his agent, of the landlord's intention to proceed to recover possession, stating the grounds and particulars of the claim, on a date not less than seven (7) days from the date of the notice.",
+    "keywords": [
+      "refuse",
+      "give up possession",
+      "overstay",
+      "hold over",
+      "mesne profits",
+      "landlord",
+      "evict"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "LAGTEN2011-s25",
+    "source": "Lagos Tenancy Law 2011",
+    "section": "25",
+    "title": "Grounds for Possession",
+    "text": "25.-(1) unless the agreement expressly stipulates otherwise, the Court shall have power to make an .order for possession upon proof of any of the following grounds – (a) arrears of rent; (b) breach of any covenant or agreement; (c) where the premises is required by the landlord for personal use; or (2) Notwithstanding any agreement between the parties, the Court shall have power to make an Order for possession upon proof of any of the following grounds where- (a) the premises is being used for immoral or illegal purposes; (b) the premises has been abandoned; (c) the premises is unsafe and unsound as to constitute a danger to human life or property; or (d) the tenant or any person residing or lodging with him or being his sub-tenant constitutes by conduct, an act of intolerable nuisance or induces a breach of a tenancy agreement.",
+    "keywords": [
+      "grounds",
+      "possession",
+      "recover premises",
+      "breach",
+      "arrears",
+      "landlord",
+      "evict"
+    ],
+    "jurisdiction": "lagos",
+    "domain": "tenancy",
+    "applicability": "Lagos State ONLY (see s.1 Application for the premises this Law covers and its exclusions). Tenancy notice and eviction rules differ by state."
+  },
+  {
+    "id": "FOIA2011-s1",
+    "source": "Freedom of Information Act 2011",
+    "section": "1",
+    "title": "Rights of access to records",
+    "text": "1. (1) Notwithstanding anything contained in any other Act, law or regulation, the right of any person to access or request information, whether or not contained in any written form, which is in the custody or possession of any public official, agency or institution howsoever described, is established. (2) An applicant under this Act needs not demonstrate any specific interest in the information being applied for. (3) Any person entitled to the right to information under this Act, shall have the right to institute proceedings in the Court to compel any public institution to comply with the provisions of this Act.",
+    "keywords": [
+      "information",
+      "records",
+      "request",
+      "government agency",
+      "ministry",
+      "access",
+      "right to know"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "FOIA2011-s2",
+    "source": "Freedom of Information Act 2011",
+    "section": "2",
+    "title": "Information about public institution",
+    "text": "2. (1) A public institution shall ensure that it records and keeps information about all its activities, operations and businesses. (2) A public institution shall ensure the proper organization and maintenance of all information in its custody in a manner that facilitates public access to such information. (3) A public institution shall cause to be published in accordance with subsection (4) of this Section, the following information - (a) a description of the organization and responsibilities of the institution including details of the programmes and functions of each division, branch and department of the institution; (b) a list of all - (i) Classes of records under the control of the institution in sufficient detail to facilitate the exercise of the right to information under this Act, and (ii) Manuals used by employees of the institution in administering or carrying out any of the programmes or activities of the institution; (c) a description of documents containing final opinions including concurring and dissenting opinions as well as orders made in the adjudication of cases; (i) substantive rules of the institution (ii) statements and interpretations of policy which have been adopted by the institution, (iii) final planning policies, recommendations, and decisions; (iv) factual reports, inspection reports, and studies whether prepared by or for the institution; (v) information relating to the receipt or expenditure of public or other funds of the institution; (vi) the names, salaries, titles and dates of employment of all employees and officers of the institution; (vii) the right of the state, public institutions, or of any private person(s) (viii) the name of every official and the final records of voting in all proceedings of the institution; (e) a list of – (i) files containing applications for any contract, permit, grants, licenses or agreements, (ii) reports, documents, studies, or' publications prepared by independent contractors for the institution, and (iii) materials containing information relating to any grant or contract made by or between the institution and another public institution or private organization; (f) the title and address of the appropriate officer of the institution to whom an application for information under this Act shall be sent, provided that the failure of any public institution to publish any information under this subsection shall not prejudicially affect the public's right of access to information in the custody of such public institution. (4) A public institution shall ensure that information referred to in this section is widely disseminated and made readily available to members of the public through various means, including print, electronic and online sources, and at the offices of such public institutions. (5) A public institution shall update and review information required to be published under this section periodically, and immediately whenever changes occur (6) A person entitled to the right of access conferred by this Act shall have the right to institute proceedings in the Court to compel any public institution to comply with the provisions of this section. (7) Public institutions are all authorities whether executive, legislative or judicial agencies, ministries, and extra- ministerial departments of the government, together with all corporations established by law and all companies in which government has a controlling interest, and private companies utilizing public funds, providing public services or performing public functions.",
+    "keywords": [
+      "contact",
+      "register",
+      "list",
+      "records",
+      "agency",
+      "publish",
+      "information desk"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "FOIA2011-s3",
+    "source": "Freedom of Information Act 2011",
+    "section": "3",
+    "title": "Request for access to records",
+    "text": "3. An application for access to a record or information under this Act shall be made in accordance with Section 1 of this Act, (2) For the purpose of this Act, any information or record applied for under this Act that does not exist in print but can by regulation be produced from a machine, normally used by the government or public institution shall be deemed to be record under the control of the government or public institution. (3) Illiterate or disabled applicants who by virtue of their illiteracy or disability are unable to make an application for access to information or record in accordance with the provisions of subsection (1) of this Section, may make that application through a third party. (4) An authorized official of a government or public institution to whom an applicant makes an oral application for information or record, shall reduce the application into writing in the manner prescribed under subsection (1) of this Section and shall provide a copy of the written application to the applicant.",
+    "keywords": [
+      "apply",
+      "request procedure",
+      "write",
+      "application",
+      "describe",
+      "agency",
+      "how to request"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "FOIA2011-s4",
+    "source": "Freedom of Information Act 2011",
+    "section": "4",
+    "title": "Time for granting or refusing application",
+    "text": "4. Where information is applied for under this Act the public institution to which the application is made shall, subject to sections 6, 7, and 8 of this Act, within 7 days after the application is received- (a) make the information available to the applicant (b) Where the public institution considers that the application should be denied, the institution shall give written notice to the applicant that access to all or part of the information will not be granted, stating reasons for the denial, and the section of this Act under which the denial is made.",
+    "keywords": [
+      "days",
+      "7 days",
+      "timeline",
+      "grant",
+      "refuse",
+      "refusal",
+      "deemed refused",
+      "transfer"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "FOIA2011-s6",
+    "source": "Freedom of Information Act 2011",
+    "section": "6",
+    "title": "Extension of time limit",
+    "text": "6. The public institution may extend the time limit set out in Section 5 or Section 6 in respect of an application for a time not exceeding 7 days if – (a) The application is for a large number of records and meeting the original time limit would unreasonably interfere with the operations of the public institution; or (b) Consultations are necessary to comply with the application that cannot reasonably be completed within the original time limit, by giving notice of the extension stating whether the extension falls under the circumstances set out in this section, which notice shall contain a statement that the applicant has a right to have the decision to extend the limit reviewed by the Court.",
+    "keywords": [
+      "extend",
+      "extension",
+      "more time",
+      "large records",
+      "consultation",
+      "notice"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "FOIA2011-s8",
+    "source": "Freedom of Information Act 2011",
+    "section": "8",
+    "title": "Fees",
+    "text": "8. Fees shall be limited to standard charges for document duplication and Fees transcription where necessary.",
+    "keywords": [
+      "fees",
+      "charges",
+      "pay",
+      "duplication",
+      "transcription",
+      "cost",
+      "free"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "FOIA2011-s20",
+    "source": "Freedom of Information Act 2011",
+    "section": "20",
+    "title": "Judicial review",
+    "text": "20. Any applicant who has been denied access to information, or a part thereof, may apply to the Court for a review of the matter within 30 days after the public institution denies or is deemed to have denied the application, or within such further time as the Court may either before or after the expiration of the 30 days fix or allow.",
+    "keywords": [
+      "court",
+      "judge",
+      "review",
+      "refused",
+      "denied",
+      "sue",
+      "order",
+      "lawyer"
+    ],
+    "jurisdiction": "federal",
+    "domain": "civic_foi",
+    "applicability": "Right to request records from public institutions; request procedure and timelines."
+  },
+  {
+    "id": "LUA1978-s1",
+    "source": "Land Use Act (Cap L5)",
+    "section": "1",
+    "title": "Vesting of all land in the State",
+    "text": "1. Vesting of all land in the State Subject to the provisions of this Act, all land comprised in the territory of each State in the Federation is hereby vested in the Governor of that State, and such land shall be held in trust and administered for the use and common benefit of all Nigerians in accor- dance with the provisions of this Act.",
+    "keywords": [
+      "land",
+      "governor",
+      "vested",
+      "own land",
+      "all land",
+      "family land",
+      "ancestral"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LUA1978-s2",
+    "source": "Land Use Act (Cap L5)",
+    "section": "2",
+    "title": "Control and management of land",
+    "text": "2. Control and management of land; advisory bodies (1) As from the commencement of this Act- (a) all land in urban areas shall be under the control and management of the Gov- ernor of each State; and (b) all other land shall, subject to this Act, be under the control and management of the local government within the area of jurisdiction of which the land is situated. (2) There shall be established in each State a body to be known as \"the Land Use and Allocation Committee\" which shall have responsibility for- (a) advising the Governor on any matter connected with the management of land to which paragraph (a) of subsection (1) of this section relates; (b) advising the Governor on any matter connected with the resettlement of per- sons affected by the revocation of rights of occupancy on the ground of over- riding public interest under this Act; and (c) determining disputes as to the amount of compensation payable under this Act for improvements on land. (3) The Land Use and Allocation Committee shall consist of such a number of per- sons as the Governor may determine and shall include in its membership-- (a) not less than two persons possessing qualifications approved for appointment to the civil service as estate surveyors or land officers and who have had such qualification for not less than five years; and (b) a legal practitioner. (4) The Land Use and Allocation Committee shall be presided over by such one of its members as may be designated by the Governor and, subject to such directions as may be given in that regard by the Governor, shall have power to regulate its proceedings. (5) There shall also be established for each Local Government a body to be known as \"the Land Allocation Advisory Committee\" which shall consist of such person as may be determined by the Governor acting after consultation with the local government and shall have responsibility for advising the local government on any matter connected with the management of land to which paragraph (b) of subsection (1) of this section relates.",
+    "keywords": [
+      "manage",
+      "control",
+      "governor",
+      "advisory",
+      "land use",
+      "committee"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LUA1978-s5",
+    "source": "Land Use Act (Cap L5)",
+    "section": "5",
+    "title": "Powers of the Governor in relation to land",
+    "text": "5. Powers of the Governor in relation to land (1) It shall be lawful for the Governor in respect of land, whether or not in an urban area to-- (a) grant statutory rights of occupancy to any person for all purposes; (b) grant easements appurtenant to statutory rights of occupancy; (c) demand rental for any such land granted to any person; (d) revise the said rental- (i) at such intervals as may be specified in the certificate of occupancy; or (ii) where no intervals are specified in the certificate of occupancy at any time during the term of the statutory right of occupancy; (e) impose a penal rent for a breach of any covenant in a certificate of occupancy requiring the holder to develop or effect improvements on the land, the subject of the certificate of occupancy, and to revise such penal rent as provided in section 19 of this Act; (f) impose a penal rent for a breach of any condition, express or implied, which precludes the holder of a statutory right of occupancy from alienating the right of occupancy or any part thereof by sale, mortgage, transfer of possession, sub- lease or bequest or otherwise howsoever without the prior consent of the Governor; (g) waive, wholly or partially, except as otherwise prescribed, all or any of the cove- nants or conditions to which a statutory right of occupancy is subject where, owing to special circumstances, compliance therewith would be impossible or great hardship would be imposed upon the holder; (h) extend except as otherwise prescribed, the time to the holder of a statutory right of occupancy for performing any of the conditions of the right of occu- pancy upon such terms and conditions as he may think fit. (2) Upon the grant of a statutory right of occupancy under the provisions of subsec- tion (1) of this section, all existing rights to the use and occupation of the land, which is the subject of the statutory right of occupancy, shall be extinguished.",
+    "keywords": [
+      "governor",
+      "grant",
+      "statutory right of occupancy",
+      "urban land",
+      "certificate",
+      "C of O",
+      "consent"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LUA1978-s6",
+    "source": "Land Use Act (Cap L5)",
+    "section": "6",
+    "title": "Powers of local government in non-urban land",
+    "text": "6. Powers of local government in relation to land not in urban areas (1) It shall be lawful for a local government in respect of land not in an urban area to- (a) grant customary rights of occupancy to any person or organisation for the use of land in the local government area for agricultural, residential and other pur- poses; (b) grant customary rights of occupancy to any person or organisation for the use of land for grazing purposes and such other purposes ancillary to agricultural purposes as may be customary in the local government area concerned. (2) No single customary right of occupancy shall be granted in respect of an area of land in excess of 500 hectares if granted for agricultural purposes, or 5,000 hectares if granted for grazing purposes, except with the consent of the Governor. (3) It shall be lawful for a local government to enter upon, use and occupy for public purposes any land within the area of its jurisdiction which is not- (a) land within an area declared to be an urban area pursuant to section 3 of this Act; (b) the subject of a statutory right of occupancy; (c) within any area compulsorily acquired by the Government of the Federation or of the State concerned; (d) the subject of any laws relating to minerals or mineral oils, and for the purpose, to revoke any customary right of occupancy on any such land. (4) The local government shall have exclusive rights to the lands so occupied against all persons except the Governor. (5) The holder and the occupier according to their respective interests of any custom- ary right of occupancy revoked under subsection (3) of this section shall be entitled to compensation, for the value at the date of revocation, of their unexhausted improvements. (6) Where land in respect of which a customary right of occupancy is revoked under this Act was used for agricultural purposes by the holder, the local government shall allo- cate to such holder alternative land for use for the same purpose. (7) If a local government refuses or neglects within a reasonable time to pay compen- sation to a holder and an occupier according to their respective interests under the provi- sions of subsection (5) of this section, the Governor may proceed to the assessment of compensation under section 29 of this Act and direct the local government to pay the amount of such compensation to the holder and occupier according to their respective interests.",
+    "keywords": [
+      "local government",
+      "customary",
+      "right of occupancy",
+      "rural land",
+      "village",
+      "chairman"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LUA1978-s9",
+    "source": "Land Use Act (Cap L5)",
+    "section": "9",
+    "title": "Certificates of occupancy",
+    "text": "9. Certificates of occupancy (1) It shall be lawful for the Governor- (a) when granting a statutory right of occupancy to any person; or (b) when any person is in occupation of land under a customary right of occu- pancy and applies in the prescribed manner; or (c) when any person is entitled to a statutory right of occupancy, to issue a certificate under his hand in evidence of such right of occupancy. (2) Such certificate shall be termed a certificate of occupancy and there shall be paid therefor, by the person in whose name it is issued, such fee (if any) as may be prescribed. (3) If the person in whose name a certificate of occupancy is issued, without lawful excuse, refuses or neglects to accept and pay for the certificate, the Governor may cancel the certificate and recover from such person any expenses incidental thereto, and in the case of a certificate evidencing a statutory right of occupancy to be granted under para- graph (a) of subsection (1) of this section, the Governor may revoke the statutory right of occupancy. (4) The terms and conditions of a certificate of occupancy granted under this Act and which has been accepted by the holder shall be enforceable against the holder and his successors in title, notwithstanding that the acceptance of such terms and conditions is not evidenced by the signature of the holder or is evidenced by the signature only or, in the case of a corporation, is evidenced by the signature only of some person purporting to accept on behalf of the corporation.",
+    "keywords": [
+      "certificate",
+      "C of O",
+      "evidence",
+      "title",
+      "land",
+      "right of occupancy"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LUA1978-s28",
+    "source": "Land Use Act (Cap L5)",
+    "section": "28",
+    "title": "Power of Governor to revoke rights of occupancy",
+    "text": "28. Power of Governor to revoke rights of occupancy (1) It shall be lawful for the Governor to revoke a right of occupancy for overriding public interest. (2) Overriding public interest in the case of a statutory right of occupancy means- (c) the alienation by the occupier by assignment, mortgage, transfer of possession, sub-lease, or otherwise of any right of occupancy or part thereof contrary to the provisions of this Act or of any regulations made thereunder; (b) the requirement of the land by the Government of the State or by a Local Gov- ernment in the State, in either case for public purposes within the State, or the requirement of the land by the Government of the Federation for public pur- poses of the Federation; (c) the requirement of the land for mining purposes or oil pipelines or for any pur- pose connected therewith. (3) Overriding public interest in the case of a customary right of occupancy means- (a) the requirement of the land by the Government of the State or by a Local Gov- ernment in the State, in either case for public purposes within the State, or the requirement of the land by the Government of the Federation for public pur- poses of the Federation; (b) the requirement of the land for mining purposes or oil pipelines or for any pur- pose connected therewith; (c) the requirement of the land for the extraction of building materials; (d) the alienation by the occupier by sale, assignment, mortgage, transfer of possession, sub-lease, bequest or otherwise of the right of occupancy without the requisite consent or approval. (4) The Governor shall revoke a right of occupancy in the event of the issue of a no- tice by or on behalf of the President if such notice declares such land to be required by the Government for public purposes. (5) The Governor may revoke a statutory right of occupancy on the ground of- (a) a breach of any of the provisions which a certificate of occupancy is by sec- tion 10 of this Act deemed to contain; (b) a breach of any term contained in the certificate of occupancy or in any special contract made under section 8 of this Act; (c) a refusal or neglect to accept and pay for a certificate which was issued in evidence of a right of occupancy but has been cancelled by the governor under subsection (3) of section 9 of this Act. (6) The revocation of a right of occupancy shall be signified under the hand of a pub- lic officer duly authorised in that behalf by the Governor and notice thereof shall be given to the holder. (7) The title of the holder of a right of occupancy shall be extinguished on receipt by him of a notice given under subsection (6) of this section or on such later date as may be stated in the notice.",
+    "keywords": [
+      "revoke",
+      "revocation",
+      "take land",
+      "government take land",
+      "override",
+      "public purpose"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LUA1978-s29",
+    "source": "Land Use Act (Cap L5)",
+    "section": "29",
+    "title": "Compensation on revocation",
+    "text": "29. Compensation payable on revocation of right of occupancy by Governor in cer- tain cases (1) If a right of occupancy is revoked for the cause set out in paragraph (b) of sub- section (2) of section 28 of this Act or in paragraph (a) or (c) of subsection (3) of the same section, the holder and the occupier shall be entitled to compensation for the value at the date of revocation of their unexhausted improvements. (2) If a right of occupancy is revoked for the cause set out in paragraph (c) of subsec- tion (2) of section 28 of this Act or in paragraph (b) of subsection (3) of the same section the holder and the occupier shall be entitled to compensation under the appropriate provi- sions of the Minerals and Mining Act or the Petroleum Act or any legislation replacing the same. [Cap. M12. Cap. P10.] (3) If the holder or the occupier entitled to compensation under this section is a community the Governor may direct that any compensation payable to it shall be paid- (a) to the community; or (b) to the chief or leader of the community to be disposed of by him for the benefit of the community in accordance with the applicable customary law; or (c) into some fund specified by the Governor for the purpose of being utilised or applied for the benefit of the community. (4) Compensation under subsection (1) of this section shall be, as respects- (a) the land, for an amount equal to the rent, if any, paid by the occupier during the year in which the right of occupancy was revoked; (b) buildings, installation or improvements thereon, for the amount of the replace- ment cost of the building, installation or improvement, that is to say, such cost as may be assessed on the basis of the prescribed method of assessment as de- termined by the appropriate officer less any depreciation, together with interest at the bank rate for delayed payment of compensation and in respect of any improvement in the nature of reclamation works, being such cost thereof as may be substantiated by documentary evidence and proof to the satisfaction of the appropriate officer; (c) crops on land apart from any building, installation or improvement thereon, for an amount equal to the value as prescribed and determined by the appropriate officer. (5) Where the land in respect of which a right of occupancy has been revoked forms part of a larger area, the compensation payable shall be computed as in subsection (4) (a) of this section less a proportionate amount calculated in relation to that part of the area not affected by the revocation, but of which the portion revoked forms a part and any interest payable shall be assessed and computed in the like manner. (6) Where there is any building, installation or improvement or crops on the land to which subsection (5) of this section applies, then compensation shall be computed as specified hereunder, that is as respects- (a) such land, on the basis specified in that subsection; (b) any building, installation or improvement or corps thereon (or any combination of two or all of those things) on the basis specified in that subsection and sub- section (4) of this section, or so much of those provisions as are applicable, and any interest payable under those provisions shall be computed in the like manner. (7) For the purposes of this section, \"installation\" means any mechanical apparatus set up or put in position for use or materials set up in or on land or other equipment, but excludes any fixture in or on any building.",
+    "keywords": [
+      "compensation",
+      "pay",
+      "unexhausted improvements",
+      "crops",
+      "buildings",
+      "taken",
+      "prompt payment"
+    ],
+    "jurisdiction": "federal",
+    "domain": "land",
+    "applicability": "Vests land in the Governor; rights of occupancy; consent and compensation rules."
+  },
+  {
+    "id": "LABOUR1971-s11",
+    "source": "Labour Act",
+    "section": "11",
+    "title": "Termination of contracts by notice",
+    "text": "11. Termination of contracts by notice (1) Either party to a contract of employment may terminate the contract on the expi‐ ration of notice given by him to the other party of his intention to do so. (2) The notice to be given for the purposes of subsection (1) of this section shall be‐ (a) one day, where the contract has continued for a period of three months or less; (b) one week, where the contract had continued for more than three months but less than two years; (c) two weeks, where the contract has continued for a period of two years but less than five years; and (d) one month, where the contract had continued for five years or more. (3) Any notice for a period of one week or more shall be in writing. (4) The periods of notice specified in subsection (2) of this section exclude the day on which notice is given. (5) Nothing in this section affects any right of either party to a contract to treat the contract as terminable without notice by reason of such conduct by the other party as would have enabled him so to treat it before the making of this Act. (6) Nothing in this section shall prevent either party to a contract from waiving his right to notice on any occasion, or from accepting a payment in lieu of notice. (7) All wages payable in money shall be paid on or before the expiry of any period of notice. (8) If an employer gives notice to terminate the contract of employment of a worker who has been continuously employed for three months or more, the employer shall not be liable under this section to make any payment in respect of a period during which the worker is absent from work with the leave of the employer granted at the request of the worker. (9) In the calculation of a payment in lieu of notice, only that part of the wages which a worker receives in money, exclusive of overtime and other allowances, shall be taken into account.",
+    "keywords": [
+      "sack",
+      "sacked",
+      "terminate",
+      "dismiss",
+      "notice",
+      "fired",
+      "one week",
+      "two weeks",
+      "one month",
+      "length of service",
+      "wetin I fit do"
+    ],
+    "jurisdiction": "federal",
+    "domain": "employment",
+    "applicability": "Contracts, wages, hours, termination and redundancy for workers. s.7 (written particulars) deliberately excluded: this copy numbers that provision '3.' in the body while its own arrangement calls it '7.', colliding with another s.3 — unverifiable as s.7, so skipped."
+  },
+  {
+    "id": "LABOUR1971-s13",
+    "source": "Labour Act",
+    "section": "13",
+    "title": "Hours of work and overtime",
+    "text": "13. Hours of work and overtime (1) Normal hours of work in any undertaking shall be those fixed‐ (a) by mutual agreement; or (b) by collective bargaining within the organisation or industry concerned; or (c) by an industrial wages board (established by or under an enactment providing for the establishment of such boards) where there is no machinery for collec‐ tive bargaining. (2) Hours which a worker is required to work in excess of the normal hours fixed un‐ der subsection (1) of this section shall constitute overtime. (3) Where a worker is at work for six hours or more a day, his work shall be inter‐ rupted (to the extent which is necessary, having regard to its character and duration and to working conditions in general) by allowing one or more suitably spaced rest‐intervals of not less than one hour on the aggregate: Provided that‐ (a) exceptions may be made to the rule in this subsection where unforeseen cir‐ cumstances render them necessary; and (b) where it is found unavoidable in view of the nature of the work and the work‐ ing conditions in general, time‐off for a meal at the worksite or in the immedi‐ ate vicinity may be substituted for the rest‐interval. (4) In subsection (3) of this section, \"rest‐interval\" means an interruption of work of which the length is fixed beforehand and during which the worker is free to dispose of his time and is not required to remain at the place of work. (5) Where, by reason of its connection with a mechanical process or as a result of other circumstances, the work involves continuous strain or is particularly trying in other ways, the worker shall be allowed the requisite number of suitably adjusted and spaced breaks in the work. (6) In subsection (5) of this section, \"break in the work\" means a short intermission in the work fixed beforehand which is ordered with a view to allowing the worker to de‐ tach himself from his work and which is not to be counted as a rest‐interval or time‐off under subsection (3) of this section. (7) In every period of seven days a worker shall be entitled to one day of rest which shall not be less than 24 consecutive hours; if any reduction takes place in the weekly rest‐period‐ (a) corresponding time‐off from work shall be allowed as soon as possible (and in any case not later than fourteen days thereafter); or (b) wages at overtime rates shall be paid in lieu thereof.",
+    "keywords": [
+      "hours",
+      "overtime",
+      "8 hours",
+      "work time",
+      "rest",
+      "shift",
+      "overwork"
+    ],
+    "jurisdiction": "federal",
+    "domain": "employment",
+    "applicability": "Contracts, wages, hours, termination and redundancy for workers. s.7 (written particulars) deliberately excluded: this copy numbers that provision '3.' in the body while its own arrangement calls it '7.', colliding with another s.3 — unverifiable as s.7, so skipped."
+  },
+  {
+    "id": "LABOUR1971-s15",
+    "source": "Labour Act",
+    "section": "15",
+    "title": "Periodicity of payment of wages",
+    "text": "15. Periodicity of payment of wages Wages shall become due and payable at the end of each period for which the contract is expressed to subsist, that is to say, daily, weekly or at such other period as may be agreed upon: Provided that, where the period is more than one month, the wages shall become due and payable at intervals not exceeding one month.",
+    "keywords": [
+      "salary",
+      "wages",
+      "pay",
+      "boss",
+      "not paid",
+      "owe",
+      "monthly",
+      "when wages due",
+      "no pay",
+      "two months"
+    ],
+    "jurisdiction": "federal",
+    "domain": "employment",
+    "applicability": "Contracts, wages, hours, termination and redundancy for workers. s.7 (written particulars) deliberately excluded: this copy numbers that provision '3.' in the body while its own arrangement calls it '7.', colliding with another s.3 — unverifiable as s.7, so skipped."
+  },
+  {
+    "id": "LABOUR1971-s18",
+    "source": "Labour Act",
+    "section": "18",
+    "title": "Annual holidays with pay",
+    "text": "18. Annual holidays with pay (1) Every worker shall be entitled after twelve months' continuous service to a holi‐ day with full pay of‐ (a) at least six working days; or (b) in the case of a person under the age of sixteen years (including an apprentice), at least twelve working days. (2) The holiday mentioned in subsection (1) of this section may be deferred by agreement between the employer and the worker: Provided that the holiday‐earning period shall not thereby be increased beyond 24 months' continuous service. (3) It shall be unlawful for an employer to pay wages in lieu of the holiday mentioned in subsection (1) of this section to a worker whose contract has not terminated. (4) A person who ceases to be employed after having completed‐ (a) less than twelve but not less than six months in the continuous employment of an employer; or (b) not less than six months in the continuous employment of an employer since he last qualified for a holiday under subsection (1) of this section, shall be paid with respect to that period of employment an amount bearing the same pro‐ portion to full pay for one week at his normal rate as that period bears to twelve months.",
+    "keywords": [
+      "leave",
+      "annual leave",
+      "holiday",
+      "vacation",
+      "paid leave",
+      "rest days"
+    ],
+    "jurisdiction": "federal",
+    "domain": "employment",
+    "applicability": "Contracts, wages, hours, termination and redundancy for workers. s.7 (written particulars) deliberately excluded: this copy numbers that provision '3.' in the body while its own arrangement calls it '7.', colliding with another s.3 — unverifiable as s.7, so skipped."
+  },
+  {
+    "id": "LABOUR1971-s20",
+    "source": "Labour Act",
+    "section": "20",
+    "title": "Redundancy",
+    "text": "20. Redundancy (1) In the event of redundancy‐ (a) the employer shall inform the trade union or workers' representative concerned of the reasons for and the extent of the anticipated redundancy; (b) the principle of \"last in, first out\" shall be adopted in the discharge of the par‐ ticular category of workers affected, subject to all factors of relative merit, in‐ cluding skill, ability and reliability; and (c) the employer shall use his best endeavours to negotiate redundancy payments to any discharged workers who are not protected by regulations made under subsection (2) of this section. (2) The Minister may make regulations providing, generally or in particular cases, for the compulsory payment of redundancy allowances on the termination of a worker's em‐ ployment because of his redundancy. (3) In this section \"redundancy\" means an involuntary and permanent loss of em‐ ployment caused by an excess of manpower. General",
+    "keywords": [
+      "redundant",
+      "redundancy",
+      "retrench",
+      "lay off",
+      "compensation",
+      "declare redundant"
+    ],
+    "jurisdiction": "federal",
+    "domain": "employment",
+    "applicability": "Contracts, wages, hours, termination and redundancy for workers. s.7 (written particulars) deliberately excluded: this copy numbers that provision '3.' in the body while its own arrangement calls it '7.', colliding with another s.3 — unverifiable as s.7, so skipped."
+  },
+  {
+    "id": "LABOUR1971-s54",
+    "source": "Labour Act",
+    "section": "54",
+    "title": "Maternity protection",
+    "text": "54. Maternity protection (1) In any public or private industrial or commercial undertaking or in any branch thereof, or in any agricultural undertaking or any branch thereof, a woman‐ (a) shall have the right to leave her work if she produces a medical certificate given by a registered medical practitioner stating that her confinement will probably take place within six weeks; (b) shall not be permitted to work during the six weeks following her confinement; (c) if she is absent from her work in pursuance of paragraph (a) or (b) of this sub‐ section and had been continuously employed by her then employer for a period of six months or more immediately prior to her absence, shall be paid not less than fifty per cent of the wages she would have earned if she had not been ab‐ sent; and (d) shall in any case, if she is nursing her child, be allowed half an hour twice a day during her working hours for that purpose. (2) Subsection (1) (c) of this section shall have effect notwithstanding any law relat‐ ing to the fixing and payment of a minimum wage. (3) No employer shall be liable, in his capacity as an employer, to pay any medical expenses incurred by a woman during or on account of her pregnancy or confinement. (4) Where a woman‐ (a) is absent from her work in pursuance of subsection (1) (a) or (b) of this sec‐ tion; or (b) remains absent from her work for a longer period as a result of illness certified by a registered medical practitioner to arise out of her pregnancy or confine‐ ment and to render her unfit for work, then, until her absence has exceeded such a period (if any) as may be prescribed, no em‐ ployer shall give her notice of dismissal during her absence or notice of dismissal expir‐ ing during her absence. (5) In subsection (1) (d) of this section, \"child\" includes both a legitimate and an il‐ legitimate child.",
+    "keywords": [
+      "maternity",
+      "pregnant",
+      "nursing",
+      "maternity leave",
+      "woman",
+      "sack pregnant"
+    ],
+    "jurisdiction": "federal",
+    "domain": "employment",
+    "applicability": "Contracts, wages, hours, termination and redundancy for workers. s.7 (written particulars) deliberately excluded: this copy numbers that provision '3.' in the body while its own arrangement calls it '7.', colliding with another s.3 — unverifiable as s.7, so skipped."
+  },
+  {
+    "id": "FCCPA2018-s119",
+    "source": "Federal Competition and Consumer Protection Act 2018",
+    "section": "119",
+    "title": "Prohibition of tied supply conditions",
+    "text": "119. An undertaking shall not require, as a condition of offering to supply or supplying any goods or services, or as a condition of entering into an agreement or transaction, that a consumer shall- (a) purchase any other particular goods or services from that undertaking, (b) enter into an additional agreement or transaction with the same undertaking or a designated third party, or (c) agree to purchase any particular goods or services from a designated third party, unless the undertaking can demonstrate that the convenience to the consumer in having those goods or services bundled outweighs the limitation of the consumer's right to choice, or that the bundling of those goods or services results in economic benefit for the consumer.",
+    "keywords": [
+      "tie",
+      "tied",
+      "bundle",
+      "condition",
+      "must buy",
+      "another goods",
+      "cheat",
+      "consumer",
+      "seller"
+    ],
+    "jurisdiction": "federal",
+    "domain": "consumer",
+    "applicability": "Gazette OCR scan: verified plain-string typo fixes in 'fixes', applied in order."
+  },
+  {
+    "id": "FCCPA2018-s134",
+    "source": "Federal Competition and Consumer Protection Act 2018",
+    "section": "134",
+    "title": "Duty to label goods properly",
+    "text": "134. A manufacturer, importer or distributor of goods shall label or describe the goods in a manner that will be easily traceable to the manufacturer, importer or distributor.",
+    "keywords": [
+      "label",
+      "describe",
+      "goods",
+      "fake",
+      "counterfeit",
+      "package",
+      "manufacturer",
+      "importer"
+    ],
+    "jurisdiction": "federal",
+    "domain": "consumer",
+    "applicability": "Gazette OCR scan: verified plain-string typo fixes in 'fixes', applied in order."
+  },
+  {
+    "id": "FCCPA2018-s140",
+    "source": "Federal Competition and Consumer Protection Act 2018",
+    "section": "140",
+    "title": "Exclusion of liability for defective goods",
+    "text": "140. Where a contract contains a term which excludes or restricts any liability to which a part of a contract may be the subject by reason of any misrepresentation made before the contract was made, or any remedy available to another party to the contract by reason of such a misrepresentation, that terrn shall have no effect.",
+    "keywords": [
+      "exclude",
+      "liability",
+      "defective",
+      "contract term",
+      "unfair term",
+      "void",
+      "consumer right"
+    ],
+    "jurisdiction": "federal",
+    "domain": "consumer",
+    "applicability": "Gazette OCR scan: verified plain-string typo fixes in 'fixes', applied in order."
+  },
+  {
+    "id": "FCCPA2018-s143",
+    "source": "Federal Competition and Consumer Protection Act 2018",
+    "section": "143",
+    "title": "Implied terms in service contracts",
+    "text": "143. Where under a contract for the supply of a service by a supplier acting in the course of a business, the time for the service to be carried out is not fixed by the contract, left to be fixed in a manner agreed by the contract or determined by the course of dealing between the parties, it is implied that the supplier will carry out the service within a reasonable time.",
+    "keywords": [
+      "service",
+      "implied",
+      "repair",
+      "artisan",
+      "mechanic",
+      "tailor",
+      "work",
+      "quality",
+      "time"
+    ],
+    "jurisdiction": "federal",
+    "domain": "consumer",
+    "applicability": "Gazette OCR scan: verified plain-string typo fixes in 'fixes', applied in order."
+  },
+  {
+    "id": "FCCPA2018-s145",
+    "source": "Federal Competition and Consumer Protection Act 2018",
+    "section": "145",
+    "title": "Defective goods: onus of proof",
+    "text": "145. Where it is alleged that goods or services are defective, the onus of proof shall lie on the undertaking that supplied the goods or services.",
+    "keywords": [
+      "defective",
+      "proof",
+      "prove",
+      "burden",
+      "faulty",
+      "spoilt",
+      "fake",
+      "refund"
+    ],
+    "jurisdiction": "federal",
+    "domain": "consumer",
+    "applicability": "Gazette OCR scan: verified plain-string typo fixes in 'fixes', applied in order."
+  },
+  {
+    "id": "FCCPA2018-s152",
+    "source": "Federal Competition and Consumer Protection Act 2018",
+    "section": "152",
+    "title": "Investigation of consumer complaints",
+    "text": "152. Where upon an investigation by the Commission of a complaint by a consumer it is proved that- (a) the consumer's right has been violated, or (b) a wrong has been committed by the way of trade, provision of services, supply or information or advertisement thereby causing injury or loss to the consumer, the consumer shall in addition to the redress which the Commission may impose. have a right of civil action for compensation or restitution in a court ofcornpetent jurisdiction.",
+    "keywords": [
+      "complaint",
+      "commission",
+      "investigate",
+      "report seller",
+      "cheat",
+      "consumer",
+      "where to complain"
+    ],
+    "jurisdiction": "federal",
+    "domain": "consumer",
+    "applicability": "Gazette OCR scan: verified plain-string typo fixes in 'fixes', applied in order."
+  },
+  {
+    "id": "CPA2000-s8",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "8",
+    "title": "Offence of accepting gratification",
+    "text": "8. (1) Any person who corruptly – (a) ask for, receives or obtains any property or benefit of any kind for himself or for any other person; or (b) agree or attempts to receive or obtain any property or (c) benefit of any kind for himself or for any other person, on account of- (i) anything already done or omitted to be done, or for any favour or disfavour already shown to any person by himself in the discharge of his official duties or in relation to any matter connected with the functions, affairs or business of a Government department, or corporate body or other organisation or institution in which he is serving as an official; or (ii) anything to be afterwards done or omitted to be done or favour or disfavour to be afterwards shown to any person, by himself in the discharge of his official duties or in relation to any such matter as aforesaid, is guilty of an offence of Official corruption and is liable to imprisonment for seven (7) years. (2) If in any proceedings for an offence under this section it is proved that any property or benefit of any kind, or any promise thereof, was received by a public officer, or by some other person at the instance of a public officer from a person- (a) holding or seeking to obtain a contract, license, permit, employment or anything whatsoever from a Government department, public body or other organisation or institution in which that public officer is serving as such; (b) concerned, or likely to be concerned, in any proceeding or business transacted, pending or likely to be transacted before or by that public officer or a government department, public body or other organisation or institution in which that public officer is serving as such; and (c) acting on behalf of or related to such a person; the property, benefit or promise shall, unless the contrary is proved, be presumed to have been received corruptly on account of such a past or future act, omission, favour or disfavour as is mentioned in subsection (1)(a) or (b). (3) In any proceedings for an offence to which subsection (1)(b) is relevant, it shall not be a defence to show that the accused- (a) did not subsequently do, make or show the act, omission, favour or disfavour in question; or (b) never intend to do, make or show the act, omission, favour or disfavour. (4) Without prejudice to subsection (3), where a Police Officer or other public officer whose duties include the prosecution, detection or punishment of offenders is charged with an offence under this section arising from- (a) the arrest, detention or prosecution of any person for an alleged offence; or (b) an omission to arrest, detain or prosecute any person for an alleged offence; or (c) the investigation of an alleged offence, it shall not be necessary to prove that the accused believed that the offence mentioned in paragraph (a) (b) or (c), or any other offence had been committed.",
+    "keywords": [
+      "bribe",
+      "bribery",
+      "corruption",
+      "gratification",
+      "accept",
+      "official",
+      "collect money",
+      "roadblock"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "CPA2000-s9",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "9",
+    "title": "Giving or accepting gratification through agent",
+    "text": "9. (1) Any person who corruptly- (a) gives, confers or procures any property or benefit of any kind to, on or for a public officer or to, on or for any other person; or (b) promises or offers to give, confers, procure or attempt to procure any property or benefit of any kind to, on or for a public officer or any other person, on account of any such act, omission, favour or disfavour our to be done or shown by the public officer is guilty of an offence of official corruption and shall on conviction be liable to imprisonment for seven (7) years. (2) If in any proceedings for an offence under this section it is proved that any Property or benefit of any kind, or any promise thereof, was given to a public officer or some other person at the instance of a public officer, by a person- (a) holding or seeking to obtain a contract, licence, permit, employment or anything whatsoever from a Government department, public body or other organisation or institution in which that public officer is serving as such,or (b) concerned or likely to be concerned in any proceeding or business transacted, pending or likely to be transacted before or by that public officer or a government department, public body or other organisation or institution in which that public officer is serving as such, or (c) acting on behalf of or relative to such a person, the property, benefit or promise shall, unless the contrary is proved, be deemed to have been given corruptly on account of such a past or future act, omission, favour or disfavour as is mentioned in section 9(1) and (2).",
+    "keywords": [
+      "agent",
+      "middleman",
+      "bribe",
+      "gratification",
+      "through",
+      "corruption"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "CPA2000-s10",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "10",
+    "title": "Guilty notwithstanding purpose not carried out",
+    "text": "10. Any person who - (a) ask for, receives or obtains property or benefits of any kind for himself or any other person; or agrees or attempts to receive or obtain any property or benefit of any kind for himself or any other person; on account of- (i) anything already done or omitted to be done, or any favour or disfavour already shown to any person, by a public officer in the discharge of his official duties or in relation to any matter connected with the functions, affairs or business of a Government department, public body or other organisation or institution in which the public officer is serving as such; or (ii) anything to be afterwards done or omitted, or any favour or disfavour to be afterwards shown to any person, by a public officer in the discharge of his official duties or in relation to any such matter as aforesaid, is guilty of an offence of official corruption and shall on conviction be liable to imprisonment for seven (7) years.",
+    "keywords": [
+      "bribe",
+      "purpose",
+      "not carried out",
+      "guilty",
+      "gratification",
+      "corruption"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "CPA2000-s18",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "18",
+    "title": "Bribery of public officer",
+    "text": "18. Any person who offers to any public officer, or being a public officer solicits, counsels or accepts any gratification as an inducement or a reward for- (a) voting or abstaining from voting at any meeting of the public body in favour or against any measure, resolution or question submitted to the public body; (b) performing or abstaining from performing or aiding in procuring, expediting, delaying, hindering or preventing the performance of any official act; (c) aiding in procuring or preventing the passing of any vote or the granting of any contract, award, recognition or advantage in favour of any person; or (d) showing or forbearing to show any favour or disfavour in his capacity as such officer, shall, notwithstanding that the officer did not have the power, right or opportunity so to do, or that the inducement or reward was not in relation to the affairs of the public body, be guilty of an offence and shall on conviction be liable to five (5) years imprisonment with hard labour.",
+    "keywords": [
+      "bribe",
+      "public officer",
+      "offer",
+      "solicit",
+      "government official",
+      "corruption"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "CPA2000-s19",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "19",
+    "title": "Using office for gratification",
+    "text": "19. Any public officer who uses his office or position to gratify or confer any corrupt or unfair advantage upon himself or any relation or associate of the public officer or any other public officer shall be guilty of an offence and shall on conviction be liable to imprisonment for five (5) years without option of fine.",
+    "keywords": [
+      "office",
+      "position",
+      "gratify",
+      "confer",
+      "favour",
+      "unfair advantage",
+      "corruption"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "CPA2000-s23",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "23",
+    "title": "Duty to report bribery transactions",
+    "text": "23. (1) Any Public officer to whom any gratification is given, promised, or offered, in contravention of any provision of this Act shall report such gift, promise or offer together with the name, if known, of the person who gave, promised or offered such gratification to him to the nearest officer of the Commission or Police Officer. (2) Any person from whom any gratification has been solicited or obtained, or from whom an attempt has been made to obtain such gratification, in contravention of any provision of this Act, shall, at the earliest opportunity thereafter, report such soliciting or obtaining, or attempt to obtain the gratification together with the name, if known, or a true and full description of the person who solicited, or obtained, or attempted to obtain the gratification from him, to the nearest officer or officer of the Commission or a Police Officer. (3) Any person who fails, without reasonable excuse, to comply with subsections (I) and (2) shall be guilty of an offence and shall on conviction be liable to a fine not exceeding one hundred thousand naira or to imprisonment for a term not exceeding two years or to both fine and imprisonment.",
+    "keywords": [
+      "report",
+      "duty",
+      "inform",
+      "ICPC",
+      "bribe",
+      "how to report",
+      "complain"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "CPA2000-s64",
+    "source": "Corrupt Practices and Other Related Offences Act 2000",
+    "section": "64",
+    "title": "Protection of informers",
+    "text": "64. (1) Subject to subsection (2), where any complaint made by any officer of the Commission states that the complaint is made in consequence of information received by the officer making the complaint, the information referred to in the compliant and the identity of the person from whom such information is received shall be secret between the officer who made the complaint and the person who gave the information, and everything contained in such information, identity of the person who gave the information and all other circumstances relating to the information, including the place where it was given, shall not be disclosed or be ordered or required to be disclosed in public but only to the trial judge and the defence lawyer in attendance in any civil, criminal or other proceedings in any court or tribunal. (2) If any book, paper or other document, or any visual or sound recording, or other matter or material which is given in evidence or liable to inspection in any civil, criminal or other proceedings in any court, or other authority as are referred to in subsection (1) contains any entry other matter in which any person who gave the information is named or described or shown, or which might lead to his discovery, the court before which the proceedings are held shall cause all such parts thereof or passages therein to be concealed from view or to be obliterated or otherwise removed so far as is necessary to protect such person from discovery- (3) Any person who gives the information referred to in subsection (I) knowing the information to be false shall be guilty of an offence and shall on conviction be liable to imprisonment for a term not exceeding ten years, and shall also be liable to a fine not exceeding one hundred thousand naira; Provided that sub-sections (1) and (2) shall not apply to any investigation or prosecution for any offence arising from any breach of the provisions of this sub-section. General",
+    "keywords": [
+      "informer",
+      "protect",
+      "identity",
+      "secret",
+      "whistleblower",
+      "report safely"
+    ],
+    "jurisdiction": "federal",
+    "domain": "anti_corruption",
+    "applicability": "ICPC offences: bribery, gratification, and how to report."
+  },
+  {
+    "id": "LAA2011-s8",
+    "source": "Legal Aid Act 2011",
+    "section": "8",
+    "title": "Scope of legal aid",
+    "text": "8. (1) The grant of legal aid, advice and access to justice shall be provided by the Council in 3 broad areas, namely, Criminal Defence Service, Advice and Assistance in Civil matters including legal representation in court and Community Legal Services subject to merits and indigence tests for the parties. (2) The Council, shall establish, maintain and develop a service known as the Criminal Defence Service for the purpose of assisting indigent persons involved in criminal investigation or proceedings specified in the Second Schedule to this Act, access to such advice, assistance and representation as the interest of justice requires. (3) The Council shall establish and maintain a service to be known as the Civil Litigation Service for the purpose of assisting indigent persons to access such advice, assistance, and representation in court where the interest of justice demands, to secure, defend, enforce, protect or otherwise exercise any right, obligation, duty, privilege interest or service to which that person is ordinarily entitled under the Nigerian legal system. (4) Legal Aid shall also be granted in respect of any breach or denial of any such right, obligation, duty, privilege or service and the Council shall be responsible for the representation before any court or tribunal for such civil matters. (5) Legal Aid shall consist, on terms provided by this Act, of- (a) the assistance of a legal practitioner including all such assistance as is usually given to by a private legal practitioner in the steps preliminary or incidental to any proceeding; (b) representation by a legal practitioner including all such assistance as is usually given to by a private legal practitioner before any court; and (c) such additional aid (including advice) as may be prescribed. (6) Where regulations made provide for Legal aid, provision shall be made therein to the effect that persons shall not be given legal aid in connection with any such proceeding unless he shows to the satisfaction of the Director-General or other person authorized by the Council that he has reasonable grounds for taking, defending or being a party Scope of legal Aid and access to Justice. Second Schedule thereto, and may also be refused legal aid if it appears unreasonable that he should receive it in the particular circumstances of the case. (7) The Council shall establish, maintain and develop a service known as Community Legal Service for the purpose of promoting individual services and in particular, for ensuring that individuals have access to services that effectively meet their needs. Community Legal Services for the purpose of this section means – (a) the provision of general information about the law and legal system and the availability of legal services; (b) the provision of assistance; in preventing or settling or otherwise resolving disputes about legal rights and duties; (c) the provision of assistance in enforcing decisions by which such dispute are resolved; (d) the provision of assistance in financial support and rendering; and (e) the provision of assistance with regards to claims against public authorities, private organizations and individuals: Provided that the Director-General shall reserve the right to set the limit of such assistance. (8) Every person authorized by the Council to exercise the functions relating to Community legal Service shall do so in such a manner as to – (a) promote improvement in the quality of services provided for the benefit of those who need them; (b) ensure that the services provided in relation to any matter are appropriate having regard to its nature and importance; and (c) achieve a swift and fair resolution of disputes in order to avoid the necessity of a protracted court proceeding. PART III – FINANCIAL ASPECTS OF LEGAL AID",
+    "keywords": [
+      "scope",
+      "cover",
+      "criminal",
+      "civil",
+      "legal aid",
+      "what cases",
+      "free lawyer"
+    ],
+    "jurisdiction": "federal",
+    "domain": "legal_aid",
+    "applicability": "Who qualifies for free legal help and how to apply to the Legal Aid Council."
+  },
+  {
+    "id": "LAA2011-s10",
+    "source": "Legal Aid Act 2011",
+    "section": "10",
+    "title": "Persons entitled to legal aid",
+    "text": "10. (1) Legal aid shall only be granted to a person whose income does not exceed the national minimum wage. (2) Notwithstanding the provision of subsection (1), the Board may, in exceptional circumstance, grant legal aid service to a person whose earning exceeds the national minimum wage. (3) Notwithstanding the provisions of subsection (1) of this section, the Governing Board may approve the giving of legal aid on a contributory basis to a person whose income exceeds ten times of the national minimum wage. Provided that - (a) the Council shall recover the expenses incurred in giving legal aid to such a person by the retention of both an amount equal to 10 percent of the damages awarded and the costs awarded to him; (b) where such a person has been granted Legal Aid on a contributory basis he shall be entitled to a refund of his contribution from such costs. (4) No contribution made under subsection (2) of this section shall exceed the appropriate slim calculated in the manner prescribed for that purpose. (5) The Council shall not be liable in any way to pay costs howsoever awarded against a person granted legal aid. (6) The rules of any court relating to payment of fees shall not apply to a person granted legal aid.",
+    "keywords": [
+      "free lawyer",
+      "cannot afford",
+      "legal aid",
+      "qualify",
+      "poor",
+      "indigent",
+      "no money",
+      "entitled"
+    ],
+    "jurisdiction": "federal",
+    "domain": "legal_aid",
+    "applicability": "Who qualifies for free legal help and how to apply to the Legal Aid Council."
+  },
+  {
+    "id": "LAA2011-s11",
+    "source": "Legal Aid Act 2011",
+    "section": "11",
+    "title": "Ascertainment of means",
+    "text": "11. (1) In ascertaining the means of any person for the purposes of this Act, that person’s income and his personal and real property shall be taken into account. (2) In assessing a person’s means such of his commitments as may be prescribed, shall be deducted from the resources, which would otherwise be his means. Persons entitled to Legal aid. Ascertainment of means",
+    "keywords": [
+      "means",
+      "income",
+      "test",
+      "ascertain",
+      "poor",
+      "qualify",
+      "eligibility",
+      "salary"
+    ],
+    "jurisdiction": "federal",
+    "domain": "legal_aid",
+    "applicability": "Who qualifies for free legal help and how to apply to the Legal Aid Council."
+  },
+  {
+    "id": "ATA2017-s1",
+    "source": "Anti-Torture Act 2017",
+    "section": "1",
+    "title": "Duty of Government",
+    "text": "The Government shall - Duty of Government. (a) ensure that the rights of all persons, including suspects, detainees and prisoners are respected at all times and that no person placed under investigation or held in custody of any person in authority shall be subjected to physical harm, force, violence, threat or intimidation or any act that impairs his free will; and (b) fully adhere to the principles and standards on the absolute condemnation and prohibition of torture set by the Constitution of the Federal Republic of Nigeria and various international instruments to Act No. 23, 1999. which Nigeria is a State party.",
+    "keywords": [
+      "government",
+      "duty",
+      "respect rights",
+      "suspects",
+      "detainees",
+      "prisoners",
+      "no harm"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s2",
+    "source": "Anti-Torture Act 2017",
+    "section": "2",
+    "title": "Acts of torture",
+    "text": "1) Torture is deemed committed when an act by which pain or suffering, whether physical Acts of torture. or mental, is intentionally inflicted on a person to — (a) obtain information or a confession from him or a third person; (b) punish him for an act he or a third person has committed or is suspected of having committed; or (c) intimidate or coerce him or a third person for any reason based on discrimination of any kind, when such pain or suffering is inflicted by or at the instigation of or with the consent or acquiescence of a public official or other person acting in an official capacity provided that it does not include pain or suffering in compliance with lawful sanctions. (2) For the purpose of this Act, torture includes - (a) physical torture, which refers to such cruel, inhuman or degrading treatment which causes pain, exhaustion, disability or dysfunction of one or more parts of the body, such as - (1) systematic beatings, head-bangings, punching, kicking, striking with rifle butts and jumping on the stomach, (ii) food deprivation or forcible feeding with spoiled food, animal or human excreta or other food not normally eaten, (iii) electric shocks, (iv) cigarette burning, burning by electrically heated rods, hot oil, acid, by the rubbing of pepper or other chemical substances on mucous membranes, or acids or spices directly on the wounds, (v) the submersion of the head in water or water polluted with excrement, urine, vomit or blood, (vi) being tied or forced to assume fixed and stressful bodily positions, (vii) rape and sexual abuse, including the insertion of foreign bodies into the sex organs or rectum or electrical torture of the genitals, (viii) other forms of sexual abuse, (ix) mutilation, such as amputation of the essential parts of the body such as the genitalia, ears or tongue and any other part of the body, (x) dental torture or the forced extraction of the teeth, (xi) harmful exposure to the elements such as sunlight and extreme cold, (xii) the use of plastic bags and other materials placed over the head to the point of asphyxiation, (xin) the use of psychoactive drugs to change the perception, memory, alertness or will of a person, such as administration of drugs to induce confession or reduce mental competency, or the use of drugs to induce pain or certain symptoms of disease, or (xiv) other forms of aggravated and deliberate cruel, inhuman or degrading physical .or pharmacological treatment or punishment; and (b) mental or psychological torture, which is understood as referring to. such cruel, inhuman or degrading treatment calculated to affect or confuse the mind or undermine a person’s dignity and morale, such as - (i) blindfolding, (ii) threatening a person or such persons related or known to him with bodily harm, execution or other wrongful acts, (iii) confinement in solitary cells put up in public places, (iv) confinement in solitary cells against their will or without prejudice to their security, - (v) prolonged interrogation to deny normal length of sleep or rest, (vi) causing unscheduled transfer of a person from one place to another, creating the belief that he shall be summarily executed, (vii) maltreating a member of the person’s family, (viii) causing the torture sessions to be witnessed by the person’s family, relatives or any third party, (x) inducing generalised fear among certain sections of the population, (x) denial of sleep or rest, (xi) inflicting shame by stripping a person naked, parading him in a public place, shaving his head or putting marks on his body against his will, or (xil) confinement in jails and prisons under intolerable and inhuman conditions or degrading mental treatment or punishment.",
+    "keywords": [
+      "torture",
+      "beat",
+      "beaten",
+      "confess",
+      "pain",
+      "suffering",
+      "prohibit",
+      "cell",
+      "electric",
+      "define"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s3",
+    "source": "Anti-Torture Act 2017",
+    "section": "3",
+    "title": "No justification for torture",
+    "text": "(1) No exceptional circumstances whatsoever, whether a state of war or a threat of war, internal political instability or any other public emergency, may be invoked as a justification for torture. (2) Secret detention places, solitary confinement, incommunicado or other similar forms of detention, where torture may be carried on are prohibited. Any confession, admission or statement obtained as a result of torture shall not be invoked as evidence in a proceeding, except against a person accused of torture as evidence that the confession, admission or statement was made,",
+    "keywords": [
+      "justify",
+      "no excuse",
+      "war",
+      "emergency",
+      "secret",
+      "detention",
+      "evidence",
+      "inadmissible"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s4",
+    "source": "Anti-Torture Act 2017",
+    "section": "4",
+    "title": "Right to complain",
+    "text": "(1) A person who has suffered or alleges that he has been subjected to torture shall have the right to complain to and to have his case promptly and impartially examined by a competent authority. (2) The competent authority under subsection (1) shall take steps to ensure that the complainant is protected against all ill-treatment or intimidation as a consequence of his complaint or any given evidence. No justification for torture. Non-admissibility of evidence obtained as a result of torture, Right to complain, \\ person who has suffered torture and other cruel, inhuman and degrading treatment or punishment,",
+    "keywords": [
+      "complain",
+      "complaint",
+      "report",
+      "competent authority",
+      "protected",
+      "torture",
+      "examine case"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s5",
+    "source": "Anti-Torture Act 2017",
+    "section": "5",
+    "title": "Assistance in filing complaint",
+    "text": "or any interested party on his behalf, may seek legal assistance in the proper handling and filing of the complaint from the Human Rights Commission, and non- governmental organisations and private persons.",
+    "keywords": [
+      "assistance",
+      "help",
+      "file",
+      "Human Rights Commission",
+      "NGO",
+      "complaint",
+      "lawyer"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s6",
+    "source": "Anti-Torture Act 2017",
+    "section": "6",
+    "title": "Right to examination",
+    "text": "1) A person arrested, detained or under custodial investigation shall have the right to be informed of his right to demand a physical and psychological examination by an independent and competent doctor of his own choice after interrogation, which shall be conducted outside the influence of the police or security forces. 2) The medical report shal! include in detail the history and the findings of the physical and psychological examination and shall be attached to the custodial investigation report; otherwise, such investigation report is deemed void. 3) The medical reports shall, among others, include the - (a) name, age and address of the patient; (b) name and address of the next of kin of the patient; (c) name and address of the person who brought the patient for physical and psychological examination; (d) nature and probable cause of the patient’s injuries and trauma; (e) approximate time and date when the injury or trauma was sustained; (f) place where the injury or trauma was sustained; (g) time, date and nature of treatment necessary; and (h) diagnosis, the prognosis or disposition of the patient. 4) A person who does not wish to exercise the rights under this section may knowingly and voluntarily waive such rights in writing.",
+    "keywords": [
+      "examination",
+      "doctor",
+      "medical",
+      "physical",
+      "psychological",
+      "injury",
+      "report",
+      "custody"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s7",
+    "source": "Anti-Torture Act 2017",
+    "section": "7",
+    "title": "Liability",
+    "text": "1) A person who actually participates in the infliction of torture or who is present during the commission of the act is liable as the principal. (2) A superior military, police or law enforcement officer or senior government official who issues an order to a lower. ranking personnel to torture a victim for whatever purpose is equally liable as the principal. (3) An order from a superior officer or from a superior in the office or public authority shall not be invoked as a justification for torture. (4) The immediate commanding officer of the unit concerned of the security or law enforcement agencies is held liable as an accessory to the crime for any act or omission or negligence on his part that may have led to the commission of torture by his subordinates. Assistance in filing complaint, Right to examination. Liability. (1).",
+    "keywords": [
+      "liable",
+      "principal",
+      "superior",
+      "order",
+      "commanding",
+      "officer",
+      "accessory",
+      "subordinates"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s8",
+    "source": "Anti-Torture Act 2017",
+    "section": "8",
+    "title": "Penalties",
+    "text": "A person who contravenes section 2 of this Act commits an offence and is liable on conviction to imprisonment for a term not exceeding 25 years. 2) Torture resulting in the loss of life of a person is considered as murder and shall be tried and punished under the relevant laws. 3) The penalties specified under this section shall be without prejudice to the prosecution of other crimes and other legal remedies available to the victim under other existing laws, including the right to claim for compensation. The Attorney-General of the Federation and other law enforcement and investigative agencies",
+    "keywords": [
+      "penalty",
+      "punishment",
+      "25 years",
+      "imprisonment",
+      "murder",
+      "death",
+      "compensation",
+      "jail"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s9",
+    "source": "Anti-Torture Act 2017",
+    "section": "9",
+    "title": "Regulatory agency",
+    "text": "shall ensure that the function of overseeing the implementation of this Act shall be specifically assigned to a particular office or unit of the agency concerned. The Attorney-General of the Federation and",
+    "keywords": [
+      "attorney-general",
+      "oversee",
+      "unit",
+      "office",
+      "implement",
+      "agency"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s10",
+    "source": "Anti-Torture Act 2017",
+    "section": "10",
+    "title": "Education campaign",
+    "text": "other concerned parties shall ensure that education and information regarding the prohibition against torture is fully included in the training of law enforcement personnel, civil or military, medical personnel, public officials and other persons who may be involved in the custody, interrogation or treatment of any individual subjected to any form of arrest, detention or imprisonment. The Attorney-General of the Federation shall,",
+    "keywords": [
+      "education",
+      "training",
+      "law enforcement",
+      "personnel",
+      "medical",
+      "prohibition"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s11",
+    "source": "Anti-Torture Act 2017",
+    "section": "11",
+    "title": "Rules and regulations",
+    "text": "with the approval of the President, make rules and regulations for the effective implementation of this Act.",
+    "keywords": [
+      "rules",
+      "regulations",
+      "president",
+      "approval",
+      "implement",
+      "attorney-general"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s12",
+    "source": "Anti-Torture Act 2017",
+    "section": "12",
+    "title": "Repeal",
+    "text": "All laws, rules and regulations that are contrary to, or inconsistent with the provisions of this Act are repealed or modified accordingly,",
+    "keywords": [
+      "repeal",
+      "inconsistent",
+      "contrary",
+      "modified"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
+  },
+  {
+    "id": "ATA2017-s13",
+    "source": "Anti-Torture Act 2017",
+    "section": "13",
+    "title": "Citation",
+    "text": "This Act may be cited as the Anti-Torture Act, 2017.",
+    "keywords": [
+      "citation",
+      "cited",
+      "Anti-Torture Act"
+    ],
+    "jurisdiction": "federal",
+    "domain": "police_rights",
+    "applicability": "Scanned but clean typed text, tesseract-OCR'd. 13 sections: prohibition, right to complain, right to examination, penalties. s.5's opening subject fragment was lost where a margin note merged into the line; the operative right text is verbatim."
   }
 ]

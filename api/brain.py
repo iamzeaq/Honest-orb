@@ -198,6 +198,9 @@ Rules (carry-over, never break):
   station, challenge it later through a lawyer or the Legal Aid Council.
 - Resolve references ("can he do that?", "what about my case?") from the conversation summary
   and recent turns. Handle topic switches cleanly; track the current topic in facts.
+- Topic switches ("also", "another thing", "meanwhile", a new incident): treat the turn as a
+  NEW question answered on its own terms from the retrieved sections (do NOT ask the user to
+  repeat themselves). Carry over only jurisdiction facts like state.
 - Understand Pidgin input, but ALWAYS reply in clear Nigerian English (calm, warm).
 - Spoken style: Nigerian English, calm, warm, 1-3 short sentences, written for text-to-speech.
   No symbols (#, *, /). Never read bare section numbers aloud; refer to laws by name
@@ -331,9 +334,19 @@ def _converse_fast_path(text: str, sess: dict, retriever) -> dict | None:
                   "for example Lagos, Abuja, or Kano? Tenancy law differs by state.")
         return _record_turn(sess, "clarify", spoken, {}, [], text, "tenancy")
     if (state and len(text.split()) <= 3 and detect_state(text)
-            and (sess["facts"].get("topic") or "") == "tenancy"
-            and not retriever.state_laws_available(state)):
+            and (sess["facts"].get("topic") or "") == "tenancy"):
         # The turn only names the state ("Lagos") answering our clarify.
+        # With no loaded law for it: honest not_covered. With a loaded
+        # law: deterministically ask the tenancy type, which the notice
+        # period depends on — then the follow-up goes legal.
+        if retriever.state_laws_available(state):
+            with _session_lock():
+                sess["facts"]["topic"] = "tenancy"
+            label = "Abuja (FCT)" if state == "fct" else state.capitalize()
+            spoken = (f"Thanks — {label} noted. Is it a monthly or a yearly "
+                      "tenancy? The notice your landlord must give depends on that.")
+            return _record_turn(sess, "clarify", spoken, {}, [], text, "tenancy")
+        # ...otherwise the law isn't loaded: honest not_covered.
         with _session_lock():
             sess["facts"]["topic"] = "tenancy"
         label = "Abuja (FCT)" if state == "fct" else state.capitalize()
@@ -521,23 +534,28 @@ def answer(question: str) -> dict:
     """
     client = _get_client()
     result: dict | None = None
-    for _ in range(2):
-        # One repair retry if the model returns no citations: the spec
-        # requires at least one existing section id on every answer.
-        response = _call_with_retry(
-            client,
-            model=MODEL,
-            reasoning={"effort": "minimal"},
-            max_output_tokens=MAX_OUTPUT_TOKENS,
-            input=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": question},
-            ],
-            text_format=_answer_schema(),
-        )
-        parsed = response.output_parsed
-        if parsed is None:
-            raise RuntimeError("Model returned no parsed output")
+    for _ in range(3):
+        # Repair retries: a truncated reply fails schema parsing, and the
+        # spec requires at least one existing section id on every answer.
+        try:
+            response = _call_with_retry(
+                client,
+                model=MODEL,
+                reasoning={"effort": "minimal"},
+                max_output_tokens=MAX_OUTPUT_TOKENS,
+                input=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": question},
+                ],
+                text_format=_answer_schema(),
+            )
+            parsed = response.output_parsed
+            if parsed is None:
+                raise RuntimeError("Model returned no parsed output")
+        except Exception:  # noqa: BLE001 - retry once, then surface
+            if _ < 2:
+                continue
+            raise
         result = parsed.model_dump()
         result["citations"] = [
             c

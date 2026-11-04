@@ -12,9 +12,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "Your telephone privacy is protected and police need reasonable grounds to stop and search you.",
-      "say_this": "Officer please tell me your name, station and the reason for searching my phone.",
-      "do_this": "Stay calm, ask for name, station and reason, and challenge later with a lawyer.",
+      "right": "Your telephone privacy is guaranteed, police need reasonable grounds to stop and search you (Constitution s.37, Police Act s.49).",
+      "say_this": "Officer, I know my phone privacy is protected, please explain your grounds for this search.",
+      "do_this": "Stay calm, note officer name, number, station, and contact Legal Aid Council later.",
       "citations": [
         {
           "id": "CFRN-s37",
@@ -29,13 +29,13 @@
           "label": "Police Act 2020, s.50"
         },
         {
-          "id": "NPA2020-s51",
-          "label": "Police Act 2020, s.51"
+          "id": "NPA2020-s52",
+          "label": "Police Act 2020, s.52"
         }
       ],
-      "spoken": "Your telephone privacy is protected by the Constitution. Police may only stop and search with reasonable grounds and must tell you their name, station and reason. Stay calm and ask for those details, then challenge it later with a lawyer."
+      "spoken": "Your telephone privacy is protected by the Constitution. Police can only stop and search with reasonable grounds and must tell you their name, station and reason. Stay calm, note their details and challenge it later with a lawyer."
     },
-    "latency_s": 8.81,
+    "latency_s": 6.63,
     "passed": true,
     "notes": []
   },
@@ -51,9 +51,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "Police must inform you immediately of the reason for arrest and promptly in a language you understand.",
-      "say_this": "Please tell me the reason for my arrest as required by law.",
-      "do_this": "Stay calm, ask for officer name and station, contact a lawyer or Legal Aid Council later.",
+      "right": "No. Police must inform you immediately of the reason for arrest, and in writing within 24 hours.",
+      "say_this": "Please stay calm and say: I would like to know the reason for my arrest.",
+      "do_this": "Ask politely for the officer's name, number and station, and contact a lawyer or Legal Aid Council later.",
       "citations": [
         {
           "id": "NPA2020-s35",
@@ -62,15 +62,11 @@
         {
           "id": "CFRN-s35",
           "label": "Constitution 1999, s.35"
-        },
-        {
-          "id": "NPA2020-s43",
-          "label": "Police Act 2020, s.43"
         }
       ],
-      "spoken": "You have the right to be told immediately why you were arrested. The law says police must inform you right away and promptly in a language you understand. Stay calm, ask for the officer's name and station, and contact a lawyer afterwards."
+      "spoken": "No, police must tell you immediately why you are being arrested. The Constitution says you must also be told in writing within 24 hours. Stay calm, ask politely for the reason and the officer's details, and contact a lawyer later."
     },
-    "latency_s": 3.17,
+    "latency_s": 3.43,
     "passed": true,
     "notes": []
   },
@@ -87,17 +83,13 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "Yes, you can remain silent until consulting a lawyer and get facilities to obtain legal advice.",
-      "say_this": "I wish to remain silent until I consult my lawyer, please allow me legal advice.",
-      "do_this": "Stay calm, ask for the officer's name, number and station, and challenge later with a lawyer.",
+      "right": "Yes. You have the right to remain silent, to consult a lawyer before any statement, and to free legal aid where applicable.",
+      "say_this": "Officer, I wish to remain silent until I consult my lawyer.",
+      "do_this": "Ask politely for your lawyer and the officer's name, station and Legal Aid Council contact.",
       "citations": [
         {
           "id": "CFRN-s35",
           "label": "Constitution 1999, s.35"
-        },
-        {
-          "id": "CFRN-s36",
-          "label": "Constitution 1999, s.36"
         },
         {
           "id": "NPA2020-s35",
@@ -108,9 +100,9 @@
           "label": "Police Act 2020, s.43"
         }
       ],
-      "spoken": "You have the right to remain silent until you see a lawyer, under the Constitution and the Police Act. Politely tell the officer you want to consult your lawyer before speaking. Ask for their name and station and contact your lawyer afterwards."
+      "spoken": "You have the right to remain silent and to consult a lawyer before any statement under the Constitution and the Police Act. Politely tell the officer you want to speak to your lawyer and ask for their name and station, then contact the Legal Aid Council."
     },
-    "latency_s": 2.59,
+    "latency_s": 3.16,
     "passed": true,
     "notes": []
   },
@@ -128,9 +120,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "Detention before court must be within a reasonable time: 1 day where a competent court is within 40km, otherwise 2 days or longer as court allows, and police must grant bail within 24 hours for non-capital offences.",
-      "say_this": "Officer, please may I know his allegation and apply for bail, and when will he be taken to court?",
-      "do_this": "Ask the officer in charge for bail in writing, note the station, and file a bail application in court quickly.",
+      "right": "Detention beyond reasonable time is unlawful; he must be brought to court within 1 day if court within 40km, else 2 days.",
+      "say_this": "Officer, please tell us why he is still held and when he will be charged to court.",
+      "do_this": "Visit the station with a lawyer and apply to court for bail if not released.",
       "citations": [
         {
           "id": "CFRN-s35",
@@ -143,11 +135,15 @@
         {
           "id": "NPA2020-s64",
           "label": "Police Act 2020, s.64"
+        },
+        {
+          "id": "CFRN-s46",
+          "label": "Constitution 1999, s.46"
         }
       ],
-      "spoken": "Your brother has the right to bail within 24 hours for non capital offences and to be taken to court within a reasonable time under the Constitution and the Police Act. Politely ask the officer in charge for bail and the reason for detention, get his name and station, and apply to court for bail through a lawyer or the Legal Aid Council."
+      "spoken": "Your brother has a right to be brought to court within one day if a court is within 40 kilometres, otherwise two days, according to the Constitution. The Police Act says police should grant bail within 24 hours for non-capital offences or charge to court. Ask politely for his reason for detention and contact a lawyer or the Legal Aid Council to apply for bail."
     },
-    "latency_s": 2.93,
+    "latency_s": 3.72,
     "passed": true,
     "notes": []
   },
@@ -164,26 +160,34 @@
     "output": {
       "language": "en",
       "status": "emergency",
-      "right": "You have right to dignity and life; no one shall be tortured or given inhuman treatment and force must be reasonably necessary.",
-      "say_this": "Officer, I want to stay calm and cooperate, please do not hurt me and tell me your name and station.",
-      "do_this": "Stay calm, seek medical care, photograph injuries and ask for officer name, station and report later via lawyer.",
+      "right": "You have right to life and dignity, no torture or inhuman treatment is allowed.",
+      "say_this": "Officer, I will cooperate, please note your name and station for my complaint.",
+      "do_this": "Seek medical help and contact a lawyer or Legal Aid Council to complain.",
       "citations": [
+        {
+          "id": "CFRN-s33",
+          "label": "Constitution 1999, s.33"
+        },
         {
           "id": "CFRN-s34",
           "label": "Constitution 1999, s.34"
         },
         {
-          "id": "CFRN-s33",
-          "label": "Constitution 1999, s.33"
+          "id": "ATA2017-s2",
+          "label": "Anti-Torture Act 2017, s.2"
+        },
+        {
+          "id": "ATA2017-s4",
+          "label": "Anti-Torture Act 2017, s.4"
         },
         {
           "id": "NPA2020-s37",
           "label": "Police Act 2020, s.37"
         }
       ],
-      "spoken": "Call 112 first if you are in danger or injured. The Constitution protects your life and dignity and the Police Act requires humane treatment. Stay calm, get medical help and report with a lawyer later."
+      "spoken": "Call 112 first if you are in danger. The Constitution and the Anti-Torture Act say no one should be beaten or threatened. Stay calm, get medical help and contact a lawyer or Legal Aid Council to file a complaint."
     },
-    "latency_s": 2.93,
+    "latency_s": 3.06,
     "passed": true,
     "notes": []
   },
@@ -198,18 +202,22 @@
     "output": {
       "language": "pcm",
       "status": "answered",
-      "right": "Police no fit arrest person for another person place; arrest in lieu na illegal.",
-      "say_this": "Abeg officer, my brother no be suspect, I wan know your name and station.",
-      "do_this": "Remain calm, write officer name and station, contact lawyer or Legal Aid Council later.",
+      "right": "Police no fit arrest person for place of another suspect.",
+      "say_this": "Officer abeg tell me your name and station make my lawyer fit follow up.",
+      "do_this": "Make una contact Legal Aid Council or lawyer sharply to challenge the arrest.",
       "citations": [
         {
           "id": "NPA2020-s36",
           "label": "Police Act 2020, s.36"
+        },
+        {
+          "id": "ACJA2015-s7",
+          "label": "ACJA 2015, s.7"
         }
       ],
-      "spoken": "Police no fit arrest person for another person place, na wetin Police Act talk. Stay calm, no argue or struggle. Ask for officer name and station, then contact lawyer or Legal Aid Council later."
+      "spoken": "Police no fit arrest pesin for anoda pesin place, na wetin Police Act talk. No argue for station, just ask officer name and station, and call lawyer or Legal Aid Council quick."
     },
-    "latency_s": 3.55,
+    "latency_s": 4.89,
     "passed": true,
     "notes": []
   },
@@ -225,9 +233,9 @@
     "output": {
       "language": "pcm",
       "status": "answered",
-      "right": "Your phone and conversations get privacy, police need reasonable ground and must explain search.",
-      "say_this": "Officer abeg, wetin be the reason una wan search my phone?",
-      "do_this": "Stay calm, ask for im name, station and reason for search, later see lawyer.",
+      "right": "Your telephone privacy dey guaranteed, police fit only stop and search with reasonable suspicion (Constitution 1999, s.37; Police Act 2020, s.49).",
+      "say_this": "Officer abeg no vex, wetin be the reason for this search?",
+      "do_this": "Stay calm, ask for him name, station and reason, challenge later with lawyer or Legal Aid Council.",
       "citations": [
         {
           "id": "CFRN-s37",
@@ -246,9 +254,9 @@
           "label": "Police Act 2020, s.51"
         }
       ],
-      "spoken": "Your phone get privacy under the Constitution. Police for road need reasonable ground, dem must tell you why and show uniform or ID card before any search. Stay calm, ask im name and station politely, later follow lawyer or Legal Aid Council."
+      "spoken": "Your telephone privacy dey guaranteed under the Constitution. Police fit only stop and search if dem get reasonable suspicion under the Police Act, and dem must tell you their name and reason. Stay calm and challenge am later with lawyer."
     },
-    "latency_s": 4.65,
+    "latency_s": 4.37,
     "passed": true,
     "notes": []
   },
@@ -265,9 +273,9 @@
     "output": {
       "language": "pcm",
       "status": "answered",
-      "right": "Police must bring person wey dem hold go court within 1 day if court dey within 40km, or 2 days if e far.",
-      "say_this": "Abeg oga, wetin be im offence? We wan apply for bail and see lawyer.",
-      "do_this": "Make una go court to apply for bail, or meet Legal Aid Council make dem help una.",
+      "right": "If dem hold person for non-capital offence, police suppose grant bail within 24 hours or carry am go court within 1 day if court dey within 40km, otherwise 2 days.",
+      "say_this": "Officer, abeg wetin be the offence, make una grant am bail, we wan see lawyer.",
+      "do_this": "Make una go court apply for bail and contact Legal Aid Council.",
       "citations": [
         {
           "id": "CFRN-s35",
@@ -282,9 +290,9 @@
           "label": "Police Act 2020, s.64"
         }
       ],
-      "spoken": "Your friend get right make dem carry am go court within one day if court dey near, or two days if e far. You fit go court apply for bail after 24 hours if police no gree grant am. Stay calm, collect officer name and station, then contact lawyer or Legal Aid Council."
+      "spoken": "Your friend get right to bail if no be capital offence. Police suppose grant bail within 24 hours or carry am go court within one or two days. Stay calm, ask for bail politely, and go court or call Legal Aid Council if dem still hold am."
     },
-    "latency_s": 3.34,
+    "latency_s": 4.08,
     "passed": true,
     "notes": []
   },
@@ -300,9 +308,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "You may remain silent and avoid answering until you consult a lawyer or person of your choice.",
-      "say_this": "I wish to remain silent until I consult my lawyer.",
-      "do_this": "Stay calm, ask for name and station, challenge later with a lawyer or Legal Aid Council.",
+      "right": "You have the right to remain silent until after you consult a lawyer or any person of your choice.",
+      "say_this": "Say calmly you wish to remain silent until you have spoken to a lawyer.",
+      "do_this": "Ask for the officer's name, station and to speak to a lawyer or Legal Aid Council later.",
       "citations": [
         {
           "id": "CFRN-s35",
@@ -313,9 +321,9 @@
           "label": "Police Act 2020, s.35"
         }
       ],
-      "spoken": "You have the right to remain silent until you consult a lawyer. Under the Constitution and the Police Act you can avoid answering questions. Stay calm, say you wish to remain silent, and ask for the officer's name and station."
+      "spoken": "You have the right to remain silent until you speak to a lawyer. Tell the officer calmly you want to wait for your lawyer. Ask for the officer's name and station, and get legal help later."
     },
-    "latency_s": 1.68,
+    "latency_s": 3.81,
     "passed": true,
     "notes": []
   },
@@ -331,9 +339,9 @@
     "output": {
       "language": "pcm",
       "status": "answered",
-      "right": "Yes, you get right to remain silent and consult lawyer before you answer any question.",
-      "say_this": "Abeg I wan remain silent and call my lawyer before I talk.",
-      "do_this": "Stay calm, ask for station name and officer identity, call Legal Aid Council if needed.",
+      "right": "Yes, you get right to remain silent until you don consult your lawyer or any person you choose.",
+      "say_this": "Officer abeg, I wan remain silent until I don consult my lawyer before I answer.",
+      "do_this": "Stay calm and polite, ask for officer name, station, and call Legal Aid Council later.",
       "citations": [
         {
           "id": "CFRN-s35",
@@ -348,9 +356,9 @@
           "label": "Police Act 2020, s.43"
         }
       ],
-      "spoken": "Yes, you get right to remain silent and call your lawyer before you answer any question. Tell police say you wan remain silent and consult your lawyer. Stay calm, collect officer name and station, later challenge am with lawyer."
+      "spoken": "Yes you get right to remain silent until you don see your lawyer. Tell officer say you wan remain silent until you consult your lawyer. Stay calm, collect hin name and station, follow up later with Legal Aid Council."
     },
-    "latency_s": 2.29,
+    "latency_s": 3.32,
     "passed": true,
     "notes": []
   },
@@ -366,9 +374,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "Your home privacy is guaranteed, and a search warrant is unlawful unless it meets legal safeguards.",
-      "say_this": "Officer, I know my home is private and any warrant must follow the law.",
-      "do_this": "Stay calm, ask for officer name and station, and contact a lawyer later to challenge it.",
+      "right": "Your privacy and home are protected, and a search warrant is unlawful unless it meets strict requirements.",
+      "say_this": "Officer, I respectfully ask to see a valid search warrant stating the premises and law.",
+      "do_this": "Stay calm and polite, ask for the officer's name, station and warrant, and contact a lawyer or Legal Aid Council later.",
       "citations": [
         {
           "id": "CFRN-s37",
@@ -379,9 +387,9 @@
           "label": "Police Act 2020, s.58"
         }
       ],
-      "spoken": "Your home privacy is protected by the Constitution. A search warrant must meet strict legal safeguards under the Police Act. Stay calm and ask for the officer's name and station to challenge it later through a lawyer."
+      "spoken": "Your home privacy is protected by the Constitution. A search warrant must meet strict rules under the Police Act to be lawful. Stay calm, ask for the warrant and officer details, and speak to a lawyer afterwards."
     },
-    "latency_s": 2.24,
+    "latency_s": 3.68,
     "passed": true,
     "notes": []
   },
@@ -397,9 +405,9 @@
     "output": {
       "language": "pcm",
       "status": "emergency",
-      "right": "You get right to dignity, no torture or beating, and right to life na protected by law.",
-      "say_this": "Abeg officers, I dey cooperate, I no want wahala, make una no beat me.",
-      "do_this": "Stay calm, no resist, ask for officer name and station, call lawyer or Legal Aid later.",
+      "right": "You get right to life and dignity, police no fit torture or beat you at all.",
+      "say_this": "Oga abeg, I know my right to dignity, I no wan any violence, make I call my lawyer.",
+      "do_this": "Stay calm, no argue, ask for im name and station, later report to lawyer or Legal Aid Council.",
       "citations": [
         {
           "id": "CFRN-s34",
@@ -412,11 +420,19 @@
         {
           "id": "NPA2020-s37",
           "label": "Police Act 2020, s.37"
+        },
+        {
+          "id": "ATA2017-s2",
+          "label": "Anti-Torture Act 2017, s.2"
+        },
+        {
+          "id": "ATA2017-s3",
+          "label": "Anti-Torture Act 2017, s.3"
         }
       ],
-      "spoken": "Abeg call 112 first if you dey immediate danger. You get right to dignity, police no suppose beat or torture you. Stay calm, no argue, ask for their name and station, later call Legal Aid."
+      "spoken": "Call 112 first if you dey in danger now. You get right to life and dignity, police no fit beat you. Stay calm, ask for im name and report later."
     },
-    "latency_s": 2.65,
+    "latency_s": 3.4,
     "passed": true,
     "notes": []
   },
@@ -424,18 +440,40 @@
     "id": "q13",
     "language": "en",
     "question": "A police officer collected money from me at a roadblock. How do I file a formal complaint against him?",
-    "expected_status": "not_sure",
-    "expected_ids": [],
+    "expected_status": "answered",
+    "expected_ids": [
+      "CPA2000-s23",
+      "CPA2000-s64",
+      "CPA2000-s8",
+      "CPA2000-s18"
+    ],
     "output": {
       "language": "en",
-      "status": "not_sure",
-      "right": "The provided sections do not describe the complaint process for extortion at roadblocks.",
-      "say_this": "Stay calm and ask for the officer's name, number and station politely.",
-      "do_this": "Contact the Legal Aid Council of Nigeria or a lawyer for help filing a complaint.",
-      "citations": [],
-      "spoken": "The law sections provided do not cover how to file a complaint for money collected at roadblocks. For help with this, contact the Legal Aid Council of Nigeria or a lawyer."
+      "status": "answered",
+      "right": "Collecting money corruptly is official corruption punishable by up to 7 years imprisonment.",
+      "say_this": "I want to report this calmly and get your name, number and station for a formal complaint.",
+      "do_this": "Write down date, place, officer name or number and report to the nearest ICPC office or police officer.",
+      "citations": [
+        {
+          "id": "CPA2000-s8",
+          "label": "Corrupt Practices Act 2000, s.8"
+        },
+        {
+          "id": "CPA2000-s18",
+          "label": "Corrupt Practices Act 2000, s.18"
+        },
+        {
+          "id": "CPA2000-s23",
+          "label": "Corrupt Practices Act 2000, s.23"
+        },
+        {
+          "id": "CPA2000-s64",
+          "label": "Corrupt Practices Act 2000, s.64"
+        }
+      ],
+      "spoken": "An officer collecting money at a roadblock is official corruption under the Corrupt Practices Act. You should report it to the nearest ICPC officer or police officer, and your identity as an informer is protected. Stay calm, note the details, and challenge it later through a lawyer."
     },
-    "latency_s": 2.63,
+    "latency_s": 3.73,
     "passed": true,
     "notes": []
   },
@@ -449,12 +487,12 @@
       "language": "pcm",
       "status": "off_topic",
       "right": "I only dey help with rights during police encounters.",
-      "say_this": "Abeg, I no fit answer cooking question.",
-      "do_this": "Abeg ask question about your rights if police stop or arrest you.",
+      "say_this": "Abeg no vex, I no fit teach cooking.",
+      "do_this": "You fit ask me about wetin be your rights if police stop or arrest you.",
       "citations": [],
-      "spoken": "I only dey help with rights during police encounters. Abeg ask me about wetin be your right if police stop or arrest you."
+      "spoken": "Abeg no vex I no fit teach cooking. I only dey help with rights during police encounters. Ask me about police stop or arrest."
     },
-    "latency_s": 1.91,
+    "latency_s": 3.24,
     "passed": true,
     "notes": []
   },
@@ -470,9 +508,9 @@
     "output": {
       "language": "pcm",
       "status": "answered",
-      "right": "Police must tell you immediately why dem arrest you and the allegation for language you understand.",
-      "say_this": "Abeg tell me why una arrest me, I wan know my rights and talk to my lawyer.",
-      "do_this": "Stay calm, ask for officer name, number and station, call your lawyer or family.",
+      "right": "Police suppose tell you immediately the reason dem arrest you, and give you the allegation for language you understand.",
+      "say_this": "Abeg officer, I wan know wetin dem arrest me for and I wan talk to my lawyer or family.",
+      "do_this": "Stay calm and polite, ask for officer name and station, call your lawyer or Legal Aid Council later.",
       "citations": [
         {
           "id": "NPA2020-s35",
@@ -487,9 +525,9 @@
           "label": "Constitution 1999, s.35"
         }
       ],
-      "spoken": "No, e no suppose be so. The Police Act and Constitution talk say police must tell you immediately why dem arrest you for language you understand. Stay calm, ask the officer name and station, call your lawyer or family, later challenge am with lawyer."
+      "spoken": "No be so e suppose be. Police must tell you immediately why dem arrest you for language you understand. Stay calm, ask officer him name and station, and call your lawyer or Legal Aid Council after."
     },
-    "latency_s": 2.74,
+    "latency_s": 3.03,
     "passed": true,
     "notes": []
   },
@@ -506,9 +544,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "You must be taken to court within 1 day if court is within 40km, otherwise 2 days or reasonable period.",
-      "say_this": "Officer, please may I know the reason for detention and when I will be taken to court?",
-      "do_this": "Ask for your lawyer and request bail or court arraignment politely without resisting physically.",
+      "right": "You must be brought before a court within 1 day if a court is within 40km, otherwise 2 days or longer period the court considers reasonable.",
+      "say_this": "Officer, I understand I have the right to be brought before a court within a reasonable time.",
+      "do_this": "Stay calm, politely ask for the officer's name and station, and contact a lawyer or Legal Aid Council.",
       "citations": [
         {
           "id": "CFRN-s35",
@@ -523,9 +561,9 @@
           "label": "Police Act 2020, s.64"
         }
       ],
-      "spoken": "You have the right to be taken to court promptly. The Constitution says one day if a court is within 40 kilometres, otherwise two days. The Police Act says you should be considered for bail within 24 hours."
+      "spoken": "The Constitution says you must be taken to court within one day if a court is within 40 kilometres, otherwise two days or a longer period the court considers reasonable. For non-capital offences, police should release you on bail within 24 hours if you cannot be taken to court. Stay calm, ask for the officer's details and contact a lawyer or Legal Aid Council."
     },
-    "latency_s": 2.14,
+    "latency_s": 3.47,
     "passed": true,
     "notes": []
   },
@@ -542,9 +580,9 @@
     "output": {
       "language": "pcm",
       "status": "answered",
-      "right": "Your phone and telephone conversation get privacy protection under Constitution s.37, police need reasonable grounds to search.",
-      "say_this": "Officer I wan cooperate, abeg wetin be the reason for this search.",
-      "do_this": "Stay calm, ask for him name, station and reason, challenge later with lawyer or Legal Aid Council.",
+      "right": "Your phone privacy dey protected, police need reasonable grounds and must tell name, station and reason before search.",
+      "say_this": "Officer abeg tell me your name and station, wetin be reason for this search?",
+      "do_this": "Stay calm, ask for officer name and station, later see lawyer or Legal Aid Council.",
       "citations": [
         {
           "id": "CFRN-s37",
@@ -559,9 +597,9 @@
           "label": "Police Act 2020, s.50"
         }
       ],
-      "spoken": "Your phone get privacy protection under the Constitution. Police fit only search with reasonable grounds and dem must tell you their name and reason under the Police Act. Stay calm, ask for their details and challenge am later with lawyer."
+      "spoken": "Your phone privacy dey protected under the Constitution. Police need reason to search and must tell you their name and why. Stay calm, ask politely and go meet lawyer later."
     },
-    "latency_s": 3.05,
+    "latency_s": 2.55,
     "passed": true,
     "notes": []
   },
@@ -577,9 +615,9 @@
     "output": {
       "language": "en",
       "status": "answered",
-      "right": "Police may search only with reasonable grounds, must give name, station, object and grounds, and forcible search is last resort only.",
-      "say_this": "Officer I do not consent to this search, please tell me your grounds and I will challenge it later lawfully.",
-      "do_this": "Stay calm and polite, ask for his name, ID and station, note details to challenge later with a lawyer.",
+      "right": "Police may stop and search only with reasonable grounds and must follow strict search rules.",
+      "say_this": "I do not consent to this search, please tell me your name, station and grounds for search.",
+      "do_this": "Stay calm and polite, note the officer name and station, then challenge later with a lawyer.",
       "citations": [
         {
           "id": "NPA2020-s49",
@@ -594,9 +632,9 @@
           "label": "Police Act 2020, s.51"
         }
       ],
-      "spoken": "You have the right that police may only search with reasonable grounds and must tell you their name and reason. Stay calm and do not resist physically, note the officer's details and challenge it later through a lawyer. The Police Act protects you from unnecessary force."
+      "spoken": "You have the right to be told the reason for a search. Under the Police Act the officer must give his name and grounds and be in uniform with ID. Stay calm, do not resist physically, and challenge it later through a lawyer."
     },
-    "latency_s": 2.75,
+    "latency_s": 2.74,
     "passed": true,
     "notes": []
   }

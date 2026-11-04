@@ -86,18 +86,24 @@ def run_live_turn(session: str, item: dict) -> dict:
 def run_retrieval_probe(retriever: Retriever, probe: dict,
                         domains_loaded: set[str]) -> dict:
     domain = probe["requires_domain"]
-    hits = retriever.search(probe["text"], top_k=10)
+    state = probe.get("state")
+    hits = retriever.search(probe["text"], state=state, top_k=10)
     hit_ids = [h["id"] for h in hits]
     hit_domains = {h.get("domain", "police_rights") for h in hits}
     notes: list[str] = []
-    if domain in domains_loaded:
+    # State-law domains only surface when the matching state is set:
+    # without it they are correctly jurisdiction-filtered out.
+    expect_hits = probe.get("expect_domain_hits", domain in domains_loaded)
+    if expect_hits:
         if domain not in hit_domains:
             notes.append(f"domain {domain} loaded but not retrieved for "
-                         f"{probe['text'][:60]!r} (hits={hit_ids[:5]})")
+                         f"{probe['text'][:60]!r} (state={state}, "
+                         f"hits={hit_ids[:5]})")
     else:
         bad = [h["id"] for h in hits if h.get("domain") == domain]
         if bad:
-            notes.append(f"unloaded domain {domain} retrieved: {bad}")
+            notes.append(f"domain {domain} should stay filtered out "
+                         f"(state={state}) but retrieved: {bad}")
     return {"id": probe["id"], "text": probe["text"], "hits": hit_ids[:6],
             "passed": not notes, "notes": notes}
 
