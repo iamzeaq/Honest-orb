@@ -1,0 +1,468 @@
+{
+ "note": "Honest Orb conversation evals. Core scripts run live against converse(). Domain probes carry explicit expects calibrated to the data actually loaded (Constitution 1999 + Police Act 2020 only; the ten new-law PDFs are absent from data/raw/). Unloaded-domain probes honestly expect not_covered + Legal Aid pointer + EMPTY citations. When a domain's PDF lands and sections.json is rebuilt, flip that probe to expect legal + cites.",
+ "sessions": [
+  {
+   "id": "A-memory-tenancy-police",
+   "turns": [
+    {
+     "expect": {
+      "citations_empty": true,
+      "mode": [
+       "chat"
+      ]
+     },
+     "id": "A1",
+     "text": "Hello"
+    },
+    {
+     "expect": {
+      "citations_empty": true,
+      "mode": [
+       "redirect"
+      ]
+     },
+     "id": "A2",
+     "text": "Who won the match yesterday?"
+    },
+    {
+     "expect": {
+      "citations_empty": true,
+      "facts": {
+       "topic": "tenancy"
+      },
+      "mode": [
+       "clarify"
+      ]
+     },
+     "id": "A3",
+     "text": "My landlord says I must leave next week"
+    },
+    {
+     "expect": {
+      "citations_empty": true,
+      "facts": {
+       "state": "lagos",
+       "topic": "tenancy"
+      },
+      "mode": [
+       "not_covered"
+      ],
+      "spoken_contains": [
+       "Legal Aid"
+      ]
+     },
+     "id": "A4",
+     "text": "Lagos"
+    },
+    {
+     "expect": {
+      "cite_any": [
+       "CFRN-s37",
+       "NPA2020-s49",
+       "NPA2020-s51"
+      ],
+      "facts": {
+       "state": "lagos"
+      },
+      "mode": [
+       "legal"
+      ]
+     },
+     "id": "A5",
+     "text": "Also, police took my phone yesterday"
+    },
+    {
+     "expect": {
+      "mode": [
+       "emergency"
+      ],
+      "spoken_contains": [
+       "112"
+      ]
+     },
+     "id": "A6",
+     "text": "Police beat me in the cell to make me confess"
+    }
+   ]
+  },
+  {
+   "id": "B-unloaded-domains",
+   "turns": [
+    {
+     "expect": {
+      "citations_empty": true,
+      "mode": [
+       "not_covered"
+      ],
+      "spoken_contains": [
+       "Legal Aid"
+      ]
+     },
+     "id": "B1",
+     "text": "My boss hasn't paid me for 2 months"
+    },
+    {
+     "expect": {
+      "citations_empty": true,
+      "mode": [
+       "not_covered"
+      ],
+      "spoken_contains": [
+       "Legal Aid"
+      ]
+     },
+     "id": "B2",
+     "text": "I can't afford a lawyer"
+    },
+    {
+     "expect": {
+      "citations_empty": true,
+      "mode": [
+       "not_covered"
+      ],
+      "spoken_contains": [
+       "Legal Aid"
+      ]
+     },
+     "id": "B3",
+     "text": "I want information from a government agency"
+    },
+    {
+     "expect": {
+      "citations_empty": true,
+      "facts": {
+       "state": "kano"
+      },
+      "mode": [
+       "not_covered"
+      ],
+      "spoken_contains": [
+       "Legal Aid"
+      ]
+     },
+     "id": "B4",
+     "text": "Can my landlord in Kano evict me tomorrow?"
+    }
+   ]
+  },
+  {
+   "id": "C-pidgin-police",
+   "turns": [
+    {
+     "expect": {
+      "cite_any": [
+       "NPA2020-s49",
+       "NPA2020-s51",
+       "CFRN-s37"
+      ],
+      "mode": [
+       "legal"
+      ]
+     },
+     "id": "C1",
+     "text": "Police stop me for road, dem wan check my phone"
+    },
+    {
+     "expect": {
+      "cite_any": [
+       "CFRN-s35"
+      ],
+      "mode": [
+       "legal"
+      ],
+      "spoken_absent": [
+       "24 hours"
+      ]
+     },
+     "id": "C2",
+     "text": "How long police fit hold person before court?"
+    }
+   ]
+  }
+ ],
+ "domain_probes": [
+  {
+   "id": "D-acja-1",
+   "kind": "live",
+   "requires_domain": "criminal_procedure",
+   "text": "What is the punishment for armed robbery under the ACJA?",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-acja-2",
+   "kind": "retrieval",
+   "requires_domain": "criminal_procedure",
+   "text": "remand order magistrate monthly report detention"
+  },
+  {
+   "id": "D-acja-3",
+   "kind": "jurisdiction",
+   "requires_domain": "criminal_procedure",
+   "text": "criminal trial remand",
+   "want_state_law": false
+  },
+  {
+   "id": "D-tenancy-1",
+   "kind": "live",
+   "requires_domain": "tenancy",
+   "text": "My landlord in Ikeja gave me quit notice, what should I do?",
+   "expect": {
+    "mode": [
+     "clarify"
+    ],
+    "citations_empty": true
+   }
+  },
+  {
+   "id": "D-tenancy-2",
+   "kind": "retrieval",
+   "requires_domain": "tenancy",
+   "text": "notice to quit recover possession landlord tenant"
+  },
+  {
+   "id": "D-tenancy-3",
+   "kind": "jurisdiction",
+   "requires_domain": "tenancy",
+   "text": "landlord eviction",
+   "want_state_law": true
+  },
+  {
+   "id": "D-foi-1",
+   "kind": "live",
+   "requires_domain": "civic_foi",
+   "text": "How do I request records from a ministry?",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-foi-2",
+   "kind": "retrieval",
+   "requires_domain": "civic_foi",
+   "text": "freedom of information request public records agency"
+  },
+  {
+   "id": "D-foi-3",
+   "kind": "jurisdiction",
+   "requires_domain": "civic_foi",
+   "text": "information request agency",
+   "want_state_law": false
+  },
+  {
+   "id": "D-land-1",
+   "kind": "live",
+   "requires_domain": "land",
+   "text": "Government wants to take my family land, what are my rights?",
+   "expect": {
+    "mode": [
+     "legal"
+    ],
+    "cite_any": [
+     "CFRN-s43",
+     "CFRN-s44"
+    ]
+   }
+  },
+  {
+   "id": "D-land-2",
+   "kind": "retrieval",
+   "requires_domain": "land",
+   "text": "right of occupancy governor consent compensation land"
+  },
+  {
+   "id": "D-land-3",
+   "kind": "jurisdiction",
+   "requires_domain": "land",
+   "text": "land compensation",
+   "want_state_law": false
+  },
+  {
+   "id": "D-labour-1",
+   "kind": "live",
+   "requires_domain": "employment",
+   "text": "My oga sacked me without notice, I need my terminal benefits",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-labour-2",
+   "kind": "retrieval",
+   "requires_domain": "employment",
+   "text": "unpaid wages termination notice worker salary"
+  },
+  {
+   "id": "D-labour-3",
+   "kind": "jurisdiction",
+   "requires_domain": "employment",
+   "text": "unpaid salary",
+   "want_state_law": false
+  },
+  {
+   "id": "D-consumer-1",
+   "kind": "live",
+   "requires_domain": "consumer",
+   "text": "A shop sold me fake medicine, where do I complain?",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-consumer-2",
+   "kind": "retrieval",
+   "requires_domain": "consumer",
+   "text": "fake product refund consumer complaint commission"
+  },
+  {
+   "id": "D-consumer-3",
+   "kind": "jurisdiction",
+   "requires_domain": "consumer",
+   "text": "faulty goods refund",
+   "want_state_law": false
+  },
+  {
+   "id": "D-anticorruption-1",
+   "kind": "live",
+   "requires_domain": "anti_corruption",
+   "text": "An official asked me for a bribe, how do I report?",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-anticorruption-2",
+   "kind": "retrieval",
+   "requires_domain": "anti_corruption",
+   "text": "bribe gratification ICPC report corruption"
+  },
+  {
+   "id": "D-anticorruption-3",
+   "kind": "jurisdiction",
+   "requires_domain": "anti_corruption",
+   "text": "report bribe",
+   "want_state_law": false
+  },
+  {
+   "id": "D-legalaid-1",
+   "kind": "live",
+   "requires_domain": "legal_aid",
+   "text": "I cannot pay for a lawyer for my court case",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-legalaid-2",
+   "kind": "retrieval",
+   "requires_domain": "legal_aid",
+   "text": "free lawyer legal aid qualify poor apply"
+  },
+  {
+   "id": "D-legalaid-3",
+   "kind": "jurisdiction",
+   "requires_domain": "legal_aid",
+   "text": "free legal help",
+   "want_state_law": false
+  },
+  {
+   "id": "D-antitorture-1",
+   "kind": "live",
+   "requires_domain": "police_rights",
+   "text": "SARS officers tortured my cousin for confession",
+   "expect": {
+    "mode": [
+     "emergency"
+    ],
+    "cite_any": [
+     "CFRN-s34",
+     "NPA2020-s37"
+    ],
+    "spoken_contains": [
+     "112"
+    ]
+   }
+  },
+  {
+   "id": "D-antitorture-2",
+   "kind": "retrieval",
+   "requires_domain": "police_rights",
+   "text": "torture beaten confess cell complaint examination"
+  },
+  {
+   "id": "D-antitorture-3",
+   "kind": "jurisdiction",
+   "requires_domain": "police_rights",
+   "text": "torture in custody",
+   "want_state_law": false
+  },
+  {
+   "id": "D-fct-1",
+   "kind": "live",
+   "requires_domain": "tenancy",
+   "text": "My Abuja landlord wants me out next month",
+   "expect": {
+    "mode": [
+     "not_covered"
+    ],
+    "citations_empty": true,
+    "facts": {
+     "state": "abuja"
+    },
+    "spoken_contains": [
+     "Legal Aid"
+    ]
+   }
+  },
+  {
+   "id": "D-fct-2",
+   "kind": "retrieval",
+   "requires_domain": "tenancy",
+   "text": "abuja recover possession quit notice"
+  },
+  {
+   "id": "D-fct-3",
+   "kind": "jurisdiction",
+   "requires_domain": "tenancy",
+   "text": "abuja landlord eviction",
+   "want_state_law": true
+  }
+ ]
+}

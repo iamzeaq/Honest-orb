@@ -1,0 +1,609 @@
+{
+  "passed": 42,
+  "total": 42,
+  "avg_latency_s": 2.15,
+  "results": [
+    {
+      "id": "A1",
+      "session": "conv-20261104-161537-A-memory-tenancy-police",
+      "text": "Hello",
+      "output": {
+        "mode": "chat",
+        "spoken": "Hello, my friend. I am Honest Orb, your legal companion. Tell me what happened, and I will tell you what the law says.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": ""
+        }
+      },
+      "latency_s": 0.0,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "A2",
+      "session": "conv-20261104-161537-A-memory-tenancy-police",
+      "text": "Who won the match yesterday?",
+      "output": {
+        "mode": "redirect",
+        "spoken": "I don't have live scores, my friend. I am here as your legal companion, so if you have any question about your rights, police matters or civic duties in Nigeria, I am happy to help.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "none"
+        }
+      },
+      "latency_s": 8.45,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "A3",
+      "session": "conv-20261104-161537-A-memory-tenancy-police",
+      "text": "My landlord says I must leave next week",
+      "output": {
+        "mode": "clarify",
+        "spoken": "I can help with that. Which state is the house in — for example Lagos, Abuja, or Kano? Tenancy law differs by state.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "tenancy"
+        }
+      },
+      "latency_s": 0.0,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "A4",
+      "session": "conv-20261104-161537-A-memory-tenancy-police",
+      "text": "Lagos",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "Thanks — Lagos. Honestly, I don't have the Lagos tenancy law loaded yet, so I can't tell you the exact notice your landlord must give. Please contact the Legal Aid Council of Nigeria or a lawyer before you move out.",
+        "citations": [],
+        "facts": {
+          "state": "lagos",
+          "topic": "tenancy"
+        }
+      },
+      "latency_s": 0.0,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "A5",
+      "session": "conv-20261104-161537-A-memory-tenancy-police",
+      "text": "Also, police took my phone yesterday",
+      "output": {
+        "mode": "legal",
+        "spoken": "My friend, I understand this can be worrying. The law protects the privacy of your telephone conversations, but police may search an arrested person where there are reasonable grounds to find evidence. Stay calm and ask politely for the reason and a receipt, you can challenge it later with a lawyer.",
+        "citations": [
+          "CFRN-s37",
+          "NPA2020-s52",
+          "NPA2020-s49"
+        ],
+        "facts": {
+          "state": "lagos",
+          "topic": "police search/phone"
+        }
+      },
+      "latency_s": 4.23,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "A6",
+      "session": "conv-20261104-161537-A-memory-tenancy-police",
+      "text": "Police beat me in the cell to make me confess",
+      "output": {
+        "mode": "emergency",
+        "spoken": "Please call 112 immediately if you are still in danger or need urgent help my friend. The Constitution and the Police Act say you must not be beaten or tortured to confess, and you have the right to dignity. Stay calm, ask for medical help and a lawyer, and do not resist physically.",
+        "citations": [
+          "CFRN-s34",
+          "NPA2020-s37"
+        ],
+        "facts": {
+          "state": "lagos",
+          "topic": "police search/phone"
+        }
+      },
+      "latency_s": 3.21,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "B1",
+      "session": "conv-20261104-161537-B-unloaded-domains",
+      "text": "My boss hasn't paid me for 2 months",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I understand how hard two months without pay can be. I do not have the labour law on unpaid wages loaded here to give you the exact steps. Please contact the Legal Aid Council of Nigeria or a lawyer for help with your claim.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "unpaid wages"
+        }
+      },
+      "latency_s": 2.57,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "B2",
+      "session": "conv-20261104-161537-B-unloaded-domains",
+      "text": "I can't afford a lawyer",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I understand not being able to afford a lawyer makes this even harder. I do not have the labour law for wage claims loaded to give you the exact steps, but the Legal Aid Council of Nigeria helps people who cannot afford a lawyer, so please reach out to them or a lawyer near you for guidance.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "unpaid wages"
+        }
+      },
+      "latency_s": 3.44,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "B3",
+      "session": "conv-20261104-161537-B-unloaded-domains",
+      "text": "I want information from a government agency",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I understand you want information from a government agency. I do not have the law on getting government records loaded here to give you the exact steps, so please contact the Legal Aid Council of Nigeria or a lawyer near you for guidance.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "unpaid wages"
+        }
+      },
+      "latency_s": 2.54,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "B4",
+      "session": "conv-20261104-161537-B-unloaded-domains",
+      "text": "Can my landlord in Kano evict me tomorrow?",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "Honestly, I don't have the Kano tenancy law loaded yet, so I can't tell you the exact notice your landlord must give. Please contact the Legal Aid Council of Nigeria or a lawyer before you move out.",
+        "citations": [],
+        "facts": {
+          "state": "kano",
+          "topic": "tenancy"
+        }
+      },
+      "latency_s": 0.0,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "C1",
+      "session": "conv-20261104-161537-C-pidgin-police",
+      "text": "Police stop me for road, dem wan check my phone",
+      "output": {
+        "mode": "legal",
+        "spoken": "Oga, I hear you. Your phone privacy is protected by the Constitution, and police can only search with reasonable grounds after telling you who they are and why. Stay calm, ask politely for their name, station and reason, do not argue or drag phone.",
+        "citations": [
+          "CFRN-s37",
+          "NPA2020-s49",
+          "NPA2020-s50"
+        ],
+        "facts": {
+          "state": "",
+          "topic": "phone search at road stop"
+        }
+      },
+      "latency_s": 3.1,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "C2",
+      "session": "conv-20261104-161537-C-pidgin-police",
+      "text": "How long police fit hold person before court?",
+      "output": {
+        "mode": "legal",
+        "spoken": "Oga, the Constitution says police must take you to court within one day if court dey within 40 kilometres, otherwise within two days or longer time the court allows. If dem hold you pass that time, you fit ask for bail and make your family or lawyer help you go court.",
+        "citations": [
+          "CFRN-s35",
+          "NPA2020-s62",
+          "NPA2020-s64"
+        ],
+        "facts": {
+          "state": "",
+          "topic": "detention time before court"
+        }
+      },
+      "latency_s": 2.35,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-acja-1",
+      "session": "conv-20261104-161537-D-acja-1",
+      "text": "What is the punishment for armed robbery under the ACJA?",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I do not have that punishment provision loaded in my available sections. Please check with a lawyer or the Legal Aid Council for guidance on the ACJA.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "armed robbery punishment"
+        }
+      },
+      "latency_s": 1.59,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-acja-2",
+      "text": "remand order magistrate monthly report detention",
+      "hits": [
+        "NPA2020-s69",
+        "NPA2020-s70",
+        "NPA2020-s53",
+        "NPA2020-s63",
+        "CFRN-s35",
+        "NPA2020-s64"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-acja-3",
+      "text": "criminal trial remand",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-tenancy-1",
+      "session": "conv-20261104-161537-D-tenancy-1",
+      "text": "My landlord in Ikeja gave me quit notice, what should I do?",
+      "output": {
+        "mode": "clarify",
+        "spoken": "I can help with that. Which state is the house in — for example Lagos, Abuja, or Kano? Tenancy law differs by state.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "tenancy"
+        }
+      },
+      "latency_s": 0.0,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-tenancy-2",
+      "text": "notice to quit recover possession landlord tenant",
+      "hits": [
+        "NPA2020-s63",
+        "CFRN-s44",
+        "NPA2020-s38",
+        "NPA2020-s48",
+        "NPA2020-s49",
+        "CFRN-s33"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-tenancy-3",
+      "text": "landlord eviction",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": [
+        "no state-law sections loaded at all (probe needs data: honest skip, recorded here)"
+      ],
+      "blocked_on_data": true
+    },
+    {
+      "id": "D-foi-1",
+      "session": "conv-20261104-161537-D-foi-1",
+      "text": "How do I request records from a ministry?",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I hear you. I do not have the law on requesting records from ministries loaded yet, so I cannot give you the exact steps. You can contact the Legal Aid Council of Nigeria or a lawyer for help with that request.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "records request"
+        }
+      },
+      "latency_s": 2.8,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-foi-2",
+      "text": "freedom of information request public records agency",
+      "hits": [
+        "CFRN-s38",
+        "CFRN-s41",
+        "CFRN-s45",
+        "NPA2020-s69",
+        "CFRN-s39",
+        "NPA2020-s49"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-foi-3",
+      "text": "information request agency",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-land-1",
+      "session": "conv-20261104-161537-D-land-1",
+      "text": "Government wants to take my family land, what are my rights?",
+      "output": {
+        "mode": "legal",
+        "spoken": "My friend, I understand this can be worrying. Under the Constitution you have the right to own property, and if government must acquire it, the law must provide prompt compensation and access to court to confirm your interest and amount. I will explain what to ask for and keep safely.",
+        "citations": [
+          "CFRN-s44",
+          "CFRN-s43",
+          "CFRN-s46"
+        ],
+        "facts": {
+          "state": "",
+          "topic": "compulsory acquisition of land"
+        }
+      },
+      "latency_s": 1.81,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-land-2",
+      "text": "right of occupancy governor consent compensation land",
+      "hits": [
+        "CFRN-s44",
+        "CFRN-s43",
+        "NPA2020-s53",
+        "CFRN-s35",
+        "CFRN-s33",
+        "CFRN-s38"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-land-3",
+      "text": "land compensation",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-labour-1",
+      "session": "conv-20261104-161537-D-labour-1",
+      "text": "My oga sacked me without notice, I need my terminal benefits",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I understand how worrying a sudden sack can be, especially about your benefits. I don’t have the labour and employment laws loaded to advise properly on terminal benefits and notice, so I can’t give you the exact position. Please speak quickly with a lawyer or the Legal Aid Council of Nigeria near you, and keep your employment letter and payslips safe.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "employment"
+        }
+      },
+      "latency_s": 2.3,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-labour-2",
+      "text": "unpaid wages termination notice worker salary",
+      "hits": [
+        "NPA2020-s63"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-labour-3",
+      "text": "unpaid salary",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-consumer-1",
+      "session": "conv-20261104-161537-D-consumer-1",
+      "text": "A shop sold me fake medicine, where do I complain?",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I don't have the specific law on fake medicine complaints loaded yet, but you can reach NAFDAC or the Legal Aid Council of Nigeria, or speak to a lawyer for quick guidance.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "fake medicine complaint"
+        }
+      },
+      "latency_s": 1.62,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-consumer-2",
+      "text": "fake product refund consumer complaint commission",
+      "hits": [
+        "CFRN-s40",
+        "NPA2020-s35",
+        "NPA2020-s38",
+        "NPA2020-s69"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-consumer-3",
+      "text": "faulty goods refund",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-anticorruption-1",
+      "session": "conv-20261104-161537-D-anticorruption-1",
+      "text": "An official asked me for a bribe, how do I report?",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I understand how concerning that is. I don't have the specific law on reporting bribery loaded here, so I can't give you the exact procedure. Please contact the Legal Aid Council of Nigeria or a trusted lawyer for guidance on how to report it safely.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "bribery report"
+        }
+      },
+      "latency_s": 1.52,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-anticorruption-2",
+      "text": "bribe gratification ICPC report corruption",
+      "hits": [
+        "NPA2020-s63",
+        "NPA2020-s69",
+        "NPA2020-s53"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-anticorruption-3",
+      "text": "report bribe",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-legalaid-1",
+      "session": "conv-20261104-161537-D-legalaid-1",
+      "text": "I cannot pay for a lawyer for my court case",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "I hear you, not being able to afford a lawyer can be worrying. I do not have the specific law on free representation for general court cases loaded yet, but you can contact the Legal Aid Council of Nigeria or a lawyer near you for help.",
+        "citations": [],
+        "facts": {
+          "state": "",
+          "topic": "legal aid"
+        }
+      },
+      "latency_s": 2.41,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-legalaid-2",
+      "text": "free lawyer legal aid qualify poor apply",
+      "hits": [
+        "NPA2020-s35",
+        "CFRN-s46",
+        "NPA2020-s62",
+        "CFRN-s35",
+        "CFRN-s36",
+        "NPA2020-s43"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-legalaid-3",
+      "text": "free legal help",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-antitorture-1",
+      "session": "conv-20261104-161537-D-antitorture-1",
+      "text": "SARS officers tortured my cousin for confession",
+      "output": {
+        "mode": "emergency",
+        "spoken": "Please call 112 first if your cousin is in danger or needs urgent medical help. The Constitution forbids torture or degrading treatment, and the law says any confession must be voluntary and properly recorded. Stay calm, get medical care and a lawyer quickly.",
+        "citations": [
+          "CFRN-s34",
+          "NPA2020-s44"
+        ],
+        "facts": {
+          "state": "",
+          "topic": "torture for confession"
+        }
+      },
+      "latency_s": 3.41,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-antitorture-2",
+      "text": "torture beaten confess cell complaint examination",
+      "hits": [
+        "CFRN-s34",
+        "CFRN-s35",
+        "NPA2020-s37",
+        "NPA2020-s70",
+        "CFRN-s36",
+        "CFRN-s44"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-antitorture-3",
+      "text": "torture in custody",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-fct-1",
+      "session": "conv-20261104-161537-D-fct-1",
+      "text": "My Abuja landlord wants me out next month",
+      "output": {
+        "mode": "not_covered",
+        "spoken": "Honestly, I don't have the Abuja tenancy law loaded yet, so I can't tell you the exact notice your landlord must give. Please contact the Legal Aid Council of Nigeria or a lawyer before you move out.",
+        "citations": [],
+        "facts": {
+          "state": "abuja",
+          "topic": "tenancy"
+        }
+      },
+      "latency_s": 0.0,
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-fct-2",
+      "text": "abuja recover possession quit notice",
+      "hits": [
+        "NPA2020-s63",
+        "NPA2020-s69",
+        "CFRN-s44",
+        "NPA2020-s38",
+        "NPA2020-s48",
+        "NPA2020-s49"
+      ],
+      "passed": true,
+      "notes": []
+    },
+    {
+      "id": "D-fct-3",
+      "text": "abuja landlord eviction",
+      "state_laws_loaded": [],
+      "passed": true,
+      "notes": [
+        "no state-law sections loaded at all (probe needs data: honest skip, recorded here)"
+      ],
+      "blocked_on_data": true
+    }
+  ]
+}

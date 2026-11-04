@@ -45,6 +45,45 @@
   var streamOpen = false;    // more sentences may still arrive
   var playToken = 0;         // invalidates stale ended handlers
   var playOk = false;        // any clip actually started playing
+  var voiceTurn = false;     // this turn started by voice (auto-listen after)
+  var pendingAnswer = null;  // staged answer behind "Show details"
+  var ackAudio = null;       // short acknowledgement clip masking brain latency
+  var detailsButton = document.getElementById("detailsButton");
+
+  // One conversation id per browser, kept across visits: the server's
+  // session memory (recent turns, summary, state/topic facts) keys on it.
+  var sessionId = null;
+  try {
+    sessionId = localStorage.getItem("orb_session_v1");
+    if (!sessionId) {
+      sessionId = (crypto.randomUUID ? crypto.randomUUID() :
+        String(Date.now()) + "-" + String(Math.random()).slice(2));
+      localStorage.setItem("orb_session_v1", sessionId);
+    }
+  } catch (e) {
+    sessionId = String(Date.now());
+  }
+  function withSession(url) {
+    return url + (url.indexOf("?") >= 0 ? "&" : "?") +
+      "session_id=" + encodeURIComponent(sessionId);
+  }
+
+  // Play the tiny pre-generated ack clip in the orb voice the moment speech
+  // ends. It masks brain latency; the real answer stops it on arrival.
+  function playAck(url) {
+    stopAck();
+    try {
+      ackAudio = new Audio(url || "/audio/ack.wav");
+      ackAudio.volume = 0.9;
+      ackAudio.play().catch(function () { ackAudio = null; });
+    } catch (e) { ackAudio = null; }
+  }
+  function stopAck() {
+    if (ackAudio) {
+      try { ackAudio.pause(); } catch (e) {}
+      ackAudio = null;
+    }
+  }
 
   // Inline base64 data URIs play from the answer itself, so they keep
   // working even when /audio/ would land on another container. Plain
@@ -195,6 +234,7 @@
     if (micStream) micStream.getTracks().forEach(function (t) { t.stop(); });
     setState("thinking");
     setLine("Thinking…");
+    playAck(); // instant orb-voice acknowledgement while the brain runs
   }
 
   async function sendRecording() {
@@ -204,14 +244,16 @@
       resetToIdle("I didn't catch that — tap and try again.");
       return;
     }
+    voiceTurn = true; // voice turns auto-listen again after speaking
     var ext = (blob.type.indexOf("mp4") >= 0) ? "m4a" : "webm";
     var form = new FormData();
     form.append("audio", blob, "question." + ext);
     try {
       // Prefer the streaming endpoint shape: meta first, then one audio
       // line per sentence, so the first sentence starts playing while
-      // later sentences are still rendering server-side.
-      var res = await fetch("/api/ask", {
+      // later sentences are still rendering server-side. session_id keeps
+      // the conversation (state, topic, summary) across turns.
+      var res = await fetch(withSession("/api/ask"), {
         method: "POST",
         body: form,
         headers: { "Accept": "application/x-ndjson" }
@@ -226,7 +268,7 @@
       if (res.body && res.body.cancel) {
         try { await res.body.cancel(); } catch (e) { /* already read */ }
       }
-      var res2 = await fetch("/api/ask?format=json", {
+      var res2 = await fetch(withSession("/api/ask?format=json"), {
         method: "POST",
         body: form
       });
@@ -241,16 +283,18 @@
 
   async function sendText(text) {
     dismissCard();
+    voiceTurn = false; // typed turns don't auto-listen afterwards
     mode = "working";
     setState("thinking");
     setLine("Thinking…");
     try {
-      // Prefer the streaming endpoint: the first sentence's audio starts
-      // playing while later sentences are still rendering server-side.
-      var res = await fetch("/api/ask_text_stream", {
+      // Session chat stream: meta first (answer + caption), then one audio
+      // line per sentence. session_id carries the conversation server-side.
+      var payload = JSON.stringify({ text: text, session_id: sessionId });
+      var res = await fetch("/api/chat_stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text })
+        body: payload
       });
       if (!res.ok) throw await httpError(res);
       if (res.body && res.body.getReader) {
@@ -258,10 +302,10 @@
         return;
       }
       // Ancient browser without stream support: plain JSON answer instead.
-      var res2 = await fetch("/api/ask_text", {
+      var res2 = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text })
+        body: payload
       });
       if (!res2.ok) throw await httpError(res2);
       handleAnswer(await res2.json());
@@ -307,14 +351,25 @@
     }
   }
 
+  // Voice-first: no card pops up automatically. One short caption under
+  // the orb, plus "Show details" when there is substance behind it.
+  function stageAnswer(ans) {
+    pendingAnswer = ans;
+    var caption = firstSentence(ans.spoken) || "Here's what I found.";
+    setLine(caption);
+    var hasDetails = !!(ans.right || ans.say_this || ans.do_this ||
+      (ans.citations && ans.citations.length));
+    if (detailsButton) detailsButton.hidden = !hasDetails;
+  }
+
   function onStreamMessage(msg) {
     if (msg.type === "meta") {
       var ans = msg.answer || {};
+      stopAck();
       setEmergency(ans.status === "emergency");
       mode = "speaking";
       setState("speaking");
-      setLine("Speaking…");
-      showCard(ans);
+      stageAnswer(ans);
       startQueue();
     } else if (msg.type === "audio") {
       var url = clipUrl(msg);
@@ -331,11 +386,11 @@
   function handleAnswer(data) {
     var ans = data.answer || {};
     var emergency = ans.status === "emergency";
+    stopAck();
     setEmergency(emergency);
     mode = "speaking";
     setState("speaking");
-    setLine(firstSentence(ans.spoken) || "Here's what I found.");
-    showCard(ans);
+    stageAnswer(ans);
     // Prefer the per-sentence queue; fall back to the single full clip.
     // Inline base64 first, /audio/ URL second (see clipUrl).
     var urls = data.audio_urls || [];
@@ -443,6 +498,14 @@
     // The queue drained but no clip ever played: every clip was broken
     // (or the voice failed mid-stream), so say so under the orb line.
     if (!playOk && queuePos > 0) showVoiceNote();
+    // Continuous conversation: a voice turn flows straight back into
+    // listening so the user can keep talking. Tapping the orb ends it.
+    if (voiceTurn && mode === "speaking") {
+      startRecording();
+      return;
+    }
+    mode = "idle";
+    setState("idle");
   }
 
   function stopAnswerLevel() {
@@ -517,8 +580,12 @@
 
   function resetToIdle(line, err) {
     mode = "idle";
+    voiceTurn = false;
+    pendingAnswer = null;
+    stopAck();
     stopAnswerAudio();
     hideVoiceNote();
+    if (detailsButton) detailsButton.hidden = true;
     dismissCard();
     setEmergency(false);
     setState("idle");
@@ -539,10 +606,19 @@
 
   // ---------- wiring ----------
 
+  if (detailsButton) {
+    detailsButton.addEventListener("click", function () {
+      if (pendingAnswer) {
+        detailsButton.hidden = true;
+        showCard(pendingAnswer);
+      }
+    });
+  }
+
   orbButton.addEventListener("click", function () {
     if (mode === "recording") stopRecording();
-    else if (mode === "idle") startRecording();
-    // while working/speaking the orb keeps playing; card dismiss returns to idle
+    else if (mode === "idle") { voiceTurn = true; startRecording(); }
+    else { voiceTurn = false; resetToIdle(); } // tap the orb to end
   });
 
   // Swipe down on the card, or tap outside it, to dismiss.

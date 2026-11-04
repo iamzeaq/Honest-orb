@@ -38,7 +38,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from api import tts  # noqa: E402
-from api.brain import answer as brain_answer  # noqa: E402
+from api.brain import answer as brain_answer, converse as brain_converse  # noqa: E402
 from api.pipeline import run as pipeline_run  # noqa: E402
 from api.stt import transcribe as stt_transcribe  # noqa: E402
 
@@ -92,6 +92,20 @@ async def lifespan(app: FastAPI):
         # must not take the whole app down: /health stays green and the
         # model loads lazily on the first synthesis instead.
         logger.warning("tts preload failed; loading lazily on first use",
+                       exc_info=True)
+        yield
+        return
+    try:
+        # Pre-generate one short acknowledgement clip in the orb voice
+        # ("Mm, let me check."). The browser plays it the moment speech
+        # ends so the user hears something instantly while the brain runs.
+        ack_path = AUDIO_OUT_DIR / "ack.wav"
+        if not ack_path.is_file():
+            tmp = tts.speak_sentence("Mm, let me check.", str(ack_path) + ".tmp")
+            if tmp is not None:
+                shutil.move(tmp, ack_path)
+    except Exception:
+        logger.warning("ack clip preload failed; continuing without it",
                        exc_info=True)
     yield
 
@@ -204,6 +218,44 @@ def _speak_to_urls(
 
 class AskTextBody(BaseModel):
     text: str
+
+
+class ChatBody(BaseModel):
+    text: str
+    session_id: str = "default"
+
+
+# converse() modes -> legacy answer statuses (the web card and old clients
+# speak the legacy vocabulary; the raw turn rides along as "turn").
+MODE_TO_STATUS = {
+    "chat": "chat",
+    "clarify": "clarify",
+    "legal": "answered",
+    "emergency": "emergency",
+    "not_covered": "not_sure",
+    "redirect": "off_topic",
+}
+
+
+def _turn_to_legacy(turn: dict) -> dict:
+    details = turn.get("details") or {}
+    return {
+        "language": turn.get("language", "en"),
+        "status": MODE_TO_STATUS.get(turn.get("mode"), "not_sure"),
+        "mode": turn.get("mode"),
+        "right": details.get("right", ""),
+        "say_this": details.get("what_to_say", ""),
+        "do_this": details.get("what_to_do", ""),
+        "citations": turn.get("citations", []),
+        "spoken": turn.get("spoken", ""),
+        "facts": turn.get("facts", {}),
+        "turn": turn,
+    }
+
+
+def _ack_url() -> str | None:
+    path = AUDIO_OUT_DIR / "ack.wav"
+    return "/audio/ack.wav" if path.is_file() else None
 
 
 @app.get("/health")
@@ -339,11 +391,155 @@ def ask_text_stream(body: AskTextBody):
     return StreamingResponse(gen(), media_type="application/x-ndjson")
 
 
+@app.post("/api/chat")
+def chat(body: ChatBody) -> dict:
+    """Conversational turn: session memory + voice answer.
+
+    Same answer audio shape as /api/ask_text, plus the mapped legacy
+    "answer" (status/right/say_this/do_this for the card), the raw "turn"
+    (mode/spoken/details/citations/facts), session "facts", and an
+    "ack_url" short acknowledgement clip the browser plays instantly.
+    """
+    text = (body.text or "").strip()
+    session_id = (body.session_id or "default").strip() or "default"
+    if not text:
+        raise HTTPException(status_code=400, detail="text must not be empty")
+    if len(text) > 2000:
+        raise HTTPException(status_code=400, detail="text is too long")
+    timings: dict[str, float] = {}
+    overall = time.perf_counter()
+
+    started = time.perf_counter()
+    try:
+        turn = _run_timed(brain_converse, session_id, text,
+                          timeout_s=BRAIN_TIMEOUT_S)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("chat brain failed")
+        raise HTTPException(
+            status_code=502, detail=f"could not answer the text: {_reason(exc)}"
+        ) from exc
+    timings["brain"] = round(time.perf_counter() - started, 2)
+    ans = _turn_to_legacy(turn)
+
+    try:
+        audio_url, audio_urls, sentences, audio_b64, audio_b64s = _speak_to_urls(
+            ans["spoken"], timings
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("chat tts failed")
+        raise HTTPException(
+            status_code=502, detail=f"could not speak the answer: {_reason(exc)}"
+        ) from exc
+    timings["total"] = round(time.perf_counter() - overall, 2)
+    return {
+        "transcript": text,
+        "session_id": session_id,
+        "answer": ans,
+        "turn": turn,
+        "facts": turn.get("facts", {}),
+        "ack_url": _ack_url(),
+        "audio_url": audio_url,
+        "audio_urls": audio_urls,
+        "audio_b64": audio_b64,
+        "audio_b64s": audio_b64s,
+        "sentences": sentences,
+        "timings": timings,
+    }
+
+
+@app.post("/api/chat_stream")
+def chat_stream(body: ChatBody):
+    """Streaming twin of /api/chat: NDJSON meta line (answer + ack_url),
+    then one audio line per sentence as each finishes rendering."""
+    text = (body.text or "").strip()
+    session_id = (body.session_id or "default").strip() or "default"
+    if not text:
+        raise HTTPException(status_code=400, detail="text must not be empty")
+    if len(text) > 2000:
+        raise HTTPException(status_code=400, detail="text is too long")
+    timings: dict[str, float] = {}
+
+    started = time.perf_counter()
+    try:
+        turn = _run_timed(brain_converse, session_id, text,
+                          timeout_s=BRAIN_TIMEOUT_S)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("chat_stream brain failed")
+        raise HTTPException(
+            status_code=502, detail=f"could not answer the text: {_reason(exc)}"
+        ) from exc
+    timings["brain"] = round(time.perf_counter() - started, 2)
+    ans = _turn_to_legacy(turn)
+
+    sentences = tts.split_sentences(ans["spoken"]) or [ans["spoken"]]
+    meta = {
+        "type": "meta",
+        "transcript": text,
+        "session_id": session_id,
+        "answer": ans,
+        "turn": turn,
+        "facts": turn.get("facts", {}),
+        "ack_url": _ack_url(),
+        "sentences": sentences,
+        "timings": timings,
+    }
+
+    def gen():
+        import tempfile
+
+        yield json.dumps(meta) + "\n"
+        tts_started = time.perf_counter()
+        tmpdir = Path(tempfile.mkdtemp(prefix="orb_chat_stream_"))
+        try:
+            for i, sentence in enumerate(sentences):
+                try:
+                    path = tts.speak_sentence(
+                        sentence, str(tmpdir / f"s{i:02d}.wav")
+                    )
+                except Exception as exc:
+                    logger.exception("chat_stream tts failed")
+                    yield json.dumps(
+                        {"type": "error", "index": i, "detail": _reason(exc)}
+                    ) + "\n"
+                    return
+                if path is None:
+                    continue
+                try:
+                    audio_id, audio_b64 = _store_clip_with_b64(path)
+                except Exception as exc:
+                    logger.exception("chat_stream store failed")
+                    yield json.dumps(
+                        {"type": "error", "index": i, "detail": _reason(exc)}
+                    ) + "\n"
+                    return
+                yield json.dumps(
+                    {
+                        "type": "audio",
+                        "index": i,
+                        "audio_url": f"/audio/{audio_id}.wav",
+                        "audio_b64": audio_b64,
+                        "sentence": sentence,
+                        "tts_s": round(time.perf_counter() - tts_started, 2),
+                    }
+                ) + "\n"
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
+
+    return StreamingResponse(gen(), media_type="application/x-ndjson")
+
+
 @app.post("/api/ask")
 async def ask(
     audio: UploadFile = File(...),
     request: Request = None,  # type: ignore[assignment]
     format: str | None = None,
+    session_id: str | None = None,
 ):
     """Voice question: transcribe, answer, and stream the spoken answer.
 
@@ -391,6 +587,58 @@ async def ask(
             or ("application/json" in accept and "x-ndjson" not in accept)
         )
         if wants_json:
+            if session_id:
+                # Session voice turn: transcribe, converse with memory,
+                # then speak — same JSON shape as the pipeline path.
+                timings = {}
+                started = time.perf_counter()
+                try:
+                    stt = _run_timed(stt_transcribe, tmp_in,
+                                     timeout_s=STT_TIMEOUT_S)
+                except Exception as exc:
+                    logger.exception("voice stt failed")
+                    raise HTTPException(
+                        status_code=502,
+                        detail=f"could not transcribe the recording: {_reason(exc)}",
+                    ) from exc
+                timings["stt"] = round(time.perf_counter() - started, 2)
+                started = time.perf_counter()
+                try:
+                    turn = _run_timed(brain_converse, session_id,
+                                      stt["text"], timeout_s=BRAIN_TIMEOUT_S)
+                except Exception as exc:
+                    logger.exception("voice converse failed")
+                    raise HTTPException(
+                        status_code=502,
+                        detail=f"could not answer the voice question: {_reason(exc)}",
+                    ) from exc
+                timings["brain"] = round(time.perf_counter() - started, 2)
+                ans = _turn_to_legacy(turn)
+                try:
+                    (audio_url, audio_urls, sentences,
+                     audio_b64, audio_b64s) = _speak_to_urls(ans["spoken"], timings)
+                except Exception as exc:
+                    logger.exception("voice tts failed")
+                    raise HTTPException(
+                        status_code=502,
+                        detail=f"could not speak the answer: {_reason(exc)}",
+                    ) from exc
+                timings["total"] = round(
+                    sum(v for v in timings.values() if isinstance(v, (int, float))), 2)
+                return {
+                    "transcript": stt["text"],
+                    "session_id": session_id,
+                    "answer": ans,
+                    "turn": turn,
+                    "facts": turn.get("facts", {}),
+                    "ack_url": _ack_url(),
+                    "audio_url": audio_url,
+                    "audio_urls": audio_urls,
+                    "audio_b64": audio_b64,
+                    "audio_b64s": audio_b64s,
+                    "sentences": sentences,
+                    "timings": timings,
+                }
             try:
                 result = _run_timed(
                     pipeline_run, tmp_in, timeout_s=PIPELINE_TIMEOUT_S
@@ -443,9 +691,14 @@ async def ask(
         timings["stt"] = round(time.perf_counter() - started, 2)
         started = time.perf_counter()
         try:
-            ans = _run_timed(
-                brain_answer, stt["text"], timeout_s=BRAIN_TIMEOUT_S
-            )
+            if session_id:
+                turn = _run_timed(brain_converse, session_id, stt["text"],
+                                  timeout_s=BRAIN_TIMEOUT_S)
+                ans = _turn_to_legacy(turn)
+            else:
+                ans = _run_timed(
+                    brain_answer, stt["text"], timeout_s=BRAIN_TIMEOUT_S
+                )
         except HTTPException:
             raise
         except Exception as exc:
@@ -462,6 +715,10 @@ async def ask(
             "transcript": stt["text"],
             "language_hint": stt.get("language_hint"),
             "answer": ans,
+            "turn": ans.get("turn") if isinstance(ans, dict) else None,
+            "facts": (ans.get("facts") or {}) if isinstance(ans, dict) else {},
+            "session_id": session_id,
+            "ack_url": _ack_url(),
             "sentences": sentences,
             "timings": timings,
         }

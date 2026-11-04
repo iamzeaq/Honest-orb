@@ -114,6 +114,16 @@ body {
 }
 .orb-line.fade { opacity: 0; }
 
+/* Subtitle under the wordmark: quiet, one line. */
+.tagline {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--ink-faint);
+  margin: 6px 0 0;
+}
+
 /* Dev-only failure reason (?dev=1): tiny, quiet, under the orb line. */
 .orb-error {
   font-family: var(--sans);

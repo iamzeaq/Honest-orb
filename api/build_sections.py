@@ -534,6 +534,270 @@ def extract_police(fitz, path: Path) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# New Acts (spec step 1): generic ingestor + per-law config.
+#
+# Each entry: file candidates in data/raw/, id prefix, display source,
+# jurisdiction ("federal" or a lowercase state name), domain, the section
+# numbers to extract, titles, per-section keywords, and plain-string OCR
+# fixes applied in order. Laws whose PDF is absent from data/raw/ are
+# SKIPPED with a report line (never fatal): the existing sections are kept
+# byte-identical. Laws whose PDF yields no usable text layer (photographed
+# scan, e.g. the FCT Recovery of Premises Act) are also skipped and
+# reported, per the "only if clean and verifiable" rule.
+# ---------------------------------------------------------------------------
+
+NEW_LAWS: list[dict] = [
+    {
+        "files": ["acja_2015.pdf"],
+        "id_prefix": "ACJA2015",
+        "source": "Administration of Criminal Justice Act 2015",
+        "jurisdiction": "federal",
+        "domain": "criminal_procedure",
+        "note": "Federal criminal procedure: arrest, remand, trial, bail, plea.",
+        "fixes": [],
+        "sections": {
+            # number: (title, keywords)
+            "3": ("Arrest and procedure after arrest",
+                  ["arrest", "procedure", "rights of suspect", "carry go station"]),
+            "7": ("Arrest in lieu prohibited",
+                  ["arrest in lieu", "family", "proxy arrest"]),
+            "32": ("Detention and monthly remand reports",
+                   ["detention", "remand", "magistrate", "oversight"]),
+        },
+    },
+    {
+        "files": ["lagos_tenancy_law_2011.pdf"],
+        "id_prefix": "LAGTEN2011",
+        "source": "Lagos Tenancy Law 2011",
+        "jurisdiction": "lagos",
+        "domain": "tenancy",
+        "note": ("Lagos State ONLY. Applies to tenancies of residential and business "
+                 "premises in Lagos; excluded categories (e.g. educational/hostel "
+                 "accommodation and other exempt premises stated in the Law) are "
+                 "captured verbatim in each section's applicability note."),
+        "fixes": [],
+        "sections": {
+            "3": ("Jurisdiction of courts in tenancy matters",
+                  ["court", "jurisdiction", "tenancy", "lagos"]),
+            "13": ("Notice to quit and length of notice",
+                   ["notice to quit", "quit notice", "eviction", "landlord"]),
+            "14": ("Notice of intention to recover possession",
+                   ["recover possession", "eviction notice", "landlord"]),
+        },
+    },
+    {
+        "files": ["foi_act_2011.pdf"],
+        "id_prefix": "FOIA2011",
+        "source": "Freedom of Information Act 2011",
+        "jurisdiction": "federal",
+        "domain": "civic_foi",
+        "note": "Right to request records from public institutions; request procedure and timelines.",
+        "fixes": [],
+        "sections": {
+            "1": ("Right of access to records",
+                  ["information", "records", "request", "government agency", "access"]),
+            "2": ("Application for access",
+                  ["apply", "request procedure", "write", "agency"]),
+            "4": ("Time limit for disclosure",
+                  ["days", "timeline", "disclosure", "refusal"]),
+        },
+    },
+    {
+        "files": ["land_use_act.pdf"],
+        "id_prefix": "LUA1978",
+        "source": "Land Use Act (Cap L5)",
+        "jurisdiction": "federal",
+        "domain": "land",
+        "note": "Vests land in the Governor; rights of occupancy; consent and compensation rules.",
+        "fixes": [],
+        "sections": {
+            "1": ("Vesting of land in the Governor",
+                  ["land", "governor", "own land", "vested"]),
+            "5": ("Statutory right of occupancy",
+                  ["right of occupancy", "statutory", "urban land", "certificate"]),
+            "6": ("Customary right of occupancy",
+                  ["customary", "right of occupancy", "rural land", "village"]),
+        },
+    },
+    {
+        "files": ["labour_act.pdf"],
+        "id_prefix": "LABOUR1971",
+        "source": "Labour Act",
+        "jurisdiction": "federal",
+        "domain": "employment",
+        "note": "Contracts, wages, hours, termination and redundancy for workers.",
+        "fixes": [],
+        "sections": {
+            "7": ("Written statement of terms",
+                  ["contract", "terms", "employment", "letter", "wages"]),
+            "15": ("Payment of wages",
+                   ["salary", "wages", "pay", "boss", "not paid", "owe"]),
+            "20": ("Termination and notice",
+                   ["sack", "terminate", "dismiss", "notice", "fired"]),
+        },
+    },
+    {
+        "files": ["fccpa_2018.pdf"],
+        "id_prefix": "FCCPA2018",
+        "source": "Federal Competition and Consumer Protection Act 2018",
+        "jurisdiction": "federal",
+        "domain": "consumer",
+        "note": "Gazette OCR scan: plain-string typo fixes in 'fixes' are applied in order.",
+        "fixes": [
+            ("cornpetition", "competition"),
+            ("consurner", "consumer"),
+            ("cornmission", "commission"),
+        ],
+        "sections": {
+            "114": ("Consumer rights and unfair practices",
+                    ["consumer", "cheat", "refund", "seller", "product", "fake"]),
+            "130": ("Complaints to the Commission",
+                    ["complaint", "commission", "report seller", "consumer"]),
+        },
+    },
+    {
+        "files": ["corrupt_practices_act_2000.pdf"],
+        "id_prefix": "CPA2000",
+        "source": "Corrupt Practices and Other Related Offences Act 2000",
+        "jurisdiction": "federal",
+        "domain": "anti_corruption",
+        "note": "ICPC offences: bribery, gratification, and how to report.",
+        "fixes": [],
+        "sections": {
+            "8": ("Official corruption: gratification by officials",
+                  ["bribe", "bribery", "corruption", "gratification", "official"]),
+            "10": ("Bribery in relation to contracts and votes",
+                   ["bribe", "contract", "vote", "corruption"]),
+        },
+    },
+    {
+        "files": ["legal_aid_act_2011.pdf"],
+        "id_prefix": "LAA2011",
+        "source": "Legal Aid Act 2011",
+        "jurisdiction": "federal",
+        "domain": "legal_aid",
+        "note": "Who qualifies for free legal help and how to apply to the Legal Aid Council.",
+        "fixes": [],
+        "sections": {
+            "7": ("Persons entitled to legal aid",
+                  ["free lawyer", "cannot afford", "legal aid", "qualify", "poor"]),
+            "10": ("Application for legal aid",
+                   ["apply", "legal aid council", "how to apply", "office"]),
+        },
+    },
+    {
+        "files": ["anti_torture_act_2017.pdf"],
+        "id_prefix": "ATA2017",
+        "source": "Anti-Torture Act 2017",
+        "jurisdiction": "federal",
+        "domain": "police_rights",
+        "note": ("Scanned but clean typed text: OCR'd. 13 sections incl. prohibition, "
+                 "right to complain, right to examination, penalties."),
+        "fixes": [],
+        "sections": {
+            "3": ("Prohibition of torture",
+                  ["torture", "beat", "beaten", "confess", "cell", "prohibit"]),
+            "8": ("Right to complain",
+                  ["complain", "report", "torture", "complaint"]),
+            "9": ("Right to medical examination",
+                  ["examination", "doctor", "medical", "injury", "torture"]),
+            "12": ("Penalties for torture",
+                   ["penalty", "punishment", "years", "torture", "jail"]),
+        },
+    },
+    {
+        "files": ["fct_recovery_of_premises_act.pdf"],
+        "id_prefix": "FCTRPA",
+        "source": "Recovery of Premises Act (Cap 544, FCT Abuja)",
+        "jurisdiction": "fct",
+        "domain": "tenancy",
+        "note": ("Photographed scan: included ONLY if OCR text is clean and verifiable; "
+                 "otherwise skipped and reported."),
+        "fixes": [],
+        "sections": {
+            "3": ("Notice to quit",
+                  ["notice to quit", "quit notice", "abuja", "eviction"]),
+            "7": ("Recovery of possession",
+                  ["recover possession", "abuja", "court", "eviction"]),
+        },
+    },
+]
+
+
+def _law_text_quality(text: str) -> float:
+    """Fraction of characters that are plain word/space/punctuation text.
+
+    Photographed scans come back from PyMuPDF as near-empty or symbol soup;
+    gate them out so we never ship unverifiable sections.
+    """
+    if not text:
+        return 0.0
+    good = sum(1 for ch in text if ch.isalnum() or ch.isspace() or ch in ".,;:()[]-–—'\"/§")
+    return good / max(len(text), 1)
+
+
+def _find_law_pdf(filenames: list[str]) -> Path | None:
+    # Exact filenames only: a fuzzy match once pulled sections out of
+    # Police-Act-2020.pdf for unrelated Acts sharing words like "act".
+    for name in filenames:
+        path = RAW_DIR / name
+        if path.is_file():
+            return path
+    return None
+
+
+def extract_generic_law(fitz, cfg: dict) -> tuple[list[dict], str]:
+    """Extract configured sections from one Act PDF.
+
+    Returns (sections, report_line). Missing file or unusable text layer
+    yields ([], reason) — never fatal.
+    """
+    path = _find_law_pdf(cfg["files"])
+    if path is None:
+        return [], f"SKIP {cfg['source']}: PDF not in data/raw/ ({'/'.join(cfg['files'])})"
+    doc = fitz.open(path)
+    pages_text = [squash(page.get_text()) for page in doc]
+    raw = "\n".join(pages_text)
+    if _law_text_quality(raw) < 0.85 or len(re.sub(r"\s", "", raw)) < 2000:
+        return [], (f"SKIP {cfg['source']}: {path.name} has no clean verifiable "
+                     f"text layer (quality={_law_text_quality(raw):.2f}); not included")
+    for old, new in cfg.get("fixes", []):
+        raw = raw.replace(old, new)
+    raw = squash(raw)
+
+    sections: list[dict] = []
+    missing: list[str] = []
+    for num, (title, keywords) in cfg["sections"].items():
+        # Tolerant header match: "12. Title", "Section 12", "12 ...".
+        pattern = re.compile(
+            r"(?:\b[Ss]ection\s+)?\b" + re.escape(num) + r"\.\s+[A-Z(]",
+        )
+        match = pattern.search(raw)
+        if not match:
+            missing.append(num)
+            continue
+        start = match.start()
+        # End at the next numbered section header after this one.
+        next_match = re.search(r"\s\b\d{1,3}\.\s+[A-Z(]", raw[match.end():])
+        end = match.end() + next_match.start() if next_match else len(raw)
+        text = squash(raw[start:end])[:4000]
+        item = {
+            "id": f"{cfg['id_prefix']}-s{num}",
+            "source": cfg["source"],
+            "section": num,
+            "title": title,
+            "text": text,
+            "keywords": keywords,
+            "jurisdiction": cfg["jurisdiction"],
+            "domain": cfg["domain"],
+        }
+        if cfg.get("note"):
+            item["applicability"] = cfg["note"]
+        sections.append(item)
+    report = f"{cfg['source']}: {len(sections)} sections from {path.name}"
+    if missing:
+        report += f" (sections not found, skipped: {', '.join(missing)})"
+    return sections, report
 
 
 def main() -> None:
@@ -546,6 +810,15 @@ def main() -> None:
     constitution = extract_constitution(fitz, constitution_path)
     police = extract_police(fitz, police_path)
     sections = constitution + police
+    reports: list[str] = []
+    for cfg in NEW_LAWS:
+        try:
+            extra, report = extract_generic_law(fitz, cfg)
+        except Exception as exc:  # noqa: BLE001 - one bad PDF must not kill the build
+            reports.append(f"SKIP {cfg['source']}: extractor error: {exc}")
+            continue
+        reports.append(report)
+        sections.extend(extra)
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as fh:
@@ -557,6 +830,8 @@ def main() -> None:
         counts[item["source"]] = counts.get(item["source"], 0) + 1
     for source in sorted(counts):
         print(f"{source}: {len([s for s in sections if s['source'] == source])} sections")
+    for report in reports:
+        print(report)
     print(f"Total: {len(sections)} sections -> {OUT_PATH}")
 
 

@@ -53,8 +53,9 @@ app = modal.App("honest-orb")
     cpu=2.0,
     memory=4096,
     timeout=3600,
-    # keep_warm=1,  # optional: uncomment during demo hours so answers start
-    # fast; costs accrue while the container idles, so keep it off otherwise.
+    min_containers=1,  # 1 warm container while in use: first answers skip the
+    # cold start. Billed at the full CPU+memory rate while idle (~$0.13/hr
+    # for 2 CPU + 4 GB at Modal's public rates); set back to 0 after demo.
 )
 @modal.asgi_app()
 def fastapi_app():
