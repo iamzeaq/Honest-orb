@@ -95,9 +95,37 @@ def _ffmpeg_exe() -> str:
         ) from exc
 
 
+class AudioTooShortError(ValueError):
+    """Raised when the recording has no usable speech (empty/silent)."""
+
+
+MIN_SPEECH_SECONDS = 0.3
+MIN_INPUT_BYTES = 2000
+
+
+def _convert_attempt(exe: str, src_path: str, out: str,
+                     extra_input: list[str] | None = None) -> str | None:
+    """One ffmpeg conversion attempt; returns stderr tail on failure."""
+    cmd = [exe, "-y", "-v", "error"]
+    if extra_input:
+        cmd.extend(extra_input)
+    cmd += [ "-i", src_path, "-ac", "1", "-ar", "16000",
+             "-sample_fmt", "s16", out ]
+    try:
+        subprocess.run(cmd, check=True, capture_output=True)
+    except subprocess.CalledProcessError as exc:
+        return exc.stderr.decode()[:300]
+    if not os.path.exists(out) or os.path.getsize(out) == 0:
+        return "ffmpeg produced no output"
+    return None
+
+
 def _to_wav_16k(src: str | os.PathLike) -> tuple[str, bool]:
     """Convert any audio file to mono 16-bit PCM WAV at 16 kHz.
 
+    Phone recorders emit streaming containers (Android: webm/Opus with
+    unknown-length EBML; iPhone: mp4/AAC) that defeat a plain ffmpeg
+    invocation, so this tries progressively more tolerant strategies.
     Returns (path, is_temp). Already-conforming WAV files are used as-is.
     """
     src_path = str(src)
@@ -111,31 +139,31 @@ def _to_wav_16k(src: str | os.PathLike) -> tuple[str, bool]:
                 return src_path, False
     except (wave.Error, OSError):
         pass
+    try:
+        size = os.path.getsize(src_path)
+    except OSError:
+        size = 0
+    if size < MIN_INPUT_BYTES:
+        raise AudioTooShortError(
+            f"recording is empty ({size} bytes)")
     fd, out = tempfile.mkstemp(suffix=".wav")
     os.close(fd)
-    cmd = [
-        _ffmpeg_exe(),
-        "-y",
-        "-v",
-        "error",
-        "-i",
-        src_path,
-        "-ac",
-        "1",
-        "-ar",
-        "16000",
-        "-sample_fmt",
-        "s16",
-        out,
-    ]
-    try:
-        subprocess.run(cmd, check=True, capture_output=True)
-    except subprocess.CalledProcessError as exc:
-        os.path.exists(out) and os.remove(out)
-        raise RuntimeError(
-            f"ffmpeg conversion failed: {exc.stderr.decode()[:300]}"
-        ) from exc
-    return out, True
+    exe = _ffmpeg_exe()
+    errors: list[str] = []
+    # 1. Plain conversion (clean files).
+    # 2. Lenient streaming parse: ignore index, generate timestamps, probe
+    #    deep (fixes phone MediaRecorder webm/mp4 with unknown lengths).
+    for extra in (None, ["-fflags", "+ignidx+genpts", "-err_detect",
+                         "ignore_err", "-analyzeduration", "20M",
+                         "-probesize", "20M"]):
+        err = _convert_attempt(exe, src_path, out, extra)
+        if err is None:
+            return out, True
+        errors.append(err)
+    os.path.exists(out) and os.remove(out)
+    raise RuntimeError(
+        f"ffmpeg conversion failed for {size}-byte input: {errors[-1]}"
+    )
 
 
 def _wav_seconds(path: str) -> float:
@@ -163,6 +191,9 @@ def transcribe(audio_path: str | os.PathLike) -> dict:
     wav_path, is_temp = _to_wav_16k(audio_path)
     try:
         seconds = _wav_seconds(wav_path)
+        if seconds < MIN_SPEECH_SECONDS:
+            raise AudioTooShortError(
+                f"recording has no usable speech ({seconds:.2f}s)")
         request_part = {
             "mode": "PUSH_TO_TALK",
             "model": MODEL,

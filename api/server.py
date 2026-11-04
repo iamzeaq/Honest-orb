@@ -40,6 +40,7 @@ if str(ROOT) not in sys.path:
 from api import tts  # noqa: E402
 from api.brain import answer as brain_answer, converse as brain_converse  # noqa: E402
 from api.pipeline import run as pipeline_run  # noqa: E402
+from api.stt import AudioTooShortError  # noqa: E402
 from api.stt import transcribe as stt_transcribe  # noqa: E402
 
 AUDIO_OUT_DIR = ROOT / "data" / "audio_out"
@@ -256,6 +257,28 @@ def _turn_to_legacy(turn: dict) -> dict:
 def _ack_url() -> str | None:
     path = AUDIO_OUT_DIR / "ack.wav"
     return "/audio/ack.wav" if path.is_file() else None
+
+
+TOO_SHORT_SPOKEN = "Sorry, I didn't catch that. Could you please say it again?"
+
+
+def _too_short_answer() -> dict:
+    """Legacy answer shape for an empty/too-short recording.
+
+    Spoken by voice like any answer, so the user hears the prompt and the
+    orb keeps listening afterwards instead of erroring out.
+    """
+    return {
+        "language": "en",
+        "status": "chat",
+        "mode": "chat",
+        "right": "",
+        "say_this": "",
+        "do_this": "",
+        "citations": [],
+        "spoken": TOO_SHORT_SPOKEN,
+        "facts": {},
+    }
 
 
 @app.get("/health")
@@ -592,9 +615,16 @@ async def ask(
                 # then speak — same JSON shape as the pipeline path.
                 timings = {}
                 started = time.perf_counter()
+                too_short = False
                 try:
                     stt = _run_timed(stt_transcribe, tmp_in,
                                      timeout_s=STT_TIMEOUT_S)
+                    if not (stt.get("text") or "").strip():
+                        too_short = True
+                except AudioTooShortError as exc:
+                    logger.info("voice turn too short: %s", exc)
+                    too_short = True
+                    stt = {"text": "", "language_hint": "en", "seconds": 0.0}
                 except Exception as exc:
                     logger.exception("voice stt failed")
                     raise HTTPException(
@@ -602,18 +632,24 @@ async def ask(
                         detail=f"could not transcribe the recording: {_reason(exc)}",
                     ) from exc
                 timings["stt"] = round(time.perf_counter() - started, 2)
-                started = time.perf_counter()
-                try:
-                    turn = _run_timed(brain_converse, session_id,
-                                      stt["text"], timeout_s=BRAIN_TIMEOUT_S)
-                except Exception as exc:
-                    logger.exception("voice converse failed")
-                    raise HTTPException(
-                        status_code=502,
-                        detail=f"could not answer the voice question: {_reason(exc)}",
-                    ) from exc
-                timings["brain"] = round(time.perf_counter() - started, 2)
-                ans = _turn_to_legacy(turn)
+                if too_short:
+                    turn = {"mode": "chat", "spoken": TOO_SHORT_SPOKEN,
+                            "details": {}, "citations": [], "facts": {},
+                            "summary": ""}
+                    ans = _too_short_answer()
+                if not too_short:
+                    started = time.perf_counter()
+                    try:
+                        turn = _run_timed(brain_converse, session_id,
+                                          stt["text"], timeout_s=BRAIN_TIMEOUT_S)
+                    except Exception as exc:
+                        logger.exception("voice converse failed")
+                        raise HTTPException(
+                            status_code=502,
+                            detail=f"could not answer the voice question: {_reason(exc)}",
+                        ) from exc
+                    timings["brain"] = round(time.perf_counter() - started, 2)
+                    ans = _turn_to_legacy(turn)
                 try:
                     (audio_url, audio_urls, sentences,
                      audio_b64, audio_b64s) = _speak_to_urls(ans["spoken"], timings)
@@ -643,6 +679,36 @@ async def ask(
                 result = _run_timed(
                     pipeline_run, tmp_in, timeout_s=PIPELINE_TIMEOUT_S
                 )
+            except AudioTooShortError as exc:
+                # Empty/silent recording: answer by voice and keep the
+                # conversation going instead of returning an error.
+                logger.info("voice turn too short: %s", exc)
+                timings: dict[str, float] = {}
+                (audio_url, audio_urls, sentences,
+                 audio_b64, audio_b64s) = _speak_to_urls(
+                    TOO_SHORT_SPOKEN, timings)
+                timings["total"] = round(
+                    sum(v for v in timings.values()
+                        if isinstance(v, (int, float))), 2)
+                return {
+                    "transcript": "",
+                    "answer": {
+                        "language": "en",
+                        "status": "chat",
+                        "right": "",
+                        "say_this": "",
+                        "do_this": "",
+                        "cited": [],
+                        "spoken": TOO_SHORT_SPOKEN,
+                    },
+                    "too_short": True,
+                    "audio_url": audio_url,
+                    "audio_urls": audio_urls,
+                    "audio_b64": audio_b64,
+                    "audio_b64s": audio_b64s,
+                    "sentences": sentences,
+                    "timings": timings,
+                }
             except HTTPException:
                 raise
             except Exception as exc:
@@ -678,8 +744,15 @@ async def ask(
         # finishes rendering (the generator only needs sentence text).
         timings: dict[str, float] = {}
         started = time.perf_counter()
+        too_short = False
         try:
             stt = _run_timed(stt_transcribe, tmp_in, timeout_s=STT_TIMEOUT_S)
+            if not (stt.get("text") or "").strip():
+                too_short = True
+        except AudioTooShortError as exc:
+            logger.info("voice turn too short: %s", exc)
+            too_short = True
+            stt = {"text": "", "language_hint": "en", "seconds": 0.0}
         except HTTPException:
             raise
         except Exception as exc:
@@ -689,25 +762,28 @@ async def ask(
                 detail=f"could not transcribe the recording: {_reason(exc)}",
             ) from exc
         timings["stt"] = round(time.perf_counter() - started, 2)
-        started = time.perf_counter()
-        try:
-            if session_id:
-                turn = _run_timed(brain_converse, session_id, stt["text"],
-                                  timeout_s=BRAIN_TIMEOUT_S)
-                ans = _turn_to_legacy(turn)
-            else:
-                ans = _run_timed(
-                    brain_answer, stt["text"], timeout_s=BRAIN_TIMEOUT_S
-                )
-        except HTTPException:
-            raise
-        except Exception as exc:
-            logger.exception("voice brain failed")
-            raise HTTPException(
-                status_code=502,
-                detail=f"could not answer the voice question: {_reason(exc)}",
-            ) from exc
-        timings["brain"] = round(time.perf_counter() - started, 2)
+        if too_short:
+            ans = _too_short_answer()
+        else:
+            started = time.perf_counter()
+            try:
+                if session_id:
+                    turn = _run_timed(brain_converse, session_id, stt["text"],
+                                      timeout_s=BRAIN_TIMEOUT_S)
+                    ans = _turn_to_legacy(turn)
+                else:
+                    ans = _run_timed(
+                        brain_answer, stt["text"], timeout_s=BRAIN_TIMEOUT_S
+                    )
+            except HTTPException:
+                raise
+            except Exception as exc:
+                logger.exception("voice brain failed")
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"could not answer the voice question: {_reason(exc)}",
+                ) from exc
+            timings["brain"] = round(time.perf_counter() - started, 2)
 
         sentences = tts.split_sentences(ans["spoken"]) or [ans["spoken"]]
         meta = {
@@ -719,6 +795,7 @@ async def ask(
             "facts": (ans.get("facts") or {}) if isinstance(ans, dict) else {},
             "session_id": session_id,
             "ack_url": _ack_url(),
+            "too_short": too_short,
             "sentences": sentences,
             "timings": timings,
         }

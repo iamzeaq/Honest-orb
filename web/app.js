@@ -22,9 +22,11 @@
   var cardCites = document.getElementById("cardCites");
   var callButton = document.getElementById("callButton");
 
-  var SILENCE_MS = 1500;   // auto-stop after ~1.5s of silence
+  var SILENCE_MS = 1200;   // auto-send after ~1.2s of silence
   var MAX_MS = 20000;      // hard cap on a recording
   var SILENCE_LEVEL = 0.02;
+  var turnId = 0;          // bumps every turn; stale stream lines are dropped
+  var heardSpeech = false; // any voice-level audio in this recording
 
   var mode = "idle";       // idle | recording | working | speaking
   var recorder = null;
@@ -106,11 +108,11 @@
   function orb() { return window.Orb || null; }
 
   // ---------- thinking sound: Web Audio only, no files ----------
-  // Quiet machine hum + soft high ticks while the orb is thinking, from
-  // end-of-speech until the first reply audio starts (or any error/idle).
-  // The mic is never open during thinking (tracks stop in stopRecording
-  // before the thinking state, and startRecording kills the sound first),
-  // so the orb cannot hear itself.
+  // Soft mechanical ticks only while the orb is thinking, from end-of-speech
+  // until the first reply audio starts (or any error/idle). The mic is never
+  // open during thinking (tracks stop in stopRecording before the thinking
+  // state, and startRecording kills the sound first), so the orb cannot
+  // hear itself.
   var thinkCtx = null;
   var thinkMaster = null;
   var thinkNodes = null;
@@ -156,35 +158,9 @@
     thinkMaster.gain.setValueAtTime(Math.max(thinkMaster.gain.value, 0), t);
     thinkMaster.gain.linearRampToValueAtTime(1, t + 0.15); // fade in ~150ms
 
-    // Low hum (~78 Hz sine) with a slow gentle wobble, plus a faint shimmer.
-    var hum = ctx.createOscillator();
-    hum.type = "sine";
-    hum.frequency.value = 78;
-    var humGain = ctx.createGain();
-    humGain.gain.value = 0.05; // ~15-20% of reply voice loudness
-    var wobble = ctx.createOscillator();
-    wobble.type = "sine";
-    wobble.frequency.value = 0.35;
-    var wobbleAmt = ctx.createGain();
-    wobbleAmt.gain.value = 6;
-    wobble.connect(wobbleAmt);
-    wobbleAmt.connect(hum.frequency);
-    hum.connect(humGain);
-    humGain.connect(thinkMaster);
-    hum.start(t);
-    wobble.start(t);
-
-    var shimmer = ctx.createOscillator();
-    shimmer.type = "sine";
-    shimmer.frequency.value = 8400;
-    var shimmerGain = ctx.createGain();
-    shimmerGain.gain.value = 0.005;
-    shimmer.connect(shimmerGain);
-    shimmerGain.connect(thinkMaster);
-    shimmer.start(t);
-
     // Soft high ticks (~3.5 kHz, ~2ms) at ~4-5/s with loose timing, nudged
     // by the orb's thinking pulse so it feels alive, not like a clock.
+    // (Former hum + shimmer layers removed: ticks only.)
     var clickLen = Math.floor(ctx.sampleRate * 0.012);
     var clickBuf = ctx.createBuffer(1, clickLen, ctx.sampleRate);
     var data = clickBuf.getChannelData(0);
@@ -201,7 +177,7 @@
     band.connect(tickGain);
     tickGain.connect(thinkMaster);
 
-    thinkNodes = { hum: hum, wobble: wobble, shimmer: shimmer, band: band };
+    thinkNodes = { band: band, buf: clickBuf };
     thinkNextTick = t + 0.1;
     thinkTimer = setInterval(function () {
       if (token !== thinkToken || !thinkNodes) return;
@@ -238,9 +214,7 @@
     setTimeout(function () {
       if (token !== thinkToken) return;
       try {
-        nodes.hum.stop(); nodes.wobble.stop(); nodes.shimmer.stop();
-        nodes.hum.disconnect(); nodes.wobble.disconnect();
-        nodes.shimmer.disconnect(); nodes.band.disconnect();
+        nodes.band.disconnect();
       } catch (e) { /* already torn down */ }
     }, immediate ? 0 : 260);
   }
@@ -264,13 +238,22 @@
     });
   }
 
+  // One tiny one-word state label under the orb; the ONLY routine text.
+  var STATE_LABEL = {
+    idle: "Tap to talk",
+    listening: "Listening…",
+    thinking: "Thinking…",
+    speaking: "Speaking…"
+  };
+
   function setState(name) {
     var o = orb();
     if (o && o.setState) o.setState(name);
+    setLine(STATE_LABEL[name] || "");
     orbButton.setAttribute("aria-label",
-      name === "idle" ? "Tap and talk" :
+      name === "idle" ? "Tap to talk" :
       name === "listening" ? "Listening. Tap to stop." :
-      name === "thinking" ? "Thinking" : "Speaking");
+      name === "thinking" ? "Thinking" : "Speaking. Tap to interrupt.");
     orbButton.setAttribute("aria-pressed", name === "listening" ? "true" : "false");
     // Thinking hum follows the orb state: on in thinking, off on idle or
     // re-listen. Speaking keeps it until the first reply audio actually
@@ -312,8 +295,9 @@
         var v = (data[i] - 128) / 128;
         sum += v * v;
       }
-      var level = Math.min(1, Math.sqrt(sum / data.length) * 3);
+      var level = Math.min(1, Math.sqrt(sum / data.length) * 3.5);
       if (o && o.setLevel) o.setLevel(level);
+      if (level > SILENCE_LEVEL + 0.08) heardSpeech = true;
       var now = performance.now();
       if (level < SILENCE_LEVEL) {
         if (!silenceSince) silenceSince = now;
@@ -340,8 +324,12 @@
       setLine("Mic blocked — allow access, or type instead.");
       return;
     }
+    // Pick the best container this browser can record. Android Chrome
+    // records audio/webm (Opus), iPhone Safari records audio/mp4 (AAC);
+    // the server converts any of webm/ogg/mp4/m4a/aac to 16 kHz mono WAV.
     var mime = "";
-    ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"].forEach(function (m) {
+    ["audio/webm;codecs=opus", "audio/webm", "audio/mp4",
+     "audio/ogg;codecs=opus", "audio/ogg"].forEach(function (m) {
       if (!mime && window.MediaRecorder && MediaRecorder.isTypeSupported(m)) mime = m;
     });
     try {
@@ -353,6 +341,8 @@
       return;
     }
     chunks = [];
+    heardSpeech = false;
+    turnId++;
     recorder.ondataavailable = function (e) {
       if (e.data && e.data.size) chunks.push(e.data);
     };
@@ -366,12 +356,16 @@
     silenceSince = 0;
     recordStarted = performance.now();
     setState("listening");
-    setLine("Listening…");
     micLevelLoop();
   }
 
   function stopRecording() {
     if (mode !== "recording") return;
+    // 20s of listening with no actual speech: back to idle, not a send.
+    if (performance.now() - recordStarted > MAX_MS && !heardSpeech) {
+      resetToIdle();
+      return;
+    }
     mode = "working";
     cancelAnimationFrame(rafId);
     var o = orb();
@@ -379,7 +373,6 @@
     try { recorder.stop(); } catch (e) { /* already stopped */ }
     if (micStream) micStream.getTracks().forEach(function (t) { t.stop(); });
     setState("thinking");
-    setLine("Thinking…");
     playAck(); // instant orb-voice acknowledgement while the brain runs
   }
 
@@ -391,7 +384,9 @@
       return;
     }
     voiceTurn = true; // voice turns auto-listen again after speaking
-    var ext = (blob.type.indexOf("mp4") >= 0) ? "m4a" : "webm";
+    var ext = "webm";
+    if (blob.type.indexOf("mp4") >= 0 || blob.type.indexOf("aac") >= 0) ext = "m4a";
+    else if (blob.type.indexOf("ogg") >= 0 || blob.type.indexOf("oga") >= 0) ext = "ogg";
     var form = new FormData();
     form.append("audio", blob, "question." + ext);
     try {
@@ -399,6 +394,7 @@
       // line per sentence, so the first sentence starts playing while
       // later sentences are still rendering server-side. session_id keeps
       // the conversation (state, topic, summary) across turns.
+      var myTurn = turnId;
       var res = await fetch(withSession("/api/ask"), {
         method: "POST",
         body: form,
@@ -407,7 +403,7 @@
       if (!res.ok) throw await httpError(res);
       var ctype = res.headers.get("content-type") || "";
       if (res.body && res.body.getReader && ctype.indexOf("ndjson") >= 0) {
-        await readAnswerStream(res.body);
+        await readAnswerStream(res.body, myTurn);
         return;
       }
       // No stream support on this response: plain JSON answer instead.
@@ -430,9 +426,10 @@
   async function sendText(text) {
     dismissCard();
     voiceTurn = false; // typed turns don't auto-listen afterwards
+    turnId++;
+    var myTurn = turnId;
     mode = "working";
     setState("thinking");
-    setLine("Thinking…");
     try {
       // Session chat stream: meta first (answer + caption), then one audio
       // line per sentence. session_id carries the conversation server-side.
@@ -444,7 +441,7 @@
       });
       if (!res.ok) throw await httpError(res);
       if (res.body && res.body.getReader) {
-        await readAnswerStream(res.body);
+        await readAnswerStream(res.body, myTurn);
         return;
       }
       // Ancient browser without stream support: plain JSON answer instead.
@@ -461,8 +458,9 @@
   }
 
   // NDJSON stream: a meta line, then one audio line per sentence.
-  // Sentences play in order as they arrive.
-  async function readAnswerStream(body) {
+  // Sentences play in order as they arrive. Lines from an older turn
+  // (user tapped to interrupt) are dropped and the stream is cancelled.
+  async function readAnswerStream(body, myTurn) {
     var reader = body.getReader();
     var decoder = new TextDecoder();
     var buf = "";
@@ -472,6 +470,10 @@
       var lines = buf.split("\n");
       buf = chunk.done ? "" : lines.pop();
       for (var i = 0; i < lines.length; i++) {
+        if (myTurn !== turnId) {
+          try { reader.cancel(); } catch (e) {}
+          return;
+        }
         if (!lines[i].trim()) continue;
         var msg = null;
         try { msg = JSON.parse(lines[i]); } catch (e) { continue; }
@@ -497,12 +499,10 @@
     }
   }
 
-  // Voice-first: no card pops up automatically. One short caption under
-  // the orb, plus "Show details" when there is substance behind it.
+  // Voice-first: no card pops up automatically. The one-word state label
+  // stays ("Speaking…"); "Show details" appears when there is substance.
   function stageAnswer(ans) {
     pendingAnswer = ans;
-    var caption = firstSentence(ans.spoken) || "Here's what I found.";
-    setLine(caption);
     var hasDetails = !!(ans.right || ans.say_this || ans.do_this ||
       (ans.citations && ans.citations.length));
     if (detailsButton) detailsButton.hidden = !hasDetails;
@@ -572,8 +572,8 @@
     playNextInQueue();
   }
 
-  // Play answerQueue[queuePos..] in order. The orb line and the pulse
-  // always follow whichever sentence is currently playing.
+  // Play answerQueue[queuePos..] in order. The one-word state label
+  // stays put; only the orb pulse follows the audio.
   function playNextInQueue() {
     if (queuePos >= answerQueue.length) {
       if (!streamOpen) finishSpeaking();
@@ -582,7 +582,6 @@
     var item = answerQueue[queuePos++];
     var token = playToken;
     queuePlaying = true;
-    setLine(item.sentence || "Speaking…");
     answerAudio = new Audio(item.url);
     answerAudio.playsInline = true;
     var o = orb();
@@ -740,7 +739,7 @@
     var o = orb();
     if (o && o.setLevel) o.setLevel(0);
     if (line) setLine(line);
-    else setLine("Tap and talk");
+    else setLine("Tap to talk");
     if (err && DEV) {
       var reason = String((err && err.message) || err).slice(0, 200);
       setTimeout(function () {
@@ -765,9 +764,16 @@
 
   orbButton.addEventListener("click", function () {
     ensureThinkCtx(); // create/resume audio on the tap (iPhone/Safari rule)
-    if (mode === "recording") stopRecording();
+    if (mode === "recording") stopRecording(); // "I'm done", send now
     else if (mode === "idle") { voiceTurn = true; startRecording(); }
-    else { voiceTurn = false; resetToIdle(); } // tap the orb to end
+    else if (mode === "speaking") {
+      // Interrupt the reply: straight back to listening, stale stream
+      // lines are dropped via turnId and the queue is silenced.
+      voiceTurn = true;
+      stopAnswerAudio();
+      startRecording();
+    }
+    else { voiceTurn = false; resetToIdle(); } // working: tap to end
   });
 
   // Swipe down on the card, or tap outside it, to dismiss.

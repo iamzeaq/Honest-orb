@@ -137,9 +137,13 @@ body {
    voiceNote are only ever unhidden on failure. */
 .wordmark,
 .tagline,
-.footer,
-#orbLine {
+.footer {
   display: none;
+}
+
+/* The one-word state label: the only routine text on screen. */
+#orbLine {
+  display: block;
 }
 
 /* Bottom controls: small, quiet links at low opacity. */

@@ -15,6 +15,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from api.brain import answer as brain_answer
+from api.stt import AudioTooShortError
 from api.stt import transcribe as stt_transcribe
 from api import tts as tts_mod
 
@@ -34,6 +35,8 @@ def run(audio_path: str) -> dict:
     started = time.perf_counter()
     stt = stt_transcribe(audio_path)
     timings["stt"] = round(time.perf_counter() - started, 2)
+    if not (stt.get("text") or "").strip():
+        raise AudioTooShortError("transcript is empty (silent recording)")
 
     started = time.perf_counter()
     ans = brain_answer(stt["text"])
