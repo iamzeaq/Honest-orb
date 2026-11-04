@@ -143,6 +143,22 @@ _tokenizer = None
 _loaded_model_id: str | None = None
 
 
+def _device() -> str:
+    """CUDA when a GPU is present (Modal T4), else CPU.
+
+    Same weights and synthesis settings either way, so the deployed
+    voice is identical — only faster on GPU.
+    """
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            return "cuda"
+    except ImportError:
+        pass
+    return "cpu"
+
+
 def _load():
     global _model, _tokenizer, _loaded_model_id
     model_id = _model_id()
@@ -157,6 +173,7 @@ def _load():
         model_id, token=_hf_token(), cache_dir=cache_dir
     )
     _model = VitsModel.from_pretrained(model_id, token=_hf_token(), cache_dir=cache_dir)
+    _model.to(_device())
     _model.eval()
     _loaded_model_id = model_id
     return _model, _tokenizer
@@ -617,6 +634,7 @@ def _synth_normalized(normalized: str) -> tuple[list, int]:
     import numpy as np
 
     model, tokenizer = _load()
+    device = _device()
     rate = speaking_rate()
     # transformers >= 4.36 reads these synthesis controls off the model
     # instance (only speaking_rate is also a forward kwarg), so set all
@@ -633,13 +651,18 @@ def _synth_normalized(normalized: str) -> tuple[list, int]:
             inputs = tokenizer(chunk, return_tensors="pt")
             if inputs["input_ids"].numel() == 0:
                 continue
+            inputs = {k: v.to(device) for k, v in inputs.items()}
             waveform = model(**inputs, speaking_rate=rate).waveform[0].cpu().numpy()
             waves.append(waveform)
     return waves, sample_rate
 
 
 def speak_sentence(text: str, out_path: str | None = None) -> str | None:
-    """Synthesize a single sentence to a WAV file. Returns path or None."""
+    """Synthesize a single sentence to a WAV file. Returns path or None.
+
+    One automatic retry on synthesis failure (transient GPU/CUDA hiccups
+    must not cost the caller its sentence).
+    """
     import tempfile
 
     import numpy as np
@@ -647,7 +670,15 @@ def speak_sentence(text: str, out_path: str | None = None) -> str | None:
     normalized = normalize_for_speech(text)
     if not normalized:
         return None
-    waves, sample_rate = _synth_normalized(normalized)
+    last_error: Exception | None = None
+    for _ in range(2):
+        try:
+            waves, sample_rate = _synth_normalized(normalized)
+            break
+        except Exception as exc:  # noqa: BLE001 - retry once, then surface
+            last_error = exc
+    else:  # pragma: no cover - exercised only on synthesis failure
+        raise last_error  # type: ignore[misc]
     if not waves:
         return None
     # Voice-style post-processing for every sentence (VOICE_STYLE env):
@@ -676,15 +707,23 @@ def speak_sentences(
     ``on_sentence`` (optional) is called as ``on_sentence(index, path)``
     right after each sentence file is written, so a server can hand the
     first sentence's audio to the browser while later ones still render.
+    A sentence that fails even after its retry is skipped — the rest of
+    the reply still plays instead of dropping everything.
     """
+    import logging
     import tempfile
 
+    logger = logging.getLogger(__name__)
     sentences = split_sentences(text)
     if out_dir is None:
         out_dir = tempfile.mkdtemp(prefix="orb_sent_")
     paths: list[str] = []
     for i, sentence in enumerate(sentences):
-        path = speak_sentence(sentence, str(Path(out_dir) / f"s{i:02d}.wav"))
+        try:
+            path = speak_sentence(sentence, str(Path(out_dir) / f"s{i:02d}.wav"))
+        except Exception as exc:  # noqa: BLE001 - keep the rest playing
+            logger.exception("sentence %d synthesis failed, skipping: %s", i, exc)
+            continue
         if path is None:
             continue
         paths.append(path)

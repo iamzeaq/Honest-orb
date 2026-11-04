@@ -1,11 +1,11 @@
 {
-  "passed": 43,
+  "passed": 41,
   "total": 43,
-  "avg_latency_s": 2.43,
+  "avg_latency_s": 2.02,
   "results": [
     {
       "id": "A1",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "Hello",
       "output": {
         "mode": "chat",
@@ -16,30 +16,30 @@
           "topic": ""
         }
       },
-      "latency_s": 0.03,
+      "latency_s": 0.01,
       "passed": true,
       "notes": []
     },
     {
       "id": "A2",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "Who won the match yesterday?",
       "output": {
         "mode": "redirect",
-        "spoken": "Haha, I wish I could gist you on sports, but I no get match scores o. I am your legal companion, so ask me about your rights, police matters or civic duties and I go help you clear am.",
+        "spoken": "I do not follow matches closely, my friend. If you have any question about your rights or a legal issue in Nigeria, I am here to help you.",
         "citations": [],
         "facts": {
           "state": "",
           "topic": "none"
         }
       },
-      "latency_s": 8.04,
+      "latency_s": 5.0,
       "passed": true,
       "notes": []
     },
     {
       "id": "A3",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "My landlord says I must leave next week",
       "output": {
         "mode": "clarify",
@@ -56,7 +56,7 @@
     },
     {
       "id": "A4",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "Lagos",
       "output": {
         "mode": "clarify",
@@ -73,11 +73,11 @@
     },
     {
       "id": "A4b",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "It is a yearly tenancy. Can he actually do that?",
       "output": {
         "mode": "legal",
-        "spoken": "My friend, for a yearly tenancy in Lagos, the law says you should get six months notice, so next week is too short. Stay calm, tell him politely you will respect proper notice, and keep your documents safe.",
+        "spoken": "My friend, he cannot ask you to leave next week. For a yearly tenancy in Lagos, the law requires six months notice where no clause says otherwise. Stay calm and keep that notice safe while you seek advice.",
         "citations": [
           "LAGTEN2011-s13"
         ],
@@ -86,57 +86,58 @@
           "topic": "tenancy"
         }
       },
-      "latency_s": 3.14,
+      "latency_s": 2.1,
       "passed": true,
       "notes": []
     },
     {
       "id": "A5",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "Also, police took my phone yesterday",
       "output": {
-        "mode": "legal",
-        "spoken": "My friend, I hear you about the phone. The Police Act says officers may only search and seize where they have reasonable grounds to suspect stolen or prohibited items. Stay calm and ask politely for the reason and how to get it back.",
-        "citations": [
-          "NPA2020-s49"
-        ],
+        "mode": "clarify",
+        "spoken": "I understand this is worrying for you. Could you share why the police said they took your phone — for example search or investigation?",
+        "citations": [],
         "facts": {
           "state": "lagos",
-          "topic": "police_phone_seizure"
+          "topic": "police_stop_search"
         }
       },
-      "latency_s": 3.33,
-      "passed": true,
-      "notes": []
+      "latency_s": 2.48,
+      "passed": false,
+      "notes": [
+        "mode 'clarify' not in ['legal']",
+        "no expected cite (cited=[], want one of ['CFRN-s37', 'NPA2020-s49', 'NPA2020-s51'])"
+      ]
     },
     {
       "id": "A6",
-      "session": "conv-20261104-172403-A-memory-tenancy-police",
+      "session": "conv-20261104-211914-A-memory-tenancy-police",
       "text": "Police beat me in the cell to make me confess",
       "output": {
         "mode": "emergency",
-        "spoken": "Please call 112 immediately if you are still in danger or need medical help, my friend. The Constitution and Anti-Torture Act say no one should be beaten to force a confession and you have the right to dignity and humane treatment.",
+        "spoken": "Please get help now, call 112 immediately. My friend, beating you to get a confession is torture and it is forbidden by law. Stay calm, seek medical help and ask for a lawyer quickly.",
         "citations": [
-          "CFRN-s34",
           "ATA2017-s2",
-          "NPA2020-s37"
+          "NPA2020-s37",
+          "CFRN-s34"
         ],
         "facts": {
           "state": "lagos",
-          "topic": "police_torture"
+          "topic": "police_torture_confession"
         }
       },
-      "latency_s": 2.6,
+      "latency_s": 3.21,
       "passed": true,
       "notes": []
     },
     {
       "id": "B1",
-      "session": "conv-20261104-172403-B-unloaded-domains",
+      "session": "conv-20261104-211914-B-unloaded-domains",
       "text": "My boss hasn't paid me for 2 months",
       "output": {
         "mode": "legal",
-        "spoken": "I understand how hard two months without pay can be. Under the Labour Act, wages must be paid at intervals not exceeding one month, so yours is overdue.",
+        "spoken": "Sorry about this, not being paid is hard. The law says wages must be paid at least every month. You can ask politely in writing and keep your records safe.",
         "citations": [
           "LABOUR1971-s15"
         ],
@@ -145,17 +146,17 @@
           "topic": "unpaid wages"
         }
       },
-      "latency_s": 3.21,
+      "latency_s": 2.92,
       "passed": true,
       "notes": []
     },
     {
       "id": "B2",
-      "session": "conv-20261104-172403-B-unloaded-domains",
+      "session": "conv-20261104-211914-B-unloaded-domains",
       "text": "I can't afford a lawyer",
       "output": {
         "mode": "legal",
-        "spoken": "I understand, paying for a lawyer can be difficult. The Legal Aid Act says the Legal Aid Council can help with civil matters like unpaid wages if your income is within their limit, and they can also consider exceptional cases. You can visit their nearest office with your documents to apply, and stay calm and polite with your employer while you do so.",
+        "spoken": "I understand, money is tight right now. The law can still help you. The Legal Aid Council helps people who cannot afford a lawyer, if your income does not exceed the national minimum wage and the case meets the merit test.",
         "citations": [
           "LAA2011-s8",
           "LAA2011-s10",
@@ -163,37 +164,36 @@
         ],
         "facts": {
           "state": "",
-          "topic": "unpaid wages - legal aid"
+          "topic": "unpaid wages"
         }
       },
-      "latency_s": 2.86,
+      "latency_s": 2.96,
       "passed": true,
       "notes": []
     },
     {
       "id": "B3",
-      "session": "conv-20261104-172403-B-unloaded-domains",
+      "session": "conv-20261104-211914-B-unloaded-domains",
       "text": "I want information from a government agency",
       "output": {
         "mode": "legal",
-        "spoken": "You have a right to request information from any government agency under the Freedom of Information Act. You do not need to give a special reason, and you can apply in writing as the Act provides.",
+        "spoken": "You can ask for it. Under the Freedom of Information Act, you have the right to request information from any government agency, and you do not need to explain why you want it. Just apply in writing and keep a copy.",
         "citations": [
           "FOIA2011-s1",
-          "FOIA2011-s3",
-          "FOIA2011-s2"
+          "FOIA2011-s3"
         ],
         "facts": {
           "state": "",
-          "topic": "FOI - access to government information"
+          "topic": "access to government information"
         }
       },
-      "latency_s": 2.49,
+      "latency_s": 2.51,
       "passed": true,
       "notes": []
     },
     {
       "id": "B4",
-      "session": "conv-20261104-172403-B-unloaded-domains",
+      "session": "conv-20261104-211914-B-unloaded-domains",
       "text": "Can my landlord in Kano evict me tomorrow?",
       "output": {
         "mode": "not_covered",
@@ -210,11 +210,11 @@
     },
     {
       "id": "C1",
-      "session": "conv-20261104-172403-C-pidgin-police",
+      "session": "conv-20261104-211914-C-pidgin-police",
       "text": "Police stop me for road, dem wan check my phone",
       "output": {
         "mode": "legal",
-        "spoken": "I understand, that road stop can be stressful. Under the law your phone privacy is protected, and police need reasonable grounds and must tell you their name and reason before any search.",
+        "spoken": "My friend, I hear you. Police cannot just check your phone on the road. The Constitution protects your privacy, and the Police Act says they need reasonable grounds and must explain the search.",
         "citations": [
           "CFRN-s37",
           "NPA2020-s49",
@@ -222,47 +222,46 @@
         ],
         "facts": {
           "state": "",
-          "topic": "police stop and search phone"
+          "topic": "police stop and phone search"
         }
       },
-      "latency_s": 3.39,
+      "latency_s": 2.09,
       "passed": true,
       "notes": []
     },
     {
       "id": "C2",
-      "session": "conv-20261104-172403-C-pidgin-police",
+      "session": "conv-20261104-211914-C-pidgin-police",
       "text": "How long police fit hold person before court?",
       "output": {
         "mode": "legal",
-        "spoken": "I understand you want to know your rights on detention time. Under the Constitution, police must take you before a court within a reasonable time, which means one day if a court is within 40 kilometres, otherwise two days or as the court allows.",
+        "spoken": "My friend, I hear you. The law sets a strict time limit. The Constitution says police must take you to court within one day if a court is within 40 kilometres, otherwise within two days or a longer period the court finds reasonable.",
         "citations": [
-          "CFRN-s35",
-          "NPA2020-s64"
+          "CFRN-s35"
         ],
         "facts": {
           "state": "",
-          "topic": "detention time before court"
+          "topic": "detention time limit before court"
         }
       },
-      "latency_s": 3.62,
+      "latency_s": 3.01,
       "passed": true,
       "notes": []
     },
     {
       "id": "D-acja-1",
-      "session": "conv-20261104-172403-D-acja-1",
+      "session": "conv-20261104-211914-D-acja-1",
       "text": "What is the punishment for armed robbery under the ACJA?",
       "output": {
         "mode": "not_covered",
-        "spoken": "I understand you want to know the punishment for armed robbery under the ACJA, but the sections I have available right now do not cover that law. For the correct up to date information, please speak with a lawyer or contact the Legal Aid Council of Nigeria for free guidance.",
+        "spoken": "I understand your question. I do not have the punishment for armed robbery under the ACJA loaded in my current law collection. For accurate guidance, please contact the Legal Aid Council of Nigeria or a lawyer.",
         "citations": [],
         "facts": {
           "state": "",
-          "topic": ""
+          "topic": "armed robbery punishment"
         }
       },
-      "latency_s": 2.12,
+      "latency_s": 2.13,
       "passed": true,
       "notes": []
     },
@@ -291,7 +290,7 @@
     },
     {
       "id": "D-tenancy-1",
-      "session": "conv-20261104-172403-D-tenancy-1",
+      "session": "conv-20261104-211914-D-tenancy-1",
       "text": "My landlord in Ikeja gave me quit notice, what should I do?",
       "output": {
         "mode": "clarify",
@@ -331,21 +330,21 @@
     },
     {
       "id": "D-foi-1",
-      "session": "conv-20261104-172403-D-foi-1",
+      "session": "conv-20261104-211914-D-foi-1",
       "text": "How do I request records from a ministry?",
       "output": {
         "mode": "legal",
-        "spoken": "Under the Freedom of Information Act you can request records from any ministry without giving a reason. You can apply in writing, or orally if you need help and the officer must put it in writing for you.",
+        "spoken": "You can request records easily. Under the Freedom of Information Act, anyone can ask a ministry for information without giving a reason. Just apply in writing and keep a copy for your records.",
         "citations": [
           "FOIA2011-s1",
           "FOIA2011-s3"
         ],
         "facts": {
           "state": "",
-          "topic": "FOI request"
+          "topic": "request records from ministry"
         }
       },
-      "latency_s": 3.4,
+      "latency_s": 2.78,
       "passed": true,
       "notes": []
     },
@@ -374,22 +373,23 @@
     },
     {
       "id": "D-land-1",
-      "session": "conv-20261104-172403-D-land-1",
+      "session": "conv-20261104-211914-D-land-1",
       "text": "Government wants to take my family land, what are my rights?",
       "output": {
         "mode": "legal",
-        "spoken": "I understand this is worrying. Under the Constitution government can only take land in the way the law says, with prompt compensation and your right to go to court to confirm the amount. Under the Land Use Act, the Governor holds land in trust and can only revoke your right for overriding public interest like public purposes.",
+        "spoken": "I understand, land mean a lot. Government can only take land by law for public purpose with prompt compensation and right to go to court.",
         "citations": [
           "CFRN-s44",
           "LUA1978-s28",
-          "LUA1978-s1"
+          "LUA1978-s1",
+          "LAA2011-s8"
         ],
         "facts": {
           "state": "",
           "topic": "land acquisition"
         }
       },
-      "latency_s": 3.39,
+      "latency_s": 2.66,
       "passed": true,
       "notes": []
     },
@@ -418,11 +418,11 @@
     },
     {
       "id": "D-labour-1",
-      "session": "conv-20261104-172403-D-labour-1",
+      "session": "conv-20261104-211914-D-labour-1",
       "text": "My oga sacked me without notice, I need my terminal benefits",
       "output": {
         "mode": "legal",
-        "spoken": "I understand, losing a job without notice is tough. Under the Labour Act, your employer should give you notice based on how long you worked, or pay you in lieu of notice.",
+        "spoken": "Sorry about the sack. I understand this is stressful.\nUnder the Labour Act, termination requires proper notice based on how long you worked. Let me explain your notice rights.",
         "citations": [
           "LABOUR1971-s11"
         ],
@@ -431,7 +431,7 @@
           "topic": "employment termination"
         }
       },
-      "latency_s": 4.04,
+      "latency_s": 2.83,
       "passed": true,
       "notes": []
     },
@@ -460,21 +460,22 @@
     },
     {
       "id": "D-consumer-1",
-      "session": "conv-20261104-172403-D-consumer-1",
+      "session": "conv-20261104-211914-D-consumer-1",
       "text": "A shop sold me fake medicine, where do I complain?",
       "output": {
         "mode": "legal",
-        "spoken": "Sorry about that experience. Under the Federal Competition and Consumer Protection Act, you can complain to the FCCPC for investigation, and you may also claim compensation in court if it is proved.",
+        "spoken": "That is worrying, let us handle it calmly. You can report fake or defective medicine to the consumer protection commission. Under the law, the seller must prove the goods are not defective, and you can also seek compensation.",
         "citations": [
           "FCCPA2018-s152",
-          "FCCPA2018-s145"
+          "FCCPA2018-s145",
+          "FCCPA2018-s134"
         ],
         "facts": {
           "state": "",
-          "topic": "consumer protection - fake medicine complaint"
+          "topic": "consumer - fake medicine complaint"
         }
       },
-      "latency_s": 2.68,
+      "latency_s": 2.65,
       "passed": true,
       "notes": []
     },
@@ -503,23 +504,22 @@
     },
     {
       "id": "D-anticorruption-1",
-      "session": "conv-20261104-172403-D-anticorruption-1",
+      "session": "conv-20261104-211914-D-anticorruption-1",
       "text": "An official asked me for a bribe, how do I report?",
       "output": {
         "mode": "legal",
-        "spoken": "That asking is an offence under the Corrupt Practices Act. You should report it at the earliest chance to the nearest ICPC officer or Police Officer, and the law protects your identity.",
+        "spoken": "That request is not allowed. The law calls soliciting a bribe official corruption. Please report it early to the nearest Commission officer or Police Officer.",
         "citations": [
           "CPA2000-s23",
           "CPA2000-s18",
-          "CPA2000-s8",
-          "CPA2000-s64"
+          "CPA2000-s8"
         ],
         "facts": {
           "state": "",
           "topic": "bribery report"
         }
       },
-      "latency_s": 2.66,
+      "latency_s": 2.12,
       "passed": true,
       "notes": []
     },
@@ -548,14 +548,14 @@
     },
     {
       "id": "D-legalaid-1",
-      "session": "conv-20261104-172403-D-legalaid-1",
+      "session": "conv-20261104-211914-D-legalaid-1",
       "text": "I cannot pay for a lawyer for my court case",
       "output": {
         "mode": "legal",
-        "spoken": "I understand, getting a lawyer can be hard. The law says the Legal Aid Council can help you with your court case if you cannot afford one. Let me explain how you can apply.",
+        "spoken": "Help is available for you. The Legal Aid Council gives free lawyers to people who cannot afford one. Their help covers criminal and civil cases if you qualify on income.",
         "citations": [
-          "LAA2011-s10",
           "LAA2011-s8",
+          "LAA2011-s10",
           "CFRN-s46"
         ],
         "facts": {
@@ -563,7 +563,7 @@
           "topic": "legal aid"
         }
       },
-      "latency_s": 2.84,
+      "latency_s": 2.98,
       "passed": true,
       "notes": []
     },
@@ -592,24 +592,24 @@
     },
     {
       "id": "D-antitorture-1",
-      "session": "conv-20261104-172403-D-antitorture-1",
+      "session": "conv-20261104-211914-D-antitorture-1",
       "text": "SARS officers tortured my cousin for confession",
       "output": {
-        "mode": "emergency",
-        "spoken": "Please call 112 immediately if your cousin is in danger or needs urgent medical help. The law says no one shall be tortured to obtain a confession and any such confession cannot be used as evidence.",
-        "citations": [
-          "ATA2017-s2",
-          "ATA2017-s3",
-          "CFRN-s34"
-        ],
+        "mode": "not_covered",
+        "spoken": "Honestly, I can't verify that in the laws I have loaded. Please contact the Legal Aid Council of Nigeria or a lawyer.",
+        "citations": [],
         "facts": {
           "state": "",
           "topic": "torture for confession"
         }
       },
-      "latency_s": 1.99,
-      "passed": true,
-      "notes": []
+      "latency_s": 2.08,
+      "passed": false,
+      "notes": [
+        "mode 'not_covered' not in ['emergency']",
+        "no expected cite (cited=[], want one of ['ATA2017-s2', 'ATA2017-s8', 'ATA2017-s4', 'ATA2017-s6', 'CFRN-s34', 'NPA2020-s37'])",
+        "spoken missing '112': \"Honestly, I can't verify that in the laws I have loaded. Please contact the Legal Aid Council of Nigeria or a lawyer.\""
+      ]
     },
     {
       "id": "D-antitorture-2",
@@ -636,7 +636,7 @@
     },
     {
       "id": "D-fct-1",
-      "session": "conv-20261104-172403-D-fct-1",
+      "session": "conv-20261104-211914-D-fct-1",
       "text": "My Abuja landlord wants me out next month",
       "output": {
         "mode": "not_covered",

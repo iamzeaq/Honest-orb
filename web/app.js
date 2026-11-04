@@ -22,11 +22,13 @@
   var cardCites = document.getElementById("cardCites");
   var callButton = document.getElementById("callButton");
 
-  var SILENCE_MS = 1200;   // auto-send after ~1.2s of silence
+  var SILENCE_MS = 1500;   // auto-send after ~1.5s of silence
   var MAX_MS = 20000;      // hard cap on a recording
   var SILENCE_LEVEL = 0.02;
+  var MIN_SPEECH_MS = 500; // need 0.5s of real voice before a send counts
   var turnId = 0;          // bumps every turn; stale stream lines are dropped
-  var heardSpeech = false; // any voice-level audio in this recording
+  var heardSpeech = false; // at least 0.5s of voice-level audio recorded
+  var speechMs = 0;       // accumulated voice-level audio this recording
 
   var mode = "idle";       // idle | recording | working | speaking
   var recorder = null;
@@ -297,14 +299,21 @@
       }
       var level = Math.min(1, Math.sqrt(sum / data.length) * 3.5);
       if (o && o.setLevel) o.setLevel(level);
-      if (level > SILENCE_LEVEL + 0.08) heardSpeech = true;
       var now = performance.now();
+      if (level > SILENCE_LEVEL + 0.08) {
+        speechMs += 50; // ~one rAF frame of real voice
+        if (speechMs >= MIN_SPEECH_MS) heardSpeech = true;
+      }
       if (level < SILENCE_LEVEL) {
         if (!silenceSince) silenceSince = now;
-        if (now - silenceSince > SILENCE_MS || now - recordStarted > MAX_MS) {
+        // Auto-send only after real speech + 1.5s of silence; stray
+        // blips under 0.5s never cut the user off, they just keep listening.
+        if ((heardSpeech && now - silenceSince > SILENCE_MS) ||
+            now - recordStarted > MAX_MS) {
           stopRecording();
           return;
         }
+        if (!heardSpeech) silenceSince = 0;
       } else {
         silenceSince = 0;
         if (now - recordStarted > MAX_MS) { stopRecording(); return; }
@@ -342,6 +351,7 @@
     }
     chunks = [];
     heardSpeech = false;
+    speechMs = 0;
     turnId++;
     recorder.ondataavailable = function (e) {
       if (e.data && e.data.size) chunks.push(e.data);
@@ -523,7 +533,12 @@
       answerQueue.push({ url: url, sentence: msg.sentence || "" });
       if (!queuePlaying) playNextInQueue();
     } else if (msg.type === "error") {
-      voiceFailed(msg.detail);
+      // One sentence failed server-side but the rest keeps coming: only
+      // fail the turn if nothing has played or queued yet.
+      if (!playOk && queuePos === 0) voiceFailed(msg.detail);
+      else if (window.console && console.warn) {
+        console.warn("orb: skipped a failed sentence", msg.detail);
+      }
     }
   }
 

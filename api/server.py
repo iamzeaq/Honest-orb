@@ -204,6 +204,8 @@ def _speak_to_urls(
         timings["tts_first"] = first_s.get(
             "t", round(time.perf_counter() - started, 2)
         )
+        if not paths:
+            raise RuntimeError("all sentences failed synthesis")
         full_tmp = tempfile.mktemp(suffix=".wav")
         tts.concat_wav_files(paths, full_tmp)
         timings["tts"] = round(time.perf_counter() - started, 2)
@@ -387,7 +389,7 @@ def ask_text_stream(body: AskTextBody):
                     yield json.dumps(
                         {"type": "error", "index": i, "detail": _reason(exc)}
                     ) + "\n"
-                    return
+                    continue  # keep the rest of the reply playing
                 if path is None:
                     continue
                 try:
@@ -530,7 +532,7 @@ def chat_stream(body: ChatBody):
                     yield json.dumps(
                         {"type": "error", "index": i, "detail": _reason(exc)}
                     ) + "\n"
-                    return
+                    continue  # keep the rest of the reply playing
                 if path is None:
                     continue
                 try:
@@ -815,7 +817,7 @@ async def ask(
                         yield json.dumps(
                             {"type": "error", "index": i, "detail": _reason(exc)}
                         ) + "\n"
-                        return
+                        continue  # keep the rest of the reply playing
                     if path is None:
                         continue
                     try:

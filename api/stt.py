@@ -153,9 +153,14 @@ def _to_wav_16k(src: str | os.PathLike) -> tuple[str, bool]:
     # 1. Plain conversion (clean files).
     # 2. Lenient streaming parse: ignore index, generate timestamps, probe
     #    deep (fixes phone MediaRecorder webm/mp4 with unknown lengths).
+    # 3. Same plus discardcorrupt: salvages the decodable clusters of a
+    #    truncated live-edge recording instead of failing the whole turn.
     for extra in (None, ["-fflags", "+ignidx+genpts", "-err_detect",
                          "ignore_err", "-analyzeduration", "20M",
-                         "-probesize", "20M"]):
+                         "-probesize", "20M"],
+                  ["-fflags", "+ignidx+genpts+discardcorrupt",
+                   "-err_detect", "ignore_err", "-analyzeduration", "20M",
+                   "-probesize", "20M"]):
         err = _convert_attempt(exe, src_path, out, extra)
         if err is None:
             return out, True

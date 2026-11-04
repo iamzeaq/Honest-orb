@@ -8,14 +8,16 @@ No Gradio/HF Space involved. Run from the repo root after
 
 What this builds:
 
-- Debian slim (Python 3.11) + ``ffmpeg`` (apt) + CPU-only torch from the
+- Debian slim (Python 3.11) + ``ffmpeg`` (apt) + CPU torch from the
   PyTorch CPU index + the app's ``api/requirements.txt``-equivalent deps.
+  (CUDA torch + gpu="T4" once billing is enabled; api/tts.py already
+  auto-uses CUDA when present.)
 - Only the serving payload is baked into the image (``api/``, ``web/``,
   ``data/sections.json``) — never ``.env`` or other secrets.
 - The TTS voice model (~1 GB) downloads on first boot into a persisted
   Modal Volume (``honest-orb-models``), so later cold starts skip it.
-- CPU with ~4 GB RAM, generous timeout for the first-boot download.
-  No containers are kept warm by default (see ``keep_warm`` note below).
+- T4 GPU with ~4 GB RAM, generous timeout for the first-boot download.
+  MMS-TTS runs on CUDA (same weights/settings, identical voice, faster).
 """
 
 import modal
@@ -28,6 +30,8 @@ image = (
     .apt_install("ffmpeg")
     .pip_install("torch==2.6.0+cpu",
                  index_url="https://download.pytorch.org/whl/cpu")
+    # When enabling gpu="T4" above, switch this to the matching CUDA
+    # index, e.g. torch==2.6.0 with index_url=.../whl/cu124.
     .pip_install("fastapi", "uvicorn", "python-multipart", "transformers",
                  "numpy", "imageio-ffmpeg", "pymupdf", "openai", "requests")
     # Serving payload baked into the image (copy=True): only api/, web/
@@ -52,6 +56,10 @@ app = modal.App("honest-orb")
     secrets=[modal.Secret.from_name("honest-orb")],
     cpu=2.0,
     memory=4096,
+    # GPU (T4/L4) is wired up in api/tts.py (auto-uses CUDA when present)
+    # but this workspace has no payment method, so Modal refuses GPU
+    # functions. To enable: add a card at modal.com/settings/billing, then
+    # set gpu="T4" here (~$0.59/hr while idle with min_containers=1).
     timeout=3600,
     min_containers=1,  # 1 warm container while in use: first answers skip the
     # cold start. Billed at the full CPU+memory rate while idle (~$0.13/hr
