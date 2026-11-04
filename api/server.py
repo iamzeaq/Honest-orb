@@ -205,7 +205,16 @@ def _speak_to_urls(
             "t", round(time.perf_counter() - started, 2)
         )
         if not paths:
-            raise RuntimeError("all sentences failed synthesis")
+            # Every sentence failed: never end silent — speak one short
+            # line pointing at the on-screen text instead of 502ing.
+            fallback_path = tts.speak_sentence(
+                VOICE_FALLBACK_SPOKEN,
+                str(Path(tmpdir) / "fallback.wav"),
+            )
+            if fallback_path is None:
+                raise RuntimeError("all sentences failed synthesis")
+            paths = [fallback_path]
+            sentences = [VOICE_FALLBACK_SPOKEN]
         full_tmp = tempfile.mktemp(suffix=".wav")
         tts.concat_wav_files(paths, full_tmp)
         timings["tts"] = round(time.perf_counter() - started, 2)
@@ -262,6 +271,31 @@ def _ack_url() -> str | None:
 
 
 TOO_SHORT_SPOKEN = "Sorry, I didn't catch that. Could you please say it again?"
+
+# Last-resort spoken line: if every sentence of a real answer fails
+# synthesis (retry + shortened retry inside tts.speak_sentence), the
+# reply still carries one short voice clip pointing at the on-screen
+# text instead of ending silent.
+VOICE_FALLBACK_SPOKEN = (
+    "Sorry, the voice had a problem. The full answer is on screen.")
+
+
+def _fallback_clip(tmpdir) -> tuple[str, str] | None:
+    """Synthesize the last-resort voice line; None when TTS is fully down."""
+    try:
+        path = tts.speak_sentence(
+            VOICE_FALLBACK_SPOKEN, str(Path(tmpdir) / "fallback.wav"))
+    except Exception:
+        logger.exception("voice fallback synthesis failed")
+        return None
+    if path is None:
+        return None
+    try:
+        audio_id, audio_b64 = _store_clip_with_b64(path)
+    except Exception:
+        logger.exception("voice fallback store failed")
+        return None
+    return audio_id, audio_b64
 
 
 def _too_short_answer() -> dict:
@@ -378,6 +412,7 @@ def ask_text_stream(body: AskTextBody):
         yield json.dumps(meta) + "\n"
         tts_started = time.perf_counter()
         tmpdir = Path(tempfile.mkdtemp(prefix="orb_stream_"))
+        yielded = 0
         try:
             for i, sentence in enumerate(sentences):
                 try:
@@ -410,6 +445,24 @@ def ask_text_stream(body: AskTextBody):
                         "tts_s": round(time.perf_counter() - tts_started, 2),
                     }
                 ) + "\n"
+                yielded += 1
+            if yielded == 0:
+                # Every sentence failed: never end silent, send one short
+                # spoken line pointing at the on-screen text instead.
+                fallback = _fallback_clip(tmpdir)
+                if fallback is not None:
+                    audio_id, audio_b64 = fallback
+                    yield json.dumps(
+                        {
+                            "type": "audio",
+                            "index": 0,
+                            "audio_url": f"/audio/{audio_id}.wav",
+                            "audio_b64": audio_b64,
+                            "sentence": VOICE_FALLBACK_SPOKEN,
+                            "tts_s": round(
+                                time.perf_counter() - tts_started, 2),
+                        }
+                    ) + "\n"
         finally:
             shutil.rmtree(tmpdir, ignore_errors=True)
 
@@ -521,6 +574,7 @@ def chat_stream(body: ChatBody):
         yield json.dumps(meta) + "\n"
         tts_started = time.perf_counter()
         tmpdir = Path(tempfile.mkdtemp(prefix="orb_chat_stream_"))
+        yielded = 0
         try:
             for i, sentence in enumerate(sentences):
                 try:
@@ -553,6 +607,24 @@ def chat_stream(body: ChatBody):
                         "tts_s": round(time.perf_counter() - tts_started, 2),
                     }
                 ) + "\n"
+                yielded += 1
+            if yielded == 0:
+                # Every sentence failed: never end silent, send one short
+                # spoken line pointing at the on-screen text instead.
+                fallback = _fallback_clip(tmpdir)
+                if fallback is not None:
+                    audio_id, audio_b64 = fallback
+                    yield json.dumps(
+                        {
+                            "type": "audio",
+                            "index": 0,
+                            "audio_url": f"/audio/{audio_id}.wav",
+                            "audio_b64": audio_b64,
+                            "sentence": VOICE_FALLBACK_SPOKEN,
+                            "tts_s": round(
+                                time.perf_counter() - tts_started, 2),
+                        }
+                    ) + "\n"
         finally:
             shutil.rmtree(tmpdir, ignore_errors=True)
 
@@ -806,6 +878,7 @@ async def ask(
             yield json.dumps(meta) + "\n"
             tts_started = time.perf_counter()
             tmpdir = Path(tempfile.mkdtemp(prefix="orb_ask_stream_"))
+            yielded = 0
             try:
                 for i, sentence in enumerate(sentences):
                     try:
@@ -838,6 +911,24 @@ async def ask(
                             "tts_s": round(time.perf_counter() - tts_started, 2),
                         }
                     ) + "\n"
+                    yielded += 1
+                if yielded == 0:
+                    # Every sentence failed: never end silent, send one
+                    # short spoken line pointing at the on-screen text.
+                    fallback = _fallback_clip(tmpdir)
+                    if fallback is not None:
+                        audio_id, audio_b64 = fallback
+                        yield json.dumps(
+                            {
+                                "type": "audio",
+                                "index": 0,
+                                "audio_url": f"/audio/{audio_id}.wav",
+                                "audio_b64": audio_b64,
+                                "sentence": VOICE_FALLBACK_SPOKEN,
+                                "tts_s": round(
+                                    time.perf_counter() - tts_started, 2),
+                            }
+                        ) + "\n"
             finally:
                 shutil.rmtree(tmpdir, ignore_errors=True)
 

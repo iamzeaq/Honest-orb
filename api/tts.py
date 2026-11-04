@@ -657,11 +657,33 @@ def _synth_normalized(normalized: str) -> tuple[list, int]:
     return waves, sample_rate
 
 
+def shorten_for_retry(text: str, limit: int = 140) -> str:
+    """Return a shorter version of a sentence for a synthesis retry.
+
+    Cuts at a word boundary under ``limit`` chars; when the sentence is
+    already short, falls back to its first clause (split on
+    ``, ; :`` dashes). Returns "" when no shorter version exists.
+    """
+    stripped = (text or "").strip()
+    if len(stripped) > limit:
+        cut = stripped[:limit].rsplit(" ", 1)[0].strip(" ,;:-")
+        if cut and cut != stripped:
+            return cut
+    for sep in (",", ";", ":", "\u2014", "\u2013", " - "):
+        if sep in stripped:
+            first = stripped.split(sep, 1)[0].strip()
+            if first and len(first) < len(stripped):
+                return first
+    return ""
+
+
 def speak_sentence(text: str, out_path: str | None = None) -> str | None:
     """Synthesize a single sentence to a WAV file. Returns path or None.
 
     One automatic retry on synthesis failure (transient GPU/CUDA hiccups
-    must not cost the caller its sentence).
+    must not cost the caller its sentence); when the sentence still
+    fails, one last attempt synthesizes a shorter version of it, so a
+    single awkward sentence never silences the whole reply.
     """
     import tempfile
 
@@ -675,10 +697,20 @@ def speak_sentence(text: str, out_path: str | None = None) -> str | None:
         try:
             waves, sample_rate = _synth_normalized(normalized)
             break
-        except Exception as exc:  # noqa: BLE001 - retry once, then surface
+        except Exception as exc:  # noqa: BLE001 - retry once, then shorten
             last_error = exc
-    else:  # pragma: no cover - exercised only on synthesis failure
-        raise last_error  # type: ignore[misc]
+    else:
+        # Both full attempts failed: try a shorter version once before
+        # giving up on the sentence.
+        short = shorten_for_retry(text)
+        short_norm = normalize_for_speech(short) if short else ""
+        if short_norm and short_norm != normalized:
+            try:
+                waves, sample_rate = _synth_normalized(short_norm)
+            except Exception as exc:  # noqa: BLE001 - surface original
+                raise last_error  # type: ignore[misc]
+        else:  # pragma: no cover - exercised only on synthesis failure
+            raise last_error  # type: ignore[misc]
     if not waves:
         return None
     # Voice-style post-processing for every sentence (VOICE_STYLE env):

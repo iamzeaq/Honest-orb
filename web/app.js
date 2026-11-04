@@ -89,11 +89,56 @@
     }
   }
 
-  // Inline base64 data URIs play from the answer itself, so they keep
-  // working even when /audio/ would land on another container. Plain
-  // /audio/ URLs stay as the fallback for older responses.
-  function clipUrl(msg) {
-    return (msg && (msg.audio_b64 || msg.audio_url)) || "";
+  // Playback never uses a raw base64 data URI as the Audio source:
+  // large data: URIs silently fail on phones. Every clip is resolved to
+  // a blob: URL first — instantly from the inline base64 (which travels
+  // with the answer, so playback never depends on which container
+  // serves /audio/), falling back to fetching the /audio/ URL (the same
+  // plain-URL path the ack clip uses, which plays fine on phones).
+  var objectUrls = [];
+  function trackUrl(u) {
+    if (u && u.indexOf("blob:") === 0) objectUrls.push(u);
+    return u;
+  }
+  function revokeObjectUrls() {
+    objectUrls.forEach(function (u) {
+      try { URL.revokeObjectURL(u); } catch (e) {}
+    });
+    objectUrls = [];
+  }
+  function b64ToBlobUrl(b64) {
+    var comma = b64.indexOf(",");
+    var bin = atob(comma >= 0 ? b64.slice(comma + 1) : b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([bytes], { type: "audio/wav" }));
+  }
+  function resolvePlayUrl(item) {
+    // Base64 first: instant, local, no network involved.
+    if (item.b64) {
+      try { return Promise.resolve(trackUrl(b64ToBlobUrl(item.b64))); }
+      catch (e) { /* fall through to the URL fetch */ }
+    }
+    if (item.url) {
+      var ctrl = null;
+      try { ctrl = new AbortController(); } catch (e) { ctrl = null; }
+      var timer = 0;
+      if (ctrl) {
+        timer = setTimeout(function () {
+          try { ctrl.abort(); } catch (e) {}
+        }, 8000);
+      }
+      return fetch(item.url, ctrl ? { signal: ctrl.signal } : undefined)
+        .then(function (r) {
+          if (timer) clearTimeout(timer);
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.blob();
+        }).then(function (blob) {
+          if (!blob || !blob.size) throw new Error("empty clip");
+          return trackUrl(URL.createObjectURL(blob));
+        });
+    }
+    return Promise.reject(new Error("unplayable clip"));
   }
 
   function showVoiceNote() {
@@ -496,17 +541,16 @@
     if (!queuePlaying) finishSpeaking();
   }
 
-  // The brain answered but the voice failed: keep the text card and say
-  // so in small text instead of dropping back to idle silently.
+  // The brain answered but the voice failed: keep the staged text
+  // behind "Show details" and say so in small text instead of dropping
+  // back to idle silently.
   function voiceFailed(detail) {
     streamOpen = false;
-    if (mode === "speaking" && !card.hidden) {
-      showVoiceNote();
-      if (!queuePlaying) finishSpeaking();
-    } else {
-      resetToIdle("Something went wrong — try again.",
-        new Error(detail || "tts"));
-    }
+    stopThinkSound();
+    if (pendingAnswer) showVoiceNote();
+    if (mode === "speaking") finishSpeaking(); // keeps auto-listen on voice
+    else resetToIdle("Something went wrong — try again.",
+      new Error(detail || "tts"));
   }
 
   // Voice-first: no card pops up automatically. The one-word state label
@@ -524,13 +568,19 @@
       stopAck();
       setEmergency(ans.status === "emergency");
       mode = "speaking";
-      setState("speaking");
+      // Stay visibly "thinking" (label + ticks) until the first reply
+      // audio actually starts playing — that play handler switches us
+      // to "speaking". Jumping early is what stranded the UI on
+      // "Speaking…" with the ticks running and no voice.
       stageAnswer(ans);
       startQueue();
     } else if (msg.type === "audio") {
-      var url = clipUrl(msg);
-      if (!url) return; // unplayable line; the queue finish shows the note
-      answerQueue.push({ url: url, sentence: msg.sentence || "" });
+      if (!msg.audio_b64 && !msg.audio_url) return; // unplayable line
+      answerQueue.push({
+        url: msg.audio_url || "",
+        b64: msg.audio_b64 || "",
+        sentence: msg.sentence || ""
+      });
       if (!queuePlaying) playNextInQueue();
     } else if (msg.type === "error") {
       // One sentence failed server-side but the rest keeps coming: only
@@ -550,22 +600,29 @@
     stopAck();
     setEmergency(emergency);
     mode = "speaking";
-    setState("speaking");
+    // Like the stream path: "speaking" visuals wait for the first play.
     stageAnswer(ans);
     // Prefer the per-sentence queue; fall back to the single full clip.
-    // Inline base64 first, /audio/ URL second (see clipUrl).
     var urls = data.audio_urls || [];
     var b64s = data.audio_b64s || [];
     var sents = data.sentences || [];
     var items = [];
     var n = Math.max(urls.length, b64s.length);
     for (var i = 0; i < n; i++) {
-      var url = clipUrl({ audio_b64: b64s[i], audio_url: urls[i] });
-      if (url) items.push({ url: url, sentence: sents[i] || "" });
+      if (b64s[i] || urls[i]) {
+        items.push({
+          url: urls[i] || "",
+          b64: b64s[i] || "",
+          sentence: sents[i] || ""
+        });
+      }
     }
-    if (!items.length) {
-      var last = clipUrl(data);
-      if (last) items.push({ url: last, sentence: firstSentence(ans.spoken) });
+    if (!items.length && (data.audio_b64 || data.audio_url)) {
+      items.push({
+        url: data.audio_url || "",
+        b64: data.audio_b64 || "",
+        sentence: firstSentence(ans.spoken)
+      });
     }
     if (!items.length) {
       showVoiceNote(); // text answer only, no playable audio at all
@@ -589,6 +646,10 @@
 
   // Play answerQueue[queuePos..] in order. The one-word state label
   // stays put; only the orb pulse follows the audio.
+  var stallTimer = 0; // fires when a clip never plays nor errors
+  function clearStallTimer() {
+    if (stallTimer) { clearTimeout(stallTimer); stallTimer = 0; }
+  }
   function playNextInQueue() {
     if (queuePos >= answerQueue.length) {
       if (!streamOpen) finishSpeaking();
@@ -597,17 +658,46 @@
     var item = answerQueue[queuePos++];
     var token = playToken;
     queuePlaying = true;
-    answerAudio = new Audio(item.url);
+    resolvePlayUrl(item).then(function (playUrl) {
+      if (token !== playToken) return;
+      startClip(playUrl, token);
+    }).catch(function () {
+      // Unresolvable clip: skip it like the error handler instead of
+      // stalling silently.
+      if (token !== playToken) return;
+      queuePlaying = false;
+      playNextInQueue();
+    });
+  }
+  function startClip(playUrl, token) {
+    clearStallTimer();
+    answerAudio = new Audio(playUrl);
     answerAudio.playsInline = true;
+    answerAudio.preload = "auto";
     var o = orb();
+    var settled = false;
+    var settle = function () {
+      if (!settled) { settled = true; clearStallTimer(); }
+    };
+    // A clip that never plays and never errors (decode stall on some
+    // phones) must not hold the queue — and the ticks — forever.
+    stallTimer = setTimeout(function () {
+      if (token !== playToken || settled) return;
+      settle();
+      queuePlaying = false;
+      stopAnswerLevel();
+      playNextInQueue();
+    }, 20000);
     answerAudio.addEventListener("ended", function () {
       if (token !== playToken) return;
+      settle();
       queuePlaying = false;
       stopAnswerLevel();
       playNextInQueue();
     });
     answerAudio.addEventListener("error", function () {
       if (token !== playToken) return;
+      settle();
       queuePlaying = false;
       stopAnswerLevel();
       playNextInQueue(); // skip the broken clip, keep the answer going
@@ -638,15 +728,32 @@
       };
       answerAudio.addEventListener("play", function onPlay() {
         answerAudio.removeEventListener("play", onPlay);
-        if (token === playToken) playOk = true;
-        stopThinkSound(); // first reply audio begins: fade the hum out
+        if (token !== playToken) return;
+        settle();
+        // The first reply audio actually started: only now switch to
+        // "Speaking…" and fade the thinking ticks out.
+        if (!playOk) { playOk = true; setState("speaking"); }
+        stopThinkSound();
         answerRaf = requestAnimationFrame(tick);
       });
-    } catch (e) { /* plain playback without the pulse */ }
-    answerAudio.play().catch(function () {
+    } catch (e) {
+      // Plain playback without the pulse: still gate the state on play.
+      answerAudio.addEventListener("play", function onPlay2() {
+        answerAudio.removeEventListener("play", onPlay2);
+        if (token !== playToken) return;
+        settle();
+        if (!playOk) { playOk = true; setState("speaking"); }
+        stopThinkSound();
+      });
+    }
+    answerAudio.play().then(function () {
+      // play() resolved: the play event follows; the stall timer covers
+      // engines that resolve without ever firing it.
+    }).catch(function () {
       // Rejected play (autoplay guard or undecodable clip): skip to the
       // next clip like the error handler instead of stalling silently.
       if (token !== playToken) return;
+      settle();
       queuePlaying = false;
       stopAnswerLevel();
       playNextInQueue();
@@ -676,6 +783,8 @@
 
   function stopAnswerAudio() {
     stopAnswerLevel();
+    clearStallTimer();
+    revokeObjectUrls();
     playToken++;
     answerQueue = [];
     queuePos = 0;

@@ -2,8 +2,8 @@
  * HTML/JS/CSS are network-first so returning visitors always get the
  * latest files; icons stay cache-first. Bump CACHE + ASSET_V together
  * with the ?v= strings in index.html on every frontend release. */
-var CACHE = "honest-orb-v4";
-var ASSET_V = "v=4";
+var CACHE = "honest-orb-v5";
+var ASSET_V = "v=5";
 var SHELL = [
   "/", "/index.html", "/style.css?" + ASSET_V, "/app.js?" + ASSET_V,
   "/orb.js?" + ASSET_V, "/manifest.webmanifest", "/icon.svg",
