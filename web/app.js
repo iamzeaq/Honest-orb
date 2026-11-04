@@ -125,8 +125,11 @@
   }
   function paintThinkMute() {
     if (thinkMuteBtn) {
-      thinkMuteBtn.textContent =
-        thinkMuted() ? "Thinking hum: off" : "Thinking hum: on";
+      // Icon presentation only: ♪ stays, off-state is a quiet strike.
+      var off = thinkMuted();
+      thinkMuteBtn.textContent = "♪";
+      thinkMuteBtn.classList.toggle("off", off);
+      thinkMuteBtn.setAttribute("aria-pressed", off ? "false" : "true");
     }
   }
   function ensureThinkCtx() {

@@ -132,6 +132,82 @@ body {
   margin: 6px 0 0;
 }
 
+/* Quiet screen: ONLY the orb shows. Wordmark, tagline, caption and footer
+   stay in the DOM (screen readers, SEO) but render nothing. orbError and
+   voiceNote are only ever unhidden on failure. */
+.wordmark,
+.tagline,
+.footer,
+#orbLine {
+  display: none;
+}
+
+/* Bottom controls: small, quiet links at low opacity. */
+#detailsButton,
+#typeToggle {
+  font-size: 12px;
+  margin-top: 6px;
+  padding: 8px 12px;
+  opacity: 0.45;
+  text-decoration: none;
+}
+#detailsButton:hover,
+#typeToggle:hover,
+#detailsButton:focus-visible,
+#typeToggle:focus-visible {
+  opacity: 1;
+}
+#detailsButton {
+  color: var(--violet);
+}
+
+/* Thinking-hum mute: a tiny corner icon, quiet until needed. */
+#thinkMute {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  right: 12px;
+  z-index: 30;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--violet);
+  opacity: 0.55;
+  text-decoration: none;
+}
+#thinkMute.off {
+  opacity: 0.32;
+  color: var(--ink-faint);
+  text-decoration: line-through;
+}
+#thinkMute:hover,
+#thinkMute:focus-visible {
+  opacity: 1;
+}
+
+/* Emergency exception: Call 112 stays clearly visible, no tap needed.
+   Shown purely from the .emergency state class — no JS flow changes. */
+.emergency-call {
+  display: none;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 76px);
+  z-index: 40;
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 16px 42px;
+  text-decoration: none;
+  box-shadow: 0 0 34px rgba(179, 38, 30, 0.65);
+}
+html.emergency .emergency-call {
+  display: block;
+}
+
 /* Dev-only failure reason (?dev=1): tiny, quiet, under the orb line. */
 .orb-error {
   font-family: var(--sans);
