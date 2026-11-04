@@ -105,6 +105,143 @@
 
   function orb() { return window.Orb || null; }
 
+  // ---------- thinking sound: Web Audio only, no files ----------
+  // Quiet machine hum + soft high ticks while the orb is thinking, from
+  // end-of-speech until the first reply audio starts (or any error/idle).
+  // The mic is never open during thinking (tracks stop in stopRecording
+  // before the thinking state, and startRecording kills the sound first),
+  // so the orb cannot hear itself.
+  var thinkCtx = null;
+  var thinkMaster = null;
+  var thinkNodes = null;
+  var thinkTimer = 0;
+  var thinkNextTick = 0;
+  var thinkToken = 0;
+  var thinkMuteBtn = document.getElementById("thinkMute");
+
+  function thinkMuted() {
+    try { return localStorage.getItem("orb_think_muted") === "1"; }
+    catch (e) { return false; }
+  }
+  function paintThinkMute() {
+    if (thinkMuteBtn) {
+      thinkMuteBtn.textContent =
+        thinkMuted() ? "Thinking hum: off" : "Thinking hum: on";
+    }
+  }
+  function ensureThinkCtx() {
+    if (!thinkCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      thinkCtx = new AC();
+      thinkMaster = thinkCtx.createGain();
+      thinkMaster.gain.value = 0;
+      thinkMaster.connect(thinkCtx.destination);
+    }
+    if (thinkCtx.state === "suspended") {
+      thinkCtx.resume().catch(function () {});
+    }
+    return thinkCtx;
+  }
+  function startThinkSound() {
+    if (thinkMuted() || thinkNodes) return;
+    var ctx = ensureThinkCtx();
+    if (!ctx) return;
+    var token = ++thinkToken;
+    var t = ctx.currentTime;
+    thinkMaster.gain.cancelScheduledValues(t);
+    thinkMaster.gain.setValueAtTime(Math.max(thinkMaster.gain.value, 0), t);
+    thinkMaster.gain.linearRampToValueAtTime(1, t + 0.15); // fade in ~150ms
+
+    // Low hum (~78 Hz sine) with a slow gentle wobble, plus a faint shimmer.
+    var hum = ctx.createOscillator();
+    hum.type = "sine";
+    hum.frequency.value = 78;
+    var humGain = ctx.createGain();
+    humGain.gain.value = 0.05; // ~15-20% of reply voice loudness
+    var wobble = ctx.createOscillator();
+    wobble.type = "sine";
+    wobble.frequency.value = 0.35;
+    var wobbleAmt = ctx.createGain();
+    wobbleAmt.gain.value = 6;
+    wobble.connect(wobbleAmt);
+    wobbleAmt.connect(hum.frequency);
+    hum.connect(humGain);
+    humGain.connect(thinkMaster);
+    hum.start(t);
+    wobble.start(t);
+
+    var shimmer = ctx.createOscillator();
+    shimmer.type = "sine";
+    shimmer.frequency.value = 8400;
+    var shimmerGain = ctx.createGain();
+    shimmerGain.gain.value = 0.005;
+    shimmer.connect(shimmerGain);
+    shimmerGain.connect(thinkMaster);
+    shimmer.start(t);
+
+    // Soft high ticks (~3.5 kHz, ~2ms) at ~4-5/s with loose timing, nudged
+    // by the orb's thinking pulse so it feels alive, not like a clock.
+    var clickLen = Math.floor(ctx.sampleRate * 0.012);
+    var clickBuf = ctx.createBuffer(1, clickLen, ctx.sampleRate);
+    var data = clickBuf.getChannelData(0);
+    for (var i = 0; i < clickLen; i++) {
+      var env = Math.exp(-i / (ctx.sampleRate * 0.002));
+      data[i] = (Math.random() * 2 - 1) * env;
+    }
+    var band = ctx.createBiquadFilter();
+    band.type = "bandpass";
+    band.frequency.value = 3500;
+    band.Q.value = 1.1;
+    var tickGain = ctx.createGain();
+    tickGain.gain.value = 0.25; // soft clicks under the hum, never harsh
+    band.connect(tickGain);
+    tickGain.connect(thinkMaster);
+
+    thinkNodes = { hum: hum, wobble: wobble, shimmer: shimmer, band: band };
+    thinkNextTick = t + 0.1;
+    thinkTimer = setInterval(function () {
+      if (token !== thinkToken || !thinkNodes) return;
+      var ahead = ctx.currentTime + 0.3;
+      while (thinkNextTick < ahead) {
+        // Loose sync with the orb's thinking pulse (~9 rad/s shimmer).
+        var pulse = 0.5 + 0.5 * Math.sin(thinkNextTick * 9.0);
+        if (Math.random() > 0.25 * pulse) {
+          var src = ctx.createBufferSource();
+          src.buffer = clickBuf;
+          src.connect(band);
+          src.start(thinkNextTick);
+        }
+        thinkNextTick += 0.22 * (0.75 + Math.random() * 0.5);
+      }
+    }, 90);
+  }
+  function stopThinkSound(immediate) {
+    if (!thinkNodes && !thinkTimer) return;
+    var token = ++thinkToken;
+    if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = 0; }
+    var nodes = thinkNodes;
+    thinkNodes = null;
+    thinkNextTick = 0;
+    if (!thinkCtx || !thinkMaster) return;
+    var t = thinkCtx.currentTime;
+    thinkMaster.gain.cancelScheduledValues(t);
+    if (immediate) {
+      thinkMaster.gain.setValueAtTime(0, t);
+    } else {
+      thinkMaster.gain.setValueAtTime(Math.max(thinkMaster.gain.value, 0), t);
+      thinkMaster.gain.linearRampToValueAtTime(0, t + 0.2); // fade out ~200ms
+    }
+    setTimeout(function () {
+      if (token !== thinkToken) return;
+      try {
+        nodes.hum.stop(); nodes.wobble.stop(); nodes.shimmer.stop();
+        nodes.hum.disconnect(); nodes.wobble.disconnect();
+        nodes.shimmer.disconnect(); nodes.band.disconnect();
+      } catch (e) { /* already torn down */ }
+    }, immediate ? 0 : 260);
+  }
+
   function setLine(text) {
     orbError.hidden = true; // a new state clears any stale reason
     orbLine.classList.add("fade");
@@ -132,6 +269,11 @@
       name === "listening" ? "Listening. Tap to stop." :
       name === "thinking" ? "Thinking" : "Speaking");
     orbButton.setAttribute("aria-pressed", name === "listening" ? "true" : "false");
+    // Thinking hum follows the orb state: on in thinking, off on idle or
+    // re-listen. Speaking keeps it until the first reply audio actually
+    // starts (the play handler below stops it then).
+    if (name === "thinking") startThinkSound();
+    else if (name === "idle" || name === "listening") stopThinkSound();
   }
 
   function setEmergency(on) {
@@ -187,6 +329,7 @@
 
   async function startRecording() {
     dismissCard();
+    stopThinkSound(true); // never let the mic hear the hum's fade tail
     try {
       var ctx = ensureAudioCtx();
       micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -408,6 +551,7 @@
     }
     if (!items.length) {
       showVoiceNote(); // text answer only, no playable audio at all
+      stopThinkSound();
       return;
     }
     startQueue(items);
@@ -478,6 +622,7 @@
       answerAudio.addEventListener("play", function onPlay() {
         answerAudio.removeEventListener("play", onPlay);
         if (token === playToken) playOk = true;
+        stopThinkSound(); // first reply audio begins: fade the hum out
         answerRaf = requestAnimationFrame(tick);
       });
     } catch (e) { /* plain playback without the pulse */ }
@@ -616,6 +761,7 @@
   }
 
   orbButton.addEventListener("click", function () {
+    ensureThinkCtx(); // create/resume audio on the tap (iPhone/Safari rule)
     if (mode === "recording") stopRecording();
     else if (mode === "idle") { voiceTurn = true; startRecording(); }
     else { voiceTurn = false; resetToIdle(); } // tap the orb to end
@@ -635,18 +781,31 @@
   scrim.addEventListener("click", function () { resetToIdle(); });
 
   typeToggle.addEventListener("click", function () {
+    ensureThinkCtx(); // create/resume audio on the tap (iPhone/Safari rule)
     var opening = typeForm.hidden;
     typeForm.hidden = !opening;
     if (opening) typeInput.focus();
   });
   typeForm.addEventListener("submit", function (e) {
     e.preventDefault();
+    ensureThinkCtx();
     var text = typeInput.value.trim();
     if (!text || mode === "working" || mode === "recording") return;
     typeInput.value = "";
     typeForm.hidden = true;
     sendText(text);
   });
+  if (thinkMuteBtn) {
+    paintThinkMute();
+    thinkMuteBtn.addEventListener("click", function () {
+      try {
+        localStorage.setItem("orb_think_muted", thinkMuted() ? "0" : "1");
+      } catch (e) {}
+      paintThinkMute();
+      if (thinkMuted()) stopThinkSound(true);
+      else if (mode === "working") startThinkSound();
+    });
+  }
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {

@@ -1,13 +1,19 @@
-/* Honest Orb — near-black, warm white, muted gold. Red only for emergencies. */
+/* Honest Orb — near-black, violet energy, small gold touches.
+   Red only for emergencies. */
 
 :root {
   --black: #0a0a0a;
   --warm-white: #f5efe4;
   --gold: #c9a45c;
+  --gold-lit: #e8b04b;
   --gold-dim: rgba(201, 164, 92, 0.55);
+  --violet: #7b2ff7;
+  --violet-dim: rgba(123, 47, 247, 0.55);
+  --violet-line: rgba(123, 47, 247, 0.38);
+  --lavender: #e9d8ff;
   --ink-dim: rgba(245, 239, 228, 0.55);
   --ink-faint: rgba(245, 239, 228, 0.32);
-  --glass: rgba(18, 16, 12, 0.82);
+  --glass: rgba(14, 11, 20, 0.84);
   --line: rgba(201, 164, 92, 0.28);
   --red: #b3261e;
   --serif: "Instrument Serif", Georgia, serif;
@@ -66,7 +72,7 @@ body {
 }
 
 .orb-button:focus-visible {
-  outline: 1px solid var(--gold-dim);
+  outline: 1px solid var(--violet-dim);
   outline-offset: 10px;
 }
 
@@ -84,8 +90,9 @@ body {
   height: 100%;
   border-radius: 50%;
   background: radial-gradient(circle at 50% 42%,
-    #fffdf6 0%, #f7ead0 22%, #e8c37c 46%, #8a5f2a 68%, rgba(10, 10, 10, 0) 74%);
-  box-shadow: 0 0 90px 18px rgba(201, 164, 92, 0.35);
+    #e9d8ff 0%, #c13bff 26%, #7b2ff7 48%, #3b0a8f 68%, rgba(10, 10, 10, 0) 76%);
+  box-shadow: 0 0 90px 18px rgba(123, 47, 247, 0.45),
+    0 0 200px 40px rgba(123, 47, 247, 0.16);
   animation: orb-breathe 4s ease-in-out infinite;
 }
 .no-webgl #orbCanvas { display: none; }
@@ -106,7 +113,8 @@ body {
   font-size: clamp(19px, 5.4vw, 24px);
   line-height: 1.4;
   text-align: center;
-  color: var(--warm-white);
+  color: var(--lavender);
+  text-shadow: 0 0 18px rgba(123, 47, 247, 0.45);
   margin: 26px 0 0;
   max-width: 34ch;
   min-height: 2.6em;
@@ -163,6 +171,22 @@ body {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.type-toggle:focus-visible {
+  outline: 1px solid var(--violet-dim);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* "Show details" speaks in violet; the mute toggle stays quiet. */
+#detailsButton {
+  color: var(--violet);
+  text-decoration-color: var(--gold-dim);
+}
+#thinkMute {
+  margin-top: 0;
+  padding: 6px 12px;
+  font-size: 12px;
+}
 
 .type-form {
   display: flex;
@@ -183,7 +207,7 @@ body {
   outline: none;
   min-width: 0;
 }
-.type-form input:focus { border-color: var(--gold-dim); }
+.type-form input:focus { border-color: var(--violet-dim); }
 .type-form button {
   background: none;
   border: 1px solid var(--line);
@@ -275,21 +299,25 @@ body {
   margin-top: 12px;
 }
 .cite-chip {
-  background: none;
-  border: 1px solid var(--line);
+  background: rgba(123, 47, 247, 0.12);
+  border: 1px solid var(--violet-line);
   border-radius: 999px;
-  color: var(--warm-white);
+  color: var(--lavender);
   font-family: var(--sans);
   font-size: 12px;
   padding: 7px 13px;
   cursor: pointer;
+}
+.cite-chip:focus-visible {
+  outline: 1px solid var(--violet);
+  outline-offset: 2px;
 }
 .cite-text {
   flex-basis: 100%;
   font-size: 13px;
   line-height: 1.6;
   color: var(--ink-dim);
-  border-left: 2px solid var(--gold-dim);
+  border-left: 2px solid var(--violet);
   padding-left: 12px;
   margin: 2px 0 4px;
 }
